@@ -1,0 +1,1366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BZCMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ActionInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="smallint" Nullable="false" />
+          <Property Name="ModifiedOn" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="256" />
+          <Property Name="Url" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="HttpMethod" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="ActionMethodName" Type="nvarchar" MaxLength="32" />
+          <Property Name="ControllerName" Type="nvarchar" MaxLength="128" />
+          <Property Name="ActionInfoName" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Sort" Type="nvarchar(max)" />
+          <Property Name="ActionTypeEnum" Type="smallint" Nullable="false" />
+          <Property Name="MenuIcon" Type="varchar" MaxLength="512" />
+          <Property Name="IconWidth" Type="int" Nullable="false" />
+          <Property Name="IconHeight" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BumenInfoSet">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Gushu" Type="int" Nullable="false" />
+          <Property Name="Renark" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SubTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BzcmText_FanChan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Addtime" Type="datetime" Nullable="false" />
+          <Property Name="AddUser" Type="int" Nullable="false" />
+          <Property Name="DEL" Type="int" Nullable="false" />
+          <Property Name="Str_Name" Type="nvarchar(max)" />
+          <Property Name="Str_Image" Type="nvarchar" MaxLength="350" />
+          <Property Name="Str_Photo" Type="nvarchar" MaxLength="11" />
+          <Property Name="IsTop" Type="float" />
+          <Property Name="IsTop_shor" Type="int" />
+          <Property Name="IsTopStartTime" Type="datetime" />
+          <Property Name="IsTopStopTime" Type="datetime" />
+          <Property Name="IsFristItemsID" Type="int" Nullable="false" />
+          <Property Name="News_Name" Type="nvarchar" MaxLength="160" />
+          <Property Name="News_KaiFaShang" Type="nvarchar" MaxLength="160" />
+          <Property Name="News_Addess" Type="nvarchar" MaxLength="260" />
+          <Property Name="News_Money" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="News_Danwei" Type="nvarchar" MaxLength="50" />
+          <Property Name="News_Item" Type="nvarchar" MaxLength="50" />
+          <Property Name="News_Photo" Type="nvarchar" MaxLength="12" />
+          <Property Name="News_YouHui" Type="nvarchar(max)" />
+          <Property Name="News_Text" Type="nvarchar(max)" />
+          <Property Name="FYXX_Name" Type="nvarchar" MaxLength="30" />
+          <Property Name="FYXX_Photo" Type="nvarchar" MaxLength="11" />
+          <Property Name="FYXX_ONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="FYXX_TWO" Type="nvarchar" MaxLength="50" />
+          <Property Name="FYXX_SHRER" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepName" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="ParentId" Type="int" Nullable="false" />
+          <Property Name="TreePath" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Level" Type="int" Nullable="false" />
+          <Property Name="IsLeaf" Type="bit" Nullable="false" />
+          <Property Name="DelFlag" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DepartmentActionInfo">
+          <Key>
+            <PropertyRef Name="ActionInfo_ID" />
+            <PropertyRef Name="Department_ID" />
+          </Key>
+          <Property Name="ActionInfo_ID" Type="int" Nullable="false" />
+          <Property Name="Department_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IsFristItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Str" Type="nvarchar" MaxLength="150" />
+          <Property Name="Str_int" Type="int" Nullable="false" />
+          <Property Name="Del" Type="int" Nullable="false" />
+          <Property Name="Items" Type="int" />
+          <Property Name="Itemsstr" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Login_list">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="Userinfoid" Type="int" Nullable="false" />
+          <Property Name="LoginIP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoginTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="R_UserInfo_ActionInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserInfoID" Type="int" Nullable="false" />
+          <Property Name="ActionInfoID" Type="int" Nullable="false" />
+          <Property Name="IsPass" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoleInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="DelFlag" Type="smallint" Nullable="false" />
+          <Property Name="SubTime" Type="datetime" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="256" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="Sort" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="RoleInfoActionInfo">
+          <Key>
+            <PropertyRef Name="ActionInfo_ID" />
+            <PropertyRef Name="RoleInfo_ID" />
+          </Key>
+          <Property Name="ActionInfo_ID" Type="int" Nullable="false" />
+          <Property Name="RoleInfo_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_BoolItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="str" Type="nvarchar" MaxLength="150" />
+          <Property Name="BOLL_" Type="bit" />
+          <Property Name="int" Type="int" />
+          <Property Name="timener" Type="datetime" />
+          <Property Name="ItemsID" Type="int" />
+        </EntityType>
+        <EntityType Name="Userbaks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserInfoID" Type="int" Nullable="false" />
+          <Property Name="OldUserID" Type="int" Nullable="false" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gender" Type="smallint" />
+          <Property Name="BigPhoto" Type="nvarchar" MaxLength="50" />
+          <Property Name="minPhoto" Type="nvarchar" MaxLength="50" />
+          <Property Name="Addess" Type="nvarchar" MaxLength="150" />
+          <Property Name="del" Type="bit" />
+          <Property Name="Birthday" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UName" Type="nvarchar" MaxLength="32" />
+          <Property Name="UPwd" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="SubTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="smallint" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="256" />
+          <Property Name="Sort" Type="nvarchar(max)" />
+          <Property Name="OverTime" Type="datetime" />
+          <Property Name="UserXiaoHao" Type="int" />
+          <Property Name="Click" Type="int" />
+          <Property Name="ThisMastr" Type="bit" />
+          <Property Name="MasterID" Type="int" />
+          <Property Name="Login_now" Type="nvarchar" MaxLength="255" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="Umoney" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="PerSonName" Type="nvarchar" MaxLength="150" />
+          <Property Name="QuXian" Type="int" />
+          <Property Name="BuMenID" Type="int" />
+        </EntityType>
+        <EntityType Name="UserInfoDepartment">
+          <Key>
+            <PropertyRef Name="Departments_ID" />
+            <PropertyRef Name="UserInfoes_ID" />
+          </Key>
+          <Property Name="Departments_ID" Type="int" Nullable="false" />
+          <Property Name="UserInfoes_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInfoRoleInfo">
+          <Key>
+            <PropertyRef Name="RoleInfoes_ID" />
+            <PropertyRef Name="UserInfoes_ID" />
+          </Key>
+          <Property Name="RoleInfoes_ID" Type="int" Nullable="false" />
+          <Property Name="UserInfoes_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Wx_ BzcmText">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Str_Text" Type="nvarchar" MaxLength="50" />
+          <Property Name="BzcmText_FanChan_ID" Type="bigint" />
+          <Property Name="DEL" Type="int" Nullable="false" />
+          <Property Name="WXuserID" Type="bigint" Nullable="false" />
+          <Property Name="AltTime" Type="datetime" Nullable="false" />
+          <Property Name="AltPhoto" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WXX_FormID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FormID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AddUserID" Type="int" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+          <Property Name="StopTime" Type="datetime" Nullable="false" />
+          <Property Name="CanUse" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WXXLogin_bak">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WxUserID" Type="bigint" Nullable="false" />
+          <Property Name="LoginTime" Type="datetime" Nullable="false" />
+          <Property Name="LoginIP" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="LoginStr" Type="nvarchar(max)" />
+          <Property Name="del" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WXXMenuInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="EngName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="WXXUserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UID" Type="int" Nullable="false" />
+          <Property Name="WXID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PersonName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Gender" Type="int" />
+          <Property Name="Age" Type="int" />
+          <Property Name="Photo" Type="nvarchar" MaxLength="11" />
+          <Property Name="bak" Type="nvarchar(max)" />
+          <Property Name="DEL" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ActionInfoR_UserInfo_ActionInfo">
+          <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
+          <End Role="R_UserInfo_ActionInfo" Type="Self.R_UserInfo_ActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_ActionInfo">
+              <PropertyRef Name="ActionInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bumen">
+          <End Role="BumenInfoSet" Type="Self.BumenInfoSet" Multiplicity="0..1" />
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserInfo">
+              <PropertyRef Name="BuMenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BzcmText_FanChan_IsFristItems">
+          <End Role="IsFristItems" Type="Self.IsFristItems" Multiplicity="1" />
+          <End Role="BzcmText_FanChan" Type="Self.BzcmText_FanChan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IsFristItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BzcmText_FanChan">
+              <PropertyRef Name="IsFristItemsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BzcmText_FanChan_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="BzcmText_FanChan" Type="Self.BzcmText_FanChan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BzcmText_FanChan">
+              <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DepartmentActionInfo_ActionInfo">
+          <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
+          <End Role="DepartmentActionInfo" Type="Self.DepartmentActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DepartmentActionInfo">
+              <PropertyRef Name="ActionInfo_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DepartmentActionInfo_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="DepartmentActionInfo" Type="Self.DepartmentActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DepartmentActionInfo">
+              <PropertyRef Name="Department_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Login_list_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="Login_list" Type="Self.Login_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Login_list">
+              <PropertyRef Name="Userinfoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoleInfoActionInfo_ActionInfo">
+          <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
+          <End Role="RoleInfoActionInfo" Type="Self.RoleInfoActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RoleInfoActionInfo">
+              <PropertyRef Name="ActionInfo_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoleInfoActionInfo_RoleInfo">
+          <End Role="RoleInfo" Type="Self.RoleInfo" Multiplicity="1" />
+          <End Role="RoleInfoActionInfo" Type="Self.RoleInfoActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RoleInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RoleInfoActionInfo">
+              <PropertyRef Name="RoleInfo_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Userbak_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="Userbaks" Type="Self.Userbaks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Userbaks">
+              <PropertyRef Name="UserInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoDepartment_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="UserInfoDepartment" Type="Self.UserInfoDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserInfoDepartment">
+              <PropertyRef Name="Departments_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoDepartment_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="UserInfoDepartment" Type="Self.UserInfoDepartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserInfoDepartment">
+              <PropertyRef Name="UserInfoes_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoR_UserInfo_ActionInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="R_UserInfo_ActionInfo" Type="Self.R_UserInfo_ActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_ActionInfo">
+              <PropertyRef Name="UserInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoRoleInfo_RoleInfo">
+          <End Role="RoleInfo" Type="Self.RoleInfo" Multiplicity="1" />
+          <End Role="UserInfoRoleInfo" Type="Self.UserInfoRoleInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RoleInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserInfoRoleInfo">
+              <PropertyRef Name="RoleInfoes_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoRoleInfo_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="UserInfoRoleInfo" Type="Self.UserInfoRoleInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserInfoRoleInfo">
+              <PropertyRef Name="UserInfoes_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wx_ BzcmText_BzcmText_FanChan">
+          <End Role="BzcmText_FanChan" Type="Self.BzcmText_FanChan" Multiplicity="0..1" />
+          <End Role="Wx_ BzcmText" Type="Self.Wx_ BzcmText" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BzcmText_FanChan">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Wx_ BzcmText">
+              <PropertyRef Name="BzcmText_FanChan_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wx_ BzcmText_WXXUserInfo">
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="1" />
+          <End Role="Wx_ BzcmText" Type="Self.Wx_ BzcmText" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WXXUserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Wx_ BzcmText">
+              <PropertyRef Name="WXuserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXLogin_bak_WXXLogin_bak">
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="1" />
+          <End Role="WXXLogin_bak" Type="Self.WXXLogin_bak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WXXUserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXLogin_bak">
+              <PropertyRef Name="WxUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXUserInfo_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXUserInfo">
+              <PropertyRef Name="UID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BZCMModelStoreContainer">
+          <EntitySet Name="ActionInfo" EntityType="Self.ActionInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BumenInfoSet" EntityType="Self.BumenInfoSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BzcmText_FanChan" EntityType="Self.BzcmText_FanChan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DepartmentActionInfo" EntityType="Self.DepartmentActionInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IsFristItems" EntityType="Self.IsFristItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Login_list" EntityType="Self.Login_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="R_UserInfo_ActionInfo" EntityType="Self.R_UserInfo_ActionInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleInfo" EntityType="Self.RoleInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoleInfoActionInfo" EntityType="Self.RoleInfoActionInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_BoolItem" EntityType="Self.T_BoolItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Userbaks" EntityType="Self.Userbaks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfoDepartment" EntityType="Self.UserInfoDepartment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Wx_ BzcmText" EntityType="Self.Wx_ BzcmText" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXX_FormID" EntityType="Self.WXX_FormID" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXLogin_bak" EntityType="Self.WXXLogin_bak" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXMenuInfo" EntityType="Self.WXXMenuInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXUserInfo" EntityType="Self.WXXUserInfo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ActionInfoR_UserInfo_ActionInfo" Association="Self.FK_ActionInfoR_UserInfo_ActionInfo">
+            <End Role="ActionInfo" EntitySet="ActionInfo" />
+            <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bumen" Association="Self.FK_Bumen">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSet" />
+            <End Role="UserInfo" EntitySet="UserInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BzcmText_FanChan_IsFristItems" Association="Self.FK_BzcmText_FanChan_IsFristItems">
+            <End Role="IsFristItems" EntitySet="IsFristItems" />
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BzcmText_FanChan_UserInfo" Association="Self.FK_BzcmText_FanChan_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DepartmentActionInfo_ActionInfo" Association="Self.FK_DepartmentActionInfo_ActionInfo">
+            <End Role="ActionInfo" EntitySet="ActionInfo" />
+            <End Role="DepartmentActionInfo" EntitySet="DepartmentActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DepartmentActionInfo_Department" Association="Self.FK_DepartmentActionInfo_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="DepartmentActionInfo" EntitySet="DepartmentActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Login_list_UserInfo" Association="Self.FK_Login_list_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="Login_list" EntitySet="Login_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleInfoActionInfo_ActionInfo" Association="Self.FK_RoleInfoActionInfo_ActionInfo">
+            <End Role="ActionInfo" EntitySet="ActionInfo" />
+            <End Role="RoleInfoActionInfo" EntitySet="RoleInfoActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleInfoActionInfo_RoleInfo" Association="Self.FK_RoleInfoActionInfo_RoleInfo">
+            <End Role="RoleInfo" EntitySet="RoleInfo" />
+            <End Role="RoleInfoActionInfo" EntitySet="RoleInfoActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Userbak_UserInfo" Association="Self.FK_Userbak_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="Userbaks" EntitySet="Userbaks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoDepartment_Department" Association="Self.FK_UserInfoDepartment_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="UserInfoDepartment" EntitySet="UserInfoDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoDepartment_UserInfo" Association="Self.FK_UserInfoDepartment_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="UserInfoDepartment" EntitySet="UserInfoDepartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoR_UserInfo_ActionInfo" Association="Self.FK_UserInfoR_UserInfo_ActionInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoRoleInfo_RoleInfo" Association="Self.FK_UserInfoRoleInfo_RoleInfo">
+            <End Role="RoleInfo" EntitySet="RoleInfo" />
+            <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoRoleInfo_UserInfo" Association="Self.FK_UserInfoRoleInfo_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="UserInfoRoleInfo" EntitySet="UserInfoRoleInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wx_ BzcmText_BzcmText_FanChan" Association="Self.FK_Wx_ BzcmText_BzcmText_FanChan">
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+            <End Role="Wx_ BzcmText" EntitySet="Wx_ BzcmText" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wx_ BzcmText_WXXUserInfo" Association="Self.FK_Wx_ BzcmText_WXXUserInfo">
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfo" />
+            <End Role="Wx_ BzcmText" EntitySet="Wx_ BzcmText" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXLogin_bak_WXXLogin_bak" Association="Self.FK_WXXLogin_bak_WXXLogin_bak">
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfo" />
+            <End Role="WXXLogin_bak" EntitySet="WXXLogin_bak" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXUserInfo_UserInfo" Association="Self.FK_WXXUserInfo_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfo" />
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BZCMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ActionInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <Property Name="ModifiedOn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HttpMethod" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ActionMethodName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ControllerName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ActionInfoName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sort" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeEnum" Type="Int16" Nullable="false" />
+          <Property Name="MenuIcon" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="IconWidth" Type="Int32" Nullable="false" />
+          <Property Name="IconHeight" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="R_UserInfo_ActionInfo" Relationship="Self.FK_ActionInfoR_UserInfo_ActionInfo" FromRole="ActionInfo" ToRole="R_UserInfo_ActionInfo" />
+          <NavigationProperty Name="Departments" Relationship="Self.DepartmentActionInfo" FromRole="ActionInfo" ToRole="Department" />
+          <NavigationProperty Name="RoleInfoes" Relationship="Self.RoleInfoActionInfo" FromRole="ActionInfo" ToRole="RoleInfo" />
+        </EntityType>
+        <EntityType Name="BumenInfoSet">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gushu" Type="Int32" Nullable="false" />
+          <Property Name="Renark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="UserInfoes" Relationship="Self.FK_Bumen" FromRole="BumenInfoSet" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ParentId" Type="Int32" Nullable="false" />
+          <Property Name="TreePath" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Level" Type="Int32" Nullable="false" />
+          <Property Name="IsLeaf" Type="Boolean" Nullable="false" />
+          <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="ActionInfoes" Relationship="Self.DepartmentActionInfo" FromRole="Department" ToRole="ActionInfo" />
+          <NavigationProperty Name="UserInfoes" Relationship="Self.UserInfoDepartment" FromRole="Department" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="Login_list">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="Userinfoid" Type="Int32" Nullable="false" />
+          <Property Name="LoginIP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="UserInfo" Relationship="Self.FK_Login_list_UserInfo" FromRole="Login_list" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="R_UserInfo_ActionInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserInfoID" Type="Int32" Nullable="false" />
+          <Property Name="ActionInfoID" Type="Int32" Nullable="false" />
+          <Property Name="IsPass" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ActionInfo" Relationship="Self.FK_ActionInfoR_UserInfo_ActionInfo" FromRole="R_UserInfo_ActionInfo" ToRole="ActionInfo" />
+          <NavigationProperty Name="UserInfo" Relationship="Self.FK_UserInfoR_UserInfo_ActionInfo" FromRole="R_UserInfo_ActionInfo" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="RoleInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Remark" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Sort" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ActionInfoes" Relationship="Self.RoleInfoActionInfo" FromRole="RoleInfo" ToRole="ActionInfo" />
+          <NavigationProperty Name="UserInfoes" Relationship="Self.UserInfoRoleInfo" FromRole="RoleInfo" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="T_BoolItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="str" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BOLL_" Type="Boolean" />
+          <Property Name="int" Type="Int32" />
+          <Property Name="timener" Type="DateTime" Precision="3" />
+          <Property Name="ItemsID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Userbak">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserInfoID" Type="Int32" Nullable="false" />
+          <Property Name="OldUserID" Type="Int32" Nullable="false" />
+          <Property Name="CardNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="Int16" />
+          <Property Name="BigPhoto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="minPhoto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Addess" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="del" Type="Boolean" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UserInfo" Relationship="Self.FK_Userbak_UserInfo" FromRole="Userbaks" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="UPwd" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SubTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DelFlag" Type="Int16" Nullable="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Remark" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Sort" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OverTime" Type="DateTime" Precision="3" />
+          <Property Name="UserXiaoHao" Type="Int32" />
+          <Property Name="Click" Type="Int32" />
+          <Property Name="ThisMastr" Type="Boolean" />
+          <Property Name="MasterID" Type="Int32" />
+          <Property Name="Login_now" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="Umoney" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="PerSonName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="QuXian" Type="Int32" />
+          <Property Name="BuMenID" Type="Int32" />
+          <NavigationProperty Name="BumenInfoSet" Relationship="Self.FK_Bumen" FromRole="UserInfo" ToRole="BumenInfoSet" />
+          <NavigationProperty Name="Login_list" Relationship="Self.FK_Login_list_UserInfo" FromRole="UserInfo" ToRole="Login_list" />
+          <NavigationProperty Name="R_UserInfo_ActionInfo" Relationship="Self.FK_UserInfoR_UserInfo_ActionInfo" FromRole="UserInfo" ToRole="R_UserInfo_ActionInfo" />
+          <NavigationProperty Name="Userbaks" Relationship="Self.FK_Userbak_UserInfo" FromRole="UserInfo" ToRole="Userbaks" />
+          <NavigationProperty Name="WXXUserInfoes" Relationship="Self.FK_WXXUserInfo_UserInfo" FromRole="UserInfo" ToRole="WXXUserInfo" />
+          <NavigationProperty Name="Departments" Relationship="Self.UserInfoDepartment" FromRole="UserInfo" ToRole="Department" />
+          <NavigationProperty Name="RoleInfoes" Relationship="Self.UserInfoRoleInfo" FromRole="UserInfo" ToRole="RoleInfo" />
+          <NavigationProperty Name="BzcmText_FanChan" Relationship="BZCMModel.FK_BzcmText_FanChan_UserInfo" FromRole="UserInfo" ToRole="BzcmText_FanChan" />
+        </EntityType>
+        <EntityType Name="WXX_FormID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FormID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AddUserID" Type="Int32" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StopTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CanUse" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WXXMenuInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EngName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="WXXUserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UID" Type="Int32" Nullable="false" />
+          <Property Name="WXID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserInfo" Relationship="Self.FK_WXXUserInfo_UserInfo" FromRole="WXXUserInfo" ToRole="UserInfo" />
+          <Property Name="PersonName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="Int32" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="Photo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="bak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DEL" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Wx__BzcmText" Relationship="BZCMModel.FK_Wx__BzcmText_WXXUserInfo" FromRole="WXXUserInfo" ToRole="Wx__BzcmText" />
+          <NavigationProperty Name="WXXLogin_bak" Relationship="BZCMModel.FK_WXXLogin_bak_WXXLogin_bak" FromRole="WXXUserInfo" ToRole="WXXLogin_bak" />
+        </EntityType>
+        <Association Name="FK_ActionInfoR_UserInfo_ActionInfo">
+          <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
+          <End Role="R_UserInfo_ActionInfo" Type="Self.R_UserInfo_ActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_ActionInfo">
+              <PropertyRef Name="ActionInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bumen">
+          <End Role="BumenInfoSet" Type="Self.BumenInfoSet" Multiplicity="0..1" />
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BumenInfoSet">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserInfo">
+              <PropertyRef Name="BuMenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Login_list_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="Login_list" Type="Self.Login_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Login_list">
+              <PropertyRef Name="Userinfoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfoR_UserInfo_ActionInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="R_UserInfo_ActionInfo" Type="Self.R_UserInfo_ActionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="R_UserInfo_ActionInfo">
+              <PropertyRef Name="UserInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Userbak_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="Userbaks" Type="Self.Userbak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Userbaks">
+              <PropertyRef Name="UserInfoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXUserInfo_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXUserInfo">
+              <PropertyRef Name="UID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DepartmentActionInfo">
+          <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="*" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+        </Association>
+        <Association Name="RoleInfoActionInfo">
+          <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="*" />
+          <End Role="RoleInfo" Type="Self.RoleInfo" Multiplicity="*" />
+        </Association>
+        <Association Name="UserInfoDepartment">
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="*" />
+        </Association>
+        <Association Name="UserInfoRoleInfo">
+          <End Role="RoleInfo" Type="Self.RoleInfo" Multiplicity="*" />
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="BZCMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ActionInfoes" EntityType="Self.ActionInfo" />
+          <EntitySet Name="BumenInfoSets" EntityType="Self.BumenInfoSet" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Login_list" EntityType="Self.Login_list" />
+          <EntitySet Name="R_UserInfo_ActionInfo" EntityType="Self.R_UserInfo_ActionInfo" />
+          <EntitySet Name="RoleInfoes" EntityType="Self.RoleInfo" />
+          <EntitySet Name="T_BoolItem" EntityType="Self.T_BoolItem" />
+          <EntitySet Name="Userbaks" EntityType="Self.Userbak" />
+          <EntitySet Name="UserInfoes" EntityType="Self.UserInfo" />
+          <EntitySet Name="WXX_FormID" EntityType="Self.WXX_FormID" />
+          <EntitySet Name="WXXMenuInfoes" EntityType="Self.WXXMenuInfo" />
+          <EntitySet Name="WXXUserInfoes" EntityType="Self.WXXUserInfo" />
+          <AssociationSet Name="FK_ActionInfoR_UserInfo_ActionInfo" Association="Self.FK_ActionInfoR_UserInfo_ActionInfo">
+            <End Role="ActionInfo" EntitySet="ActionInfoes" />
+            <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bumen" Association="Self.FK_Bumen">
+            <End Role="BumenInfoSet" EntitySet="BumenInfoSets" />
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Login_list_UserInfo" Association="Self.FK_Login_list_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="Login_list" EntitySet="Login_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfoR_UserInfo_ActionInfo" Association="Self.FK_UserInfoR_UserInfo_ActionInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Userbak_UserInfo" Association="Self.FK_Userbak_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="Userbaks" EntitySet="Userbaks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXUserInfo_UserInfo" Association="Self.FK_WXXUserInfo_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="DepartmentActionInfo" Association="Self.DepartmentActionInfo">
+            <End Role="ActionInfo" EntitySet="ActionInfoes" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="RoleInfoActionInfo" Association="Self.RoleInfoActionInfo">
+            <End Role="ActionInfo" EntitySet="ActionInfoes" />
+            <End Role="RoleInfo" EntitySet="RoleInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="UserInfoDepartment" Association="Self.UserInfoDepartment">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="UserInfoRoleInfo" Association="Self.UserInfoRoleInfo">
+            <End Role="RoleInfo" EntitySet="RoleInfoes" />
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+          </AssociationSet>
+          <EntitySet Name="BzcmText_FanChan" EntityType="BZCMModel.BzcmText_FanChan" />
+          <EntitySet Name="IsFristItems" EntityType="BZCMModel.IsFristItem" />
+          <EntitySet Name="Wx__BzcmText" EntityType="BZCMModel.Wx__BzcmText" />
+          <EntitySet Name="WXXLogin_bak" EntityType="BZCMModel.WXXLogin_bak" />
+          <AssociationSet Name="FK_BzcmText_FanChan_IsFristItems" Association="BZCMModel.FK_BzcmText_FanChan_IsFristItems">
+            <End Role="IsFristItem" EntitySet="IsFristItems" />
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BzcmText_FanChan_UserInfo" Association="BZCMModel.FK_BzcmText_FanChan_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wx__BzcmText_BzcmText_FanChan" Association="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan">
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+            <End Role="Wx__BzcmText" EntitySet="Wx__BzcmText" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wx__BzcmText_WXXUserInfo" Association="BZCMModel.FK_Wx__BzcmText_WXXUserInfo">
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
+            <End Role="Wx__BzcmText" EntitySet="Wx__BzcmText" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXLogin_bak_WXXLogin_bak" Association="BZCMModel.FK_WXXLogin_bak_WXXLogin_bak">
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
+            <End Role="WXXLogin_bak" EntitySet="WXXLogin_bak" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BzcmText_FanChan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Addtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AddUser" Type="Int32" Nullable="false" />
+          <Property Name="DEL" Type="Int32" Nullable="false" />
+          <Property Name="Str_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Str_Image" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Str_Photo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="IsTop" Type="Double" />
+          <Property Name="IsTop_shor" Type="Int32" />
+          <Property Name="IsTopStartTime" Type="DateTime" Precision="3" />
+          <Property Name="IsTopStopTime" Type="DateTime" Precision="3" />
+          <Property Name="IsFristItemsID" Type="Int32" Nullable="false" />
+          <Property Name="News_Name" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Name="News_KaiFaShang" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Name="News_Addess" Type="String" MaxLength="260" FixedLength="false" Unicode="true" />
+          <Property Name="News_Money" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="News_Danwei" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="News_Item" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="News_Photo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="News_YouHui" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="News_Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_Photo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_ONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_TWO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_SHRER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IsFristItem" Relationship="BZCMModel.FK_BzcmText_FanChan_IsFristItems" FromRole="BzcmText_FanChan" ToRole="IsFristItem" />
+          <NavigationProperty Name="UserInfo" Relationship="BZCMModel.FK_BzcmText_FanChan_UserInfo" FromRole="BzcmText_FanChan" ToRole="UserInfo" />
+          <NavigationProperty Name="Wx__BzcmText" Relationship="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="BzcmText_FanChan" ToRole="Wx__BzcmText" />
+        </EntityType>
+        <EntityType Name="IsFristItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Str" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Str_int" Type="Int32" Nullable="false" />
+          <Property Name="Del" Type="Int32" Nullable="false" />
+          <Property Name="Items" Type="Int32" />
+          <Property Name="Itemsstr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BzcmText_FanChan" Relationship="BZCMModel.FK_BzcmText_FanChan_IsFristItems" FromRole="IsFristItem" ToRole="BzcmText_FanChan" />
+        </EntityType>
+        <EntityType Name="Wx__BzcmText">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Str_Text" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BzcmText_FanChan_ID" Type="Int64" />
+          <Property Name="DEL" Type="Int32" Nullable="false" />
+          <Property Name="WXuserID" Type="Int64" Nullable="false" />
+          <Property Name="AltTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AltPhoto" Type="Double" Nullable="false" />
+          <NavigationProperty Name="BzcmText_FanChan" Relationship="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="Wx__BzcmText" ToRole="BzcmText_FanChan" />
+          <NavigationProperty Name="WXXUserInfo" Relationship="BZCMModel.FK_Wx__BzcmText_WXXUserInfo" FromRole="Wx__BzcmText" ToRole="WXXUserInfo" />
+        </EntityType>
+        <EntityType Name="WXXLogin_bak">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WxUserID" Type="Int64" Nullable="false" />
+          <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LoginIP" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="LoginStr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="del" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WXXUserInfo" Relationship="BZCMModel.FK_WXXLogin_bak_WXXLogin_bak" FromRole="WXXLogin_bak" ToRole="WXXUserInfo" />
+        </EntityType>
+        <Association Name="FK_BzcmText_FanChan_IsFristItems">
+          <End Type="BZCMModel.IsFristItem" Role="IsFristItem" Multiplicity="1" />
+          <End Type="BZCMModel.BzcmText_FanChan" Role="BzcmText_FanChan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IsFristItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BzcmText_FanChan">
+              <PropertyRef Name="IsFristItemsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BzcmText_FanChan_UserInfo">
+          <End Type="BZCMModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+          <End Type="BZCMModel.BzcmText_FanChan" Role="BzcmText_FanChan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BzcmText_FanChan">
+              <PropertyRef Name="AddUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wx__BzcmText_BzcmText_FanChan">
+          <End Type="BZCMModel.BzcmText_FanChan" Role="BzcmText_FanChan" Multiplicity="0..1" />
+          <End Type="BZCMModel.Wx__BzcmText" Role="Wx__BzcmText" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BzcmText_FanChan">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Wx__BzcmText">
+              <PropertyRef Name="BzcmText_FanChan_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wx__BzcmText_WXXUserInfo">
+          <End Type="BZCMModel.WXXUserInfo" Role="WXXUserInfo" Multiplicity="1" />
+          <End Type="BZCMModel.Wx__BzcmText" Role="Wx__BzcmText" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WXXUserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Wx__BzcmText">
+              <PropertyRef Name="WXuserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WXXLogin_bak_WXXLogin_bak">
+          <End Type="BZCMModel.WXXUserInfo" Role="WXXUserInfo" Multiplicity="1" />
+          <End Type="BZCMModel.WXXLogin_bak" Role="WXXLogin_bak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WXXUserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXLogin_bak">
+              <PropertyRef Name="WxUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BZCMModelStoreContainer" CdmEntityContainer="BZCMEntities">
+          <EntitySetMapping Name="ActionInfoes">
+            <EntityTypeMapping TypeName="BZCMModel.ActionInfo">
+              <MappingFragment StoreEntitySet="ActionInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="HttpMethod" ColumnName="HttpMethod" />
+                <ScalarProperty Name="ActionMethodName" ColumnName="ActionMethodName" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="ActionInfoName" ColumnName="ActionInfoName" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="ActionTypeEnum" ColumnName="ActionTypeEnum" />
+                <ScalarProperty Name="MenuIcon" ColumnName="MenuIcon" />
+                <ScalarProperty Name="IconWidth" ColumnName="IconWidth" />
+                <ScalarProperty Name="IconHeight" ColumnName="IconHeight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BumenInfoSets">
+            <EntityTypeMapping TypeName="BZCMModel.BumenInfoSet">
+              <MappingFragment StoreEntitySet="BumenInfoSet">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Gushu" ColumnName="Gushu" />
+                <ScalarProperty Name="Renark" ColumnName="Renark" />
+                <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="BZCMModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DepName" ColumnName="DepName" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="TreePath" ColumnName="TreePath" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="IsLeaf" ColumnName="IsLeaf" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Login_list">
+            <EntityTypeMapping TypeName="BZCMModel.Login_list">
+              <MappingFragment StoreEntitySet="Login_list">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Userinfoid" ColumnName="Userinfoid" />
+                <ScalarProperty Name="LoginIP" ColumnName="LoginIP" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="R_UserInfo_ActionInfo">
+            <EntityTypeMapping TypeName="BZCMModel.R_UserInfo_ActionInfo">
+              <MappingFragment StoreEntitySet="R_UserInfo_ActionInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserInfoID" ColumnName="UserInfoID" />
+                <ScalarProperty Name="ActionInfoID" ColumnName="ActionInfoID" />
+                <ScalarProperty Name="IsPass" ColumnName="IsPass" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleInfoes">
+            <EntityTypeMapping TypeName="BZCMModel.RoleInfo">
+              <MappingFragment StoreEntitySet="RoleInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_BoolItem">
+            <EntityTypeMapping TypeName="BZCMModel.T_BoolItem">
+              <MappingFragment StoreEntitySet="T_BoolItem">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="str" ColumnName="str" />
+                <ScalarProperty Name="BOLL_" ColumnName="BOLL_" />
+                <ScalarProperty Name="int" ColumnName="int" />
+                <ScalarProperty Name="timener" ColumnName="timener" />
+                <ScalarProperty Name="ItemsID" ColumnName="ItemsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Userbaks">
+            <EntityTypeMapping TypeName="BZCMModel.Userbak">
+              <MappingFragment StoreEntitySet="Userbaks">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserInfoID" ColumnName="UserInfoID" />
+                <ScalarProperty Name="OldUserID" ColumnName="OldUserID" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="BigPhoto" ColumnName="BigPhoto" />
+                <ScalarProperty Name="minPhoto" ColumnName="minPhoto" />
+                <ScalarProperty Name="Addess" ColumnName="Addess" />
+                <ScalarProperty Name="del" ColumnName="del" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInfoes">
+            <EntityTypeMapping TypeName="BZCMModel.UserInfo">
+              <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UName" ColumnName="UName" />
+                <ScalarProperty Name="UPwd" ColumnName="UPwd" />
+                <ScalarProperty Name="SubTime" ColumnName="SubTime" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="OverTime" ColumnName="OverTime" />
+                <ScalarProperty Name="UserXiaoHao" ColumnName="UserXiaoHao" />
+                <ScalarProperty Name="Click" ColumnName="Click" />
+                <ScalarProperty Name="ThisMastr" ColumnName="ThisMastr" />
+                <ScalarProperty Name="MasterID" ColumnName="MasterID" />
+                <ScalarProperty Name="Login_now" ColumnName="Login_now" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="Umoney" ColumnName="Umoney" />
+                <ScalarProperty Name="PerSonName" ColumnName="PerSonName" />
+                <ScalarProperty Name="QuXian" ColumnName="QuXian" />
+                <ScalarProperty Name="BuMenID" ColumnName="BuMenID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXX_FormID">
+            <EntityTypeMapping TypeName="BZCMModel.WXX_FormID">
+              <MappingFragment StoreEntitySet="WXX_FormID">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FormID" ColumnName="FormID" />
+                <ScalarProperty Name="AddUserID" ColumnName="AddUserID" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="StopTime" ColumnName="StopTime" />
+                <ScalarProperty Name="CanUse" ColumnName="CanUse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXMenuInfoes">
+            <EntityTypeMapping TypeName="BZCMModel.WXXMenuInfo">
+              <MappingFragment StoreEntitySet="WXXMenuInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EngName" ColumnName="EngName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXUserInfoes">
+            <EntityTypeMapping TypeName="BZCMModel.WXXUserInfo">
+              <MappingFragment StoreEntitySet="WXXUserInfo">
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="bak" ColumnName="bak" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="WXID" ColumnName="WXID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="DepartmentActionInfo" TypeName="BZCMModel.DepartmentActionInfo" StoreEntitySet="DepartmentActionInfo">
+            <EndProperty Name="ActionInfo">
+              <ScalarProperty Name="ID" ColumnName="ActionInfo_ID" />
+            </EndProperty>
+            <EndProperty Name="Department">
+              <ScalarProperty Name="ID" ColumnName="Department_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="RoleInfoActionInfo" TypeName="BZCMModel.RoleInfoActionInfo" StoreEntitySet="RoleInfoActionInfo">
+            <EndProperty Name="ActionInfo">
+              <ScalarProperty Name="ID" ColumnName="ActionInfo_ID" />
+            </EndProperty>
+            <EndProperty Name="RoleInfo">
+              <ScalarProperty Name="ID" ColumnName="RoleInfo_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserInfoDepartment" TypeName="BZCMModel.UserInfoDepartment" StoreEntitySet="UserInfoDepartment">
+            <EndProperty Name="Department">
+              <ScalarProperty Name="ID" ColumnName="Departments_ID" />
+            </EndProperty>
+            <EndProperty Name="UserInfo">
+              <ScalarProperty Name="ID" ColumnName="UserInfoes_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserInfoRoleInfo" TypeName="BZCMModel.UserInfoRoleInfo" StoreEntitySet="UserInfoRoleInfo">
+            <EndProperty Name="RoleInfo">
+              <ScalarProperty Name="ID" ColumnName="RoleInfoes_ID" />
+            </EndProperty>
+            <EndProperty Name="UserInfo">
+              <ScalarProperty Name="ID" ColumnName="UserInfoes_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="BzcmText_FanChan">
+            <EntityTypeMapping TypeName="BZCMModel.BzcmText_FanChan">
+              <MappingFragment StoreEntitySet="BzcmText_FanChan">
+                <ScalarProperty Name="FYXX_SHRER" ColumnName="FYXX_SHRER" />
+                <ScalarProperty Name="FYXX_TWO" ColumnName="FYXX_TWO" />
+                <ScalarProperty Name="FYXX_ONE" ColumnName="FYXX_ONE" />
+                <ScalarProperty Name="FYXX_Photo" ColumnName="FYXX_Photo" />
+                <ScalarProperty Name="FYXX_Name" ColumnName="FYXX_Name" />
+                <ScalarProperty Name="News_Text" ColumnName="News_Text" />
+                <ScalarProperty Name="News_YouHui" ColumnName="News_YouHui" />
+                <ScalarProperty Name="News_Photo" ColumnName="News_Photo" />
+                <ScalarProperty Name="News_Item" ColumnName="News_Item" />
+                <ScalarProperty Name="News_Danwei" ColumnName="News_Danwei" />
+                <ScalarProperty Name="News_Money" ColumnName="News_Money" />
+                <ScalarProperty Name="News_Addess" ColumnName="News_Addess" />
+                <ScalarProperty Name="News_KaiFaShang" ColumnName="News_KaiFaShang" />
+                <ScalarProperty Name="News_Name" ColumnName="News_Name" />
+                <ScalarProperty Name="IsFristItemsID" ColumnName="IsFristItemsID" />
+                <ScalarProperty Name="IsTopStopTime" ColumnName="IsTopStopTime" />
+                <ScalarProperty Name="IsTopStartTime" ColumnName="IsTopStartTime" />
+                <ScalarProperty Name="IsTop_shor" ColumnName="IsTop_shor" />
+                <ScalarProperty Name="IsTop" ColumnName="IsTop" />
+                <ScalarProperty Name="Str_Photo" ColumnName="Str_Photo" />
+                <ScalarProperty Name="Str_Image" ColumnName="Str_Image" />
+                <ScalarProperty Name="Str_Name" ColumnName="Str_Name" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="AddUser" ColumnName="AddUser" />
+                <ScalarProperty Name="Addtime" ColumnName="Addtime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IsFristItems">
+            <EntityTypeMapping TypeName="BZCMModel.IsFristItem">
+              <MappingFragment StoreEntitySet="IsFristItems">
+                <ScalarProperty Name="Itemsstr" ColumnName="Itemsstr" />
+                <ScalarProperty Name="Items" ColumnName="Items" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Str_int" ColumnName="Str_int" />
+                <ScalarProperty Name="Str" ColumnName="Str" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wx__BzcmText">
+            <EntityTypeMapping TypeName="BZCMModel.Wx__BzcmText">
+              <MappingFragment StoreEntitySet="Wx_ BzcmText">
+                <ScalarProperty Name="AltPhoto" ColumnName="AltPhoto" />
+                <ScalarProperty Name="AltTime" ColumnName="AltTime" />
+                <ScalarProperty Name="WXuserID" ColumnName="WXuserID" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="BzcmText_FanChan_ID" ColumnName="BzcmText_FanChan_ID" />
+                <ScalarProperty Name="Str_Text" ColumnName="Str_Text" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXLogin_bak">
+            <EntityTypeMapping TypeName="BZCMModel.WXXLogin_bak">
+              <MappingFragment StoreEntitySet="WXXLogin_bak">
+                <ScalarProperty Name="del" ColumnName="del" />
+                <ScalarProperty Name="LoginStr" ColumnName="LoginStr" />
+                <ScalarProperty Name="LoginIP" ColumnName="LoginIP" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+                <ScalarProperty Name="WxUserID" ColumnName="WxUserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

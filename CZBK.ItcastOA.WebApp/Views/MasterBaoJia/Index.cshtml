@@ -1,0 +1,2349 @@
+﻿@{
+    Layout = null;
+}
+@using CZBK.ItcastOA.Model
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>产品报价列表</title>
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />  
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <script src="~/Scripts/MyNewJS.js"></script>
+    <script type="text/javascript">
+        $.fn.extend({
+
+            resizeDataGrid: function (heightMargin, widthMargin, minHeight, minWidth) {
+
+                var height = $("#dgdiv").height() - heightMargin;
+                var width = $("#dgdiv").width() - widthMargin;
+                height = height < minHeight ? minHeight : height;
+                width = width < minWidth ? minWidth : width;
+                $(this).datagrid('resize', {
+                    height: height,
+                    width: width
+                });
+            }
+        });
+        var editIndex = undefined;
+        var delflg = 0, win = 0;
+        function endEditing() {//该方法用于关闭上一个焦点的editing状态
+            if (editIndex == undefined) {
+                return true
+            }
+            if ($('#tt').datagrid('validateRow', editIndex)) {
+                $('#tt').datagrid('endEdit', editIndex);
+                editIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        //点击单元格事件：
+        function onClickCell(index, field, value) {
+
+            if (endEditing()) {
+                if (field == "BaoJiaMoney") {
+                    if (win == "1") {
+
+                        return;
+                    }
+                    $('#tt').datagrid('beginEdit', index);
+                    var ed = $('#tt').datagrid('getEditor', { index: index, field: field });
+                    $(ed.target).focus();
+                }
+                editIndex = index;
+            }
+            $('#tt').datagrid('onClickRow')
+        }
+        function onAfterEdit(index, row, changes) {
+            var updated = $('#tt').datagrid('getChanges', 'updated');
+            if (updated.length < 1) {
+                editRow = undefined;
+                $('#tt').datagrid('unselectAll');
+                return;
+            } else {
+                // 传值
+                submitForm(index, row, changes);
+            }
+        }
+        //提交数据
+        $(function () {
+            GetItemMeun();
+            
+            var cur_time = new Date();
+            $("#StTime").datebox("setValue", cur_time.getFullYear()+"-01-01");
+            $("#DwTime").datebox("setValue", myformatter(cur_time));
+            win = 0;
+            $(".Province").combobox({
+                onChange: function (n, o) {
+                    var cityids = $(this).attr("id");
+                    var val = $(this).combobox('getValue');
+                    $('.' + cityids).combobox({
+                        url: '/YXBJ/GetAddress?parentiD=' + val + '&MyColums=City',
+                        valueField: 'ID',
+                        textField: 'MyTexts'
+                    });
+                }
+            })
+            $(".CitySee").combobox({
+                onChange: function (n, o) {
+                    ComboboxF($(this))
+                }
+            })
+            $("#CPname").combobox({
+                onChange: function (n, o) {                  
+                    $("#CPxh").combobox({
+                        url: "/YXBJ/GetCpname_xinghao?cpid=" + n,
+                    });                    
+                }
+            })
+            $("#CPname2").combobox({
+                onChange: function (n, o) {
+                    $("#CPxh2").combobox({
+                        url: "/YXBJ/GetCpname_xinghao?cpid=" + n,
+                    });
+                }
+            })
+            $("#ProvinceID").combobox({
+                onChange: function (n, o) {
+                    $("#CityID").combobox({
+                        url: "/YXBJ/GetAddress?parentiD=" + n + "&MyColums=City",
+                    });
+                }
+            })
+            $("#CityID").combobox({
+                onChange: function (n, o) {
+                    $("#VillageID").combobox({
+                        url: "/YXBJ/GetAddress?parentiD=" + n + "&MyColums=Village",
+                    });
+                }
+            })
+            $(".CityAdd").combobox({
+                onChange: function (n, o) {
+                    ComboboxF($(this))
+                }
+            })
+            function ComboboxF(obj)
+            {
+                var cityids = obj.attr("id");
+                var val = obj.combobox('getValue');
+                $('.' + cityids).combobox({
+                    url: '/YXBJ/GetAddress?parentiD=' + val + '&MyColums=Village',
+                    valueField: 'ID',
+                    textField: 'MyTexts'
+                });
+            }
+
+            //datagrid数据表格ID
+            var datagridId = 'tt';
+            loadData();
+            // 当窗口大小发生变化时，调整DataGrid的大小
+            $(window).resize(function () {
+                $('#' + datagridId).resizeDataGrid(0, 0, 200, 500);
+            });
+            $("#EditDivTable").css("display", "none");
+            $("#FaHuoDIV").css("display", "none");
+            $("#AddFaHuoOneDiv").css("display", "none");
+            $("#mothdiv").css("display", "none");
+            $("#XiangXiDIV").css("display", "none");
+            $("#divZhList").css("display", "none");
+            $("#divMxList").css("display", "none");
+            $("#City_Div").dialog("close");
+            $('#CityDint').dialog('close')
+            $('#oldbaojia').dialog('close')
+            $('#dlg').dialog('close');
+            bindActionTypeEnumChange();
+            bindFileUpclick();
+            //报价列表
+            $("#Bjlb").click(function () {
+
+                delflg = 0;
+                win = 0;
+                var pars = {
+                    delflg: delflg
+                };
+                loadData(pars);
+            })
+            //完成报价
+            $("#Ybj").click(function () {
+
+                delflg = 1;
+                win = 0;
+                var pars = {
+                    delflg: delflg
+                };
+                loadData(pars);
+            })
+            //完成报价查询
+            $("#Winlb").click(function () {
+                $('#SpanYyZt').hide();
+                $('#CanPinSelect').show();
+                win = 1;
+                var pars = {
+                    win: win
+                };
+                loadData(pars);
+                qingkou();
+            })
+            $("#Sousuo").click(function () {                
+                var UpTime = $('#StTime').combobox('getValue');
+                if (UpTime.length <= 0) {
+                    $.messager.alert("提示", "开始时间不可为空！")
+                    return;
+                }
+                var DwTime = $('#DwTime').combobox('getValue');
+                if (DwTime.length <= 0) {
+                    $.messager.alert("提示", "结束时间不可为空！")
+                    return;
+                }
+                var addess = RetAddess();                
+                var Person = $('#Person').combobox('getValue');
+                var KHname = $('#KHname').combobox('getValue');
+                var CPname = $('#CPname').combobox('getValue');
+                var CPxh = $('#CPxh').combobox('getValue');               
+                var pars = {
+                    UpTime: UpTime, DwTime: DwTime, addess: addess, Person: Person, KHname: KHname, CPname: CPname, CPxh: CPxh
+                };
+                DuoXuanEascsh(pars);
+            })
+            $("#SousuoA").click(function () {
+                var UpTime = $('#StTime').combobox('getValue');
+                if (UpTime.length <= 0) {
+                    $.messager.alert("提示", "开始时间不可为空！")
+                    return;
+                }
+                var DwTime = $('#DwTime').combobox('getValue');
+                if (DwTime.length <= 0) {
+                    $.messager.alert("提示", "结束时间不可为空！")
+                    return;
+                }
+                var YyZt = $('#YyZt').combobox('getValue')
+                var addess = RetAddess();  
+                var Person = $('#Person').combobox('getValue');
+                var KHname = $('#KHname').combobox('getValue');
+                var CPname = $('#CPname').combobox('getValue');
+                var CPxh = $('#CPxh').combobox('getValue');
+                var pars = {
+                    UpTime: UpTime, DwTime: DwTime, addess: addess, Person: Person, KHname: KHname, CPname: CPname, CPxh: CPxh, YyZt: YyZt
+                };
+                WinHeTong(pars);
+            })
+            
+            //完成合同
+            $("#OverHeTong").click(function () {
+
+                GetOverHeTong();
+            })
+            //完成的合同查询
+            $("#WinHeTong").click(function () {
+                $('#CanPinSelect').hide();
+                $('#SpanYyZt').show();
+                WinHeTong()
+            })
+            $("#divBtn a").click(function () {
+
+                if ($(this).attr("id") == "CityEdit") {
+                    $("#TTdiv").hide();
+                    $("#mothdiv").hide();
+                    showdilag();
+
+                } else if ($(this).attr("id") == undefined) {
+                    $("#TTdiv").hide();
+                    $("#mothdiv").hide();
+                    $("#City_Div").dialog("close")
+                }
+                else {
+                    $("#tt").datagrid("clearSelections");
+                    $("#TTdiv").show();
+                    $("#mothdiv").hide();
+                }
+
+            })
+            $("#MonthTable").click(function () {
+                $("#TTdiv").hide();
+                $("#mothdiv").show();
+
+            });
+            $("#CityEdit").click(function () {
+                var pars = { "ParentId": 0 };
+                LoadCity(pars);
+            })
+            $("#BaoJiaShenhe").click(function () {
+                BaoJiaShenhe();
+            })
+            //情况选项数据
+            $("#qingkou").click(function () {
+                qingkou();
+            })
+            $('#SpanYyZt').hide();
+            //打印月预览总汇
+            $("#PrintMonth").click(function () {
+                $("#Print_div").jqprint();
+            })
+            function Contstr(obj, b) {
+                if (b) {
+                    return obj == 0 ? "-" : obj;
+                }
+                else {
+                    var rfc = formatCurrency(obj)
+                    return rfc == "0.00" ? "-" : rfc;
+                }
+            }
+            function formatCurrency(num) {
+                num = num.toString().replace(/\$|\,/g, '');
+                if (isNaN(num))
+                    num = "0";
+                sign = (num == (num = Math.abs(num)));
+                num = Math.floor(num * 100 + 0.50000000001);
+                cents = num % 100;
+                num = Math.floor(num / 100).toString();
+                if (cents < 10)
+                    cents = "0" + cents;
+                for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+                    num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+                    num.substring(num.length - (4 * i + 3));
+                return (((sign) ? '' : '-') + num + '.' + cents);
+            }
+        
+            //查询月总汇
+            $("#MonthBTN").click(function () {
+                $("#ZhList").click();
+                $("#GetMonThData").html("");
+                $("#GetmoneyThData").html("");
+                $("#MoneyListDa").html("");
+                $("#DDpercent").html("");
+                $.post("/MasterBaoJia/GetMonthSumData", { "Utime": $('#Mutime').combobox('getValue'), "Dtime": $('#Mdtime').combobox('getValue') }, function (data) {
+                    if (data.ret == "ok") {
+                        var Upmct = 0;
+                        var Dymct = 0;
+                        var holdDate = new Date($('#Mutime').combobox('getValue').replace("-", "/").replace("-", "/"));
+                        var twoDate = new Date($('#Mdtime').combobox('getValue').replace("-", "/").replace("-", "/"));
+                        var strTime = holdDate.getFullYear() + "年" + holdDate.getMonth() + 1 + "月" + holdDate.getDate() + "日—" + twoDate.getFullYear() + "年" + (twoDate.getMonth() + 1) + "月" + twoDate.getDate() + "日";
+                        $("#h1time").html(strTime);
+                        $("#h2time").html(strTime);
+                        $.each(data.temp, function (i, item) {
+                            if (i == 0) {
+                                Upmct = item["LostCount"];
+                            } else {
+                                Dymct = item["LostCount"];
+                            }
+                            var sp = i == 0 ? "历史创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
+                            var $tdName = $("<tr><td >" + sp + "</td><td >" + Contstr(item["WinCount"], true) + "</td><td >" + Contstr(item["DaiDingCount"], true) + "</td><td >" + Contstr(item["LostCount"], true) + "</td><td >" + Contstr(item["SumCount"], true) + "</td> </tr>");
+                            $("#GetMonThData").append($tdName);
+                        })
+                        $.each(data.temp, function (i, item) {
+                            var sp = i == 0 ? "历史创建信息" : i == 1 ? "当月创建信息" : "累计创建信息";
+
+                            var $tdName = $("<tr><td >" + sp + "</td><td >" + Contstr(item["WinDML"]) + "</td><td >" + Contstr(item["DdDml"]) + "</td><td >" + Contstr(item["lostDML"]) + "</td><td >" + Contstr(item["SumDMLCount"]) + "</td> </tr>");
+                            $("#GetmoneyThData").append($tdName);
+                        })
+                        var pi = 0;
+                        $.each(data.LostItem, function (ui, item) {
+
+                            var divtext = (ui == 0 ? "历史" : "当月") + "失败原因";
+                            var tr_td = "<tr><td>" + divtext + "</td>";
+                            var trhread = "<tr><td>分类</td>";
+
+                            $.each(item, function (i, ite) {
+                                var thival = (ui == 0 ? ite["Count"] / Upmct : ite["Count"] / Dymct);
+                                thival = isNaN(thival) ? 0 : thival;
+                                if (pi == 0) {
+                                    trhread = trhread + "<td>" + ite["Text"] + "</td>";
+                                }
+                                tr_td = tr_td + "<td>" + Contstr((thival * 100).toFixed(0)) + "</td>";
+
+                            })
+                            tr_td = tr_td + "</tr>";
+                            if (pi == 0) {
+                                trhread = trhread + "</tr>";
+                                $("#DDpercent").append(trhread);
+                            }
+                            pi++;
+                            $("#DDpercent").append(tr_td);
+                        })
+                        $.each(data.XiangXi, function (xx, item) {
+
+                            var $tdName = $("<tr><td>" + item["PName"] + "</td><td>" + Contstr(item["Wmoney"]) + "</td><td style='color:steelblue'>" + Contstr(item["WPercent"], true) + "</td><td>" + Contstr(item["Dmoney"]) + "</td><td style='color:steelblue'>" + Contstr(item["DPercent"], true) + "</td><td>" + Contstr(item["Lmoney"]) + "</td><td style='color:steelblue'>" + Contstr(item["LPercent"], true) + "</td></tr>");
+                            $("#MoneyListDa").append($tdName);
+                        })
+                    }
+                })
+            })
+            //总汇查询点击
+            $("#ZhList").click(function () {
+                $("#divZhList").css("display", "block");
+                $("#divMxList").css("display", "none");
+            })
+            $("#MxList").click(function () {
+                $("#divZhList").css("display", "none");
+                $("#divMxList").css("display", "block");
+            })
+
+            //追加城市
+            $("#Naddessbtn").click(function () {
+                var Pro = $("#CityAdd").combobox("getValue");
+                var Cit = $("#VillageAdd").combobox("getValue");
+                var strval = ""
+                var Parent = 0;
+                if (Pro.trim().length <= 0)
+                {
+                    strval = "Province";
+                }                   
+                else if (Cit.trim().length<= 0) {
+                    strval = "City";
+                    var Parent = Pro;
+                }
+                else {
+                    strval = "Village";
+                    var Parent = Cit;
+                }
+                var val = $("#AddCptVal").val();
+                
+                if(val.trim().length<=0)
+                {
+                    $.messager.alert("提示","值不可为空！");
+                    return;
+                }
+                $.post("/MasterBaoJia/AddSysfied", { "strval": strval, "Parent": Parent, "val": val }, function (data) {
+                    AfterFuncito(data);
+                })
+            });
+
+            $("#remoeybtn").click(function () {
+                 $("#CityAdd").combobox("setValue","");
+                $("#VillageAdd").combobox("setValue","");
+               
+            })
+            // 完成报价  按信息状态查询显示
+            $("#TableZT").combobox({
+                onChange: function (n, o) {
+                    var Vi = n;
+                    var pars = {
+                        delflg: Vi
+                    };
+                    loadData(pars);
+                }
+            });
+        });
+        
+        //返回ADDESS地址
+        function RetAddess() {
+            var addess = "";
+            if ($('#VillageSee').combobox('getValue') == undefined || $('#VillageSee').combobox('getValue').length <= 0) {
+                addess = $('#CitySee').combobox('getValue') == undefined ? "" : $('#CitySee').combobox('getValue').length <= 0 ? "" : $('#CitySee').combobox('getValue') + ",";
+            }
+            else {
+                if ($('#CitySee').combobox('getValue') == undefined || $('#CitySee').combobox('getValue').length <= 0) {
+                    addess = "";
+                }
+                else {
+
+                    addess = $('#CitySee').combobox('getValue') + "," + $('#VillageSee').combobox('getValue') + "," + $('#SeeDint').combobox('getValue');
+                }
+            }
+            return addess;
+        }
+        //给权限类别绑定Change事件
+        function bindActionTypeEnumChange() {
+            $("#ActionTypeEnumChange").change(function () {
+                if ($(this).val() == "1") {
+                    $("#actionIcontr").fadeIn("show");
+                } else {
+                    $("#actionIcontr").fadeOut("show");
+                }
+            });
+        }
+
+        function SousuoP() {
+            var UpTime = $('#StTime').combobox('getValue');
+            if (UpTime.length <= 0) {
+                $.messager.alert("提示", "开始时间不可为空！")
+                return;
+            }
+            var DwTime = $('#DwTime').combobox('getValue');
+            if (DwTime.length <= 0) {
+                $.messager.alert("提示", "结束时间不可为空！")
+                return;
+            }
+            var addess = RetAddess();
+            var Person = $('#Person').combobox('getValue');
+            var KHname = $('#KHname').combobox('getValue');
+            var CPname = $('#CPname').combobox('getValue');
+            var CPxh = $('#CPxh').combobox('getValue');
+            var pars = {
+                UpTime: UpTime, DwTime: DwTime, addess: addess, Person: Person, KHname: KHname, CPname: CPname, CPxh: CPxh
+            };
+            DuoXuanEascsh(pars);
+        }
+
+        //文件上传
+        function bindFileUpclick() {
+            $("#btnFileUp").click(function () {
+                if ($("#fileUp").val() == "") {
+                    $.messager.alert("提示", "请选择上传文件", "errer");
+                    return;
+                }
+                //开始进行异步上传图片文件
+                $("#addForm").ajaxSubmit({
+                    success: function (data) {
+                        var serverData = data.split(":");
+                        if (serverData[0] == "yes") {
+                            $("#showImage").append("<img src='" + serverData[1] + "' width='40px' height='40px'/>");
+                            $("#hiddenMenuIcon").val(serverData[1]);//将上传成功的图片地址放在隐藏input中
+                        }
+                        else {
+                            $.messager.alert("提示", serverData[1], "errer");
+                        }
+                    },
+                    url: "/ActionInfo/FileUpload",
+                    type: "post"
+                })
+            });
+        }
+        //未报价信息
+        function loadData(pars) {            
+            $('#tt').datagrid({
+                url: '/MasterBaoJia/GetMoneyInfo',
+                title: '未报价信息',
+                height: $("#dgdiv").height() -15,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     {
+                         field: 'baojia', title: '报价栏',
+                         formatter: function (value, row, index) {
+                             var str = "<a href='javascript:BaoJia(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >报价</a>";
+                             return str;
+                         }
+                     }, {
+                         field: 'edit', title: '修改栏',
+                         formatter: function (value, row, index) {
+                             var str = "<a href='javascript:EditBJInfo(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >修改</a>";
+                             return str;
+                         }
+                     },
+                     {
+                         field: 'ZhuangTai', title: '审核状态',
+                         formatter: function (value, row, index) {
+                             if (value == 0) {
+                                 var state = "申请中";
+                             } else if (value == 1) {
+                                 var state = "已报价";
+                             } else if (value == 2) {
+                                 var state = "审核通过";
+                             } else if (value == 3) {
+                                 var state = "审核失败";
+                             }
+                             else {
+                                 var state = "未知错误";
+                             }
+                             return state;
+                         }
+                     },
+                    { field: 'CPname', title: '产品名称' ,align:'center'},
+                    {
+                        field: 'CPXingHao', title: '产品型号', align: 'center', formatter: function (val, row, index) {
+                            return "<b title='123321'>"+val+"</b>";
+                        }
+                    },
+                    { field: 'CPShuLiang', title: '产品数量', align: 'center' },
+                     { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true, align: 'center' },
+                     { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
+
+                    { field: 'HanShui', title: '是否含税', align: 'center' },
+                      { field: 'CpJB', title: '产品级别', align: 'center' },
+                     { field: 'Denjiu', title: '产品单据', align: 'center' },
+                    { field: 'Remark', title: '备注' },
+                    {
+                        field: 'BaoJiaYunFei', title: '运费金额', align: 'center', formatter: function (value,row,index) {
+                            return value == null ? "" : value.toFixed(2);
+                        }
+                    },
+                     {
+                         field: 'summoney', title: '总金额',align:'center',
+                         formatter: function (value, row, index) {
+                             var str = row.BaoJiaMoney + row.BaoJiaYunFei;
+                             return str.toFixed(2);
+                         }
+                     },
+                     { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true, align: 'center',formatter: function (value,row,ind) {
+                         return value == null ? "" : value.toFixed(2);
+                     } },
+                     {
+                         field: 'GhTime', title: '供货时间', align: 'center',
+                         formatter: function (value, row, col) {
+                             var sd = value == null ? '' : ChangeDateFormat(value);
+                             return sd;
+                         }
+                     },
+                    {
+                        field: 'AddTime', title: '申请时间', align: 'center',
+                        formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value,true);
+                            return sd;
+                        }
+                    },
+                     { field: 'KHname', title: '客户名称', align: 'center' },
+                      { field: 'KHperson', title: '客户联系人', align: 'center' },
+                      { field: 'KHzhiwu', title: '联系人职务', align: 'center' },
+                     { field: 'KHphoto', title: '联系人电话', align: 'center' },
+                      { field: 'KHfaren', title: '法人', align: 'center' },
+                    { field: 'JiShuYaoQiu', title: '技术要求' },
+                    { field: 'Addess', title: '供货地点' },
+                    { field: 'DaiBanYunShu', title: '代办运输', align: 'center' },
+                    { field: 'JieShuanFanShi', title: '结算方式', align: 'center' },
+                    { field: 'HeTongQianDing', title: '合同签订', align: 'center' }
+                ]],
+                onLoadSuccess: function () {
+                    $("#toolbarIm").hide();
+                    if (win == 1) {
+                        $("#tb").show();
+                        $(".tbb0").show();
+                        $("#tb").css("height", "auto");
+                        $('#cc').combobox('setValue', 'bitem3');
+                        $('#cc').combobox('setValue', 'bitem1');
+                        $("#Sousuo").show();
+                        $("#Sousuo_win").hide();
+                        $('#tt').datagrid("getPanel").panel("setTitle", "完成合同信息")
+                    }
+                    else {
+                        $("#tb").hide();
+                        $("#tb").css("height", "0px");
+                        if (delflg == 1) {
+                            $("#tb").show();
+                            $("#tb").css("height", "auto");
+                            $(".tbb0").hide();
+                            $("#toolbarIm").show();
+                            $('#tt').datagrid("getPanel").panel("setTitle", "完成报价信息");
+                        }
+                        else {
+                          
+                            $('#tt').datagrid("getPanel").panel("setTitle", "未报价信息")
+                        }
+                    }
+                }
+            });
+        }
+        function LoadCity(pars) {
+            $("#Citytt").datagrid({
+                url: '/MasterBaojia/GetCity',
+                title: '城市信息',
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'ck', checkbox: true, align: 'left', width: 30, hidden: true },
+                    { field: 'ID', align: 'left' ,hidden:true},
+                    { field: 'Text', title: '名称' },
+                    {
+                        field: 'chaozuo', title: '操作', formatter: function (value, row, index) {
+
+                            var str = "<a href='javascript:InCit(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >选择</a>";
+                            str = row.MyColums == "Village" ? "" : str;
+                            //"<a href='javascript:InCit()' class='l-btn deletes' style='padding:2px 5px 2px 5px' >返回</a>";
+                            str = str + "&nbsp&nbsp&nbsp<a href='javascript:DelCc(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >删除</a>";
+                            return str;
+                        }
+                    },
+                    
+                ]],
+                toolbar: [{
+                    id: 'btnAdd',
+                    text: '添加名称',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        $("#AddProvince").show()
+                        $("#AddCity").hide()
+                        $("#AddVillage").hide()
+                        $('#CityDint').dialog('open');
+                    }
+                }],
+                onLoadSuccess: function () {
+                }
+            })
+
+        }
+        //删除追加的城市信息
+        function DelCc(obj) {
+            $.messager.confirm('提示', '是否删除所选信息?', function (r) {
+                if (r) {
+                    $.post("/MasterBaoJia/DelSysfiedF", { "id": obj }, function (data) {
+                        AfterFuncito(data);
+                    })
+                }
+            });
+           
+        }
+        function AfterFuncito(data) {
+            if (data.ret == "ok") {
+                $("#Citytt").datagrid("reload");
+            }
+            else {
+                $.messager.alert("提示", data.msg);
+            }
+        }
+        function InCit(obj) {
+            var pars = {"ParentId":obj };
+            LoadCity(pars);
+        }
+        //审核报价
+        function CheckBaoJia(obj) {
+           
+            $.messager.confirm('审核提示', '是否通过审核?', function (r) {
+                if (r) {
+                    PostShenhe(2)
+                } else {
+                    PostShenhe(3)
+                }                
+            });  
+        }
+        function PostShenhe(p) {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $.post("/MasterBaoJia/CheckBaoJiaYes", { "bjid": rows[0].ID, "ckid": p }, function (data) {
+                if (data.ret == "ok") {
+                    alert(data.strReturn)
+                    $('#tt').datagrid("reload");
+                }
+                else {
+                    $.messager.alert("提示", "审核失败！");
+                }
+            });
+        }
+        //修改
+        function EditBJInfo(obj) {
+            var row = $("#tt").datagrid("getSelected");
+            $.post("/YXBJ/getAllInfo", { "id": row.ID }, function (data) {
+                $("#CPname2").combobox("setValue", data.CPname);//产品名称
+                $("#CPxh2").combobox("setValue", data.CPXingHao);//产品型号
+                $("#HanShuiID2").combobox("setValue", data.HanShuiID);//是否含税
+                $("#CPDengJiID2").combobox("setValue", data.CPDengJiID);//产品登记
+                $("#PiaoJuID2").combobox("setValue", data.PiaoJuID);//产品单据
+                $("#GHTime2").datebox("setValue",ChangeDateFormat(data.GhTime));//供货时间
+                var ay = data.Addess.split(',');
+                if (ay.length == 1) {//供货地点
+                    $("#ProvinceID").combobox("setValue", ay[0]);
+                } else if (ay.length == 2) {
+                    $("#ProvinceID").combobox("setValue", ay[0]);
+                    $("#CityID").combobox("setValue", ay[1]);
+                } else if (ay.length == 3) {
+                    $("#ProvinceID").combobox("setValue", ay[0]);
+                    $("#CityID").combobox("setValue", ay[1]);
+                    $("#VillageID").combobox("setValue", ay[2]);
+                }
+            });
+            $("#CPShuLiang2").val(row.CPShuLiang);//产品数量
+            $("#BeiZhu2").val(row.Remark);//备注
+            $("#KHname2").val(row.KHname);//客户名称
+            $("#KHperson2").val(row.KHperson); //客户联系人
+            $("#KHzhiwu2").val(row.KHzhiwu);  //联系人职务
+            $("#KHphoto2").val(row.KHphoto); //联系人电话
+            $("#KHfaren2").val(row.KHfaren);  //法人
+            $("#JiShuYaoQiu2").val(row.JiShuYaoQiu);  //技术要求
+            $("#DaiBanYunShu2").val(row.DaiBanYunShu); //代办运输
+            $("#JieShuanFanShi2").val(row.JieShuanFanShi); //结算方式
+            $("#HeTongQianDing2").val(row.HeTongQianDing); //合同签订
+            $("#BaoJiaID2").val(row.ID); //合同签订
+            $("#EditBJInfoDiv").window("open");
+        }
+        //报价
+        function BaoJia(obj) {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $('#dlg').dialog('open');
+            $("#BaoJiaID").val(rows[0].ID);
+            $("#HanSHuiput").val(rows[0].HanShui);
+            $("#ProductName").val(rows[0].CPname);
+            $("#ProductType").val(rows[0].CPXingHao);
+            $("#ProductLevel").val(rows[0].CpJB);
+
+        }
+        function Chazuo(obj, bol) {
+            var Moneystr = bol ? "BaoJiaMoney" : "CpMoney";
+            var Yunfeistr = bol ? "BaoJiaYunFei" : "WinYunFei";
+            $.post("/MasterBaoJia/GetWinHeTongData", { "id": obj }, function (serverData) {
+                if (serverData.ret == "ok") {
+                    $("#WinID").val(obj);
+                    $("#EditDivTable").css("display", "block");
+                    $("#XiangMuName").val(serverData.XiangMuName);
+                    $("#HanShuiTD").val(serverData.HanShuiStr);
+                    $("#Selebody").html("");
+                    $("#Bak").val(serverData.bak);
+                    $.each(serverData.temp, function (key, val) {
+                        var tr = "<tr><td >产品名称:</td><td>" + val["CPname"] + "</td><td >产品型号:</td><td>" + val["CpXingHao"] + "</td></tr>";
+                        $("#Selebody").append(tr);
+                        tr = "<tr><td >产品数量:</td><td>" + val["CPShuLiang"] + "</td><td >报价金额:</td><td>" + val["BaoJiaMoney"] + "</td></tr>";
+                        $("#Selebody").append(tr);
+                        tr = "<tr><td >运费金额:</td><td>" + val["BaoJiaYunFei"] + "</td><td >产品等级:</td><td>" + val["Cpdengji"] + "</td></tr>"
+                        $("#Selebody").append(tr);
+                        tr = "<tr><td>备注:</td><td  style='text-align:left'  colspan='2'>" + val["Remark"] + "</td></tr>"
+                        $("#Selebody").append(tr);
+                        var $td_input = $("<tr><td>成交金额</td><td ><input type='text' onkeyup='num(this)' name='EidtMoney" + val["ID"] + "' value=\'" + val[Moneystr] + "\'/></td></tr>");
+                        $("#Selebody").append($td_input);
+                        $td_input = $("<tr><td>运费金额</td><td ><input type='text' onkeyup='num(this)' name='EidtYunFei" + val["ID"] + "' value=\'" + val[Yunfeistr] + "\'/></td></tr>");
+                        $("#Selebody").append($td_input);
+                    })
+                    $('#EditDivTable').dialog({
+                        title: "信息处理",
+                        width: 450,
+                        height: 600,
+                        collapsible: true,
+                        resizable: true,
+                        modal: true,
+                        buttons: [{
+                            text: '确定',
+                            iconCls: 'icon-ok',
+                            hidden: true,
+                            handler: function () {
+                                if (bol) {
+                                    var ms = false;
+                                    $("#Selebody input[type='text']").each(function () {
+                                        if ($(this).val().trim().length <= 0) {
+                                            $.messager.alert("提示", "成交金额不可为空！");
+                                            ms = true
+                                        }
+                                    });
+                                    if (ms) {
+                                        return;
+                                    }
+                                    $("#bollForm").submit();//提交表单
+                                }
+                                else {
+
+                                    $('#EditDivTable').dialog('close');
+                                }
+                            }
+                        }, {
+                            text: '取消',
+                            handler: function () {
+                                $('#EditDivTable').dialog('close');
+                            }
+                        }]
+                    });
+                }
+                else {
+                     alert(serverData.ret)
+                }
+            });
+        }
+        //发货方法
+        function FaHuo(obj) {
+            $("#FaHuoDIV").css("display", "block");
+            $('#FaHuoDIV').dialog({
+                title: "信息处理",
+                width: $("#dgdiv").width() / 1.4,
+                height: $("#dgdiv").height() / 1.6,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [
+                    {
+                        text: '关闭',
+                        handler: function () {
+                            $('#FaHuoDIV').dialog('close');
+                        }
+                    }]
+            });
+            var pars = {
+                ID: obj
+            };
+            $('#FaHuoTT').datagrid({
+                url: '/MasterBaoJia/FaHuoSelect',
+                title: '发货信息表',
+                width: ($("#dgdiv").width() / 1.4) - 16,
+                height: ($("#dgdiv").height() / 1.6) - 100,
+                fitColumns: true, //列自适应
+                nowrap: false,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 20,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [10, 20, 30],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'CpName', title: '产品名称' },
+                     { field: 'CpXinghao', title: '产品规格' },
+                     { field: 'CPShuLiang', title: '产品数量' },
+                     { field: 'WinMoney', title: '产品价格' },
+                     { field: 'WinYunFei', title: '运费价格' },
+                     {
+                         field: 'Sum', title: '总金额',
+                         formatter: function (value, row, index) {
+                             return ((row.WinMoney + row.WinYunFei) * row.CPShuLiang).toFixed(2);
+                         }
+                     },
+                     {
+                         field: 'AddTime', title: '创建时间',
+                         formatter: function (value, row, index) {
+                             return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                         }
+                     },
+                    { field: 'Fahuoyint', title: '发货总数' },
+                    {
+                        field: 'FahMoney', title: '发货金额',
+                        formatter: function (value, row, index) {
+                            return (row.WinMoney + row.WinYunFei) * row.Fahuoyint;
+                        }
+                    },
+
+                     {
+                         field: 'WeiFahuo', title: '未发货数',
+                         formatter: function (value, row, index) {
+                             return row.CPShuLiang - row.Fahuoyint;
+                         }
+                     }, {
+                         field: 'wfhSumMoney', title: '未发货总额',
+                         formatter: function (value, row, index) {
+                             return (((row.WinMoney + row.WinYunFei) * row.CPShuLiang) - ((row.WinMoney + row.WinYunFei) * row.Fahuoyint)).toFixed(2);
+                         }
+                     },
+                    {
+                        field: 'FahuoTime', title: '最新发货时间',
+                        formatter: function (value, row, index) {
+                            return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                        }
+                    },
+                    {
+                        field: "edit", title: "操作",
+                        formatter: function (value, row, index) {
+                            var str = "<a href='javascript:XiangXi(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >详细列表</a>";
+                            return str;
+                        }
+                    }
+
+                ]],
+                toolbar: [{
+                    id: 'btnAdd',
+                    text: '发货',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        var rows = $('#FaHuoTT').datagrid('getSelections');
+                        if (rows.length != 1) {
+                            //alert("请选择要修改的商品！");
+                            $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                            return;
+                        }
+                        $("#BaoJia_ID").val(rows[0].ID);
+                        $("#AddFaHuoOneDiv").css("display", "block");
+                        $('#AddFaHuoOneDiv').dialog({
+                            title: "信息处理",
+                            width: 300,
+                            height: 200,
+                            collapsible: true,
+                            resizable: true,
+                            modal: true,
+                            buttons: [
+                                 {
+                                     text: '提交',
+                                     handler: function () {
+                                         if ($("#FaHuoTime").combobox('getValue').length <= 0) {
+                                             $.messager.alert("错误", "时间不可为空！", "errer");
+                                             return;
+                                         }
+                                         if ($("#FahuoInt").val().length <= 0) {
+                                             $.messager.alert("错误", "金额不可为空！", "errer");
+                                             return;
+                                         }
+                                         $("#AddFahuoOne").submit();
+
+                                     }
+                                 },
+                                {
+                                    text: '关闭',
+                                    handler: function () {
+                                        $('#AddFaHuoOneDiv').dialog('close');
+                                    }
+                                }]
+                        });
+                    }
+                }
+                ],
+                onLoadSuccess: function () {
+                }
+            });
+        }
+        //获取报价发货详细信息
+        function XiangXi(objID) {
+
+            $("#XiangXiDIV").css("display", "block");
+            $('#XiangXiDIV').dialog({
+                title: "信息处理",
+                width: $("#FaHuoDIV").width() / 1.6,
+                height: $("#FaHuoDIV").height() / 1.4,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [
+                    {
+                        text: '关闭',
+                        handler: function () {
+                            $('#XiangXiDIV').dialog('close');
+                        }
+                    }]
+            });
+            var pars = {
+                ID: objID
+            };
+            $('#XiangXiTT').datagrid({
+                url: '/MasterBaoJia/FaHuoXiangXI',
+                title: '发货信息表',
+                fitColumns: true, //列自适应
+                nowrap: false,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 20,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [10, 20, 30],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     {
+                         field: 'FaHuoTime', title: '发货时间',
+                         formatter: function (value, row, index) {
+                             return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                         }
+                     },
+                     { field: 'FahuoInt', title: '发货数量' },
+                     { field: 'FaHuoBak', title: '发货备注' },
+                     { field: 'PerSonName', title: '发货人员' },
+                     {
+                         field: 'AddTime', title: '创建时间',
+                         formatter: function (value, row, index) {
+                             return value == null ? "" : (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                         }
+
+                     },
+                    {
+                        field: "edit", title: "操作",
+                        formatter: function (value, row, index) {
+                            var str = "<a href='javascript:DelXiangXi(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >删除</a>";
+                            return str;
+                        }
+                    }
+
+                ]],
+                toolbar: [
+                ],
+                onLoadSuccess: function () {
+                }
+            });
+        }
+        function DelXiangXi(objid) {
+            $.post("/MasterBaoJia/DelFahuoXiangXI", { "ID": objid }, function (Sdata) {
+                if (Sdata.ret == "ok") {
+                    $("#XiangXiTT").datagrid("reload");
+                    $("#FaHuoTT").datagrid("reload");
+                    $("#tt").datagrid("reload");
+                }
+                else {
+                    $.messager.alert("", Sdata.msg, "");
+                }
+            })
+        }
+        //将序列化成json格式后日期(毫秒数)转成日期格式
+        function ChangeDateFormat(cellval,bol) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            if (bol != null)
+            {
+                if (bol) {
+                    return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
+                }
+            }
+            return date.getFullYear() + "-" + month + "-" + currentDate ;
+        }
+
+        function myformatter(date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            var d = date.getDate();
+            return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+        }
+        function bool_click() {
+            $.post("/ActionInfo/btnbool", { "id": "" }, function (serverData) {
+                if (serverData == "True") {
+                    $("#ZTtext").val("开启");
+                    $("#btnbool").val("关闭");
+                }
+                else {
+                    $("#ZTtext").val("关闭");
+                    $("#btnbool").val("开启");
+                }
+            });
+        }
+       
+        function afterEdit(data) {
+            if (data.ret == "ok") {
+
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#EditDivTable').dialog('close');
+                }
+                catch (e) {
+
+                }
+                try {
+                    $('#AddFaHuoOneDiv').dialog('close');
+                    $("#FaHuoTT").datagrid("reload");
+                }
+                catch (e) {
+
+                }
+
+
+            } else if (data.ret == "no") {
+                $.messager.alert("提示", data.msg, "error");
+            } else {
+                $.messager.alert("提醒", "修改数据错误!!", "error");
+            }
+        }
+        //完成报价多选查询
+        function DuoXuanEascsh(pars) {
+            $('#tt').datagrid({
+                url: '/MasterBaoJia/DuoXuanSearch',
+                title: '多选查询',
+                height: $("#dgdiv").height() - 15,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'CPname', title: '产品名称' },
+                    { field: 'CPXingHao', title: '产品型号' },
+                    { field: 'CPShuLiang', title: '产品数量', align:'center',},
+                    { field: 'HanShui', title: '是否含税', align: 'center', },
+                    {
+                        field: 'BaoJiaMoney', title: '产品单价', align: 'center',
+                        formatter: function (value, row, index) {
+                            return value == null ? "" : value.toFixed(2);
+                        }
+                    },
+                     {
+                         field: 'PaoshuiMoney', title: '刨税单价',align:'center',
+                         formatter: function (value, row, index) {
+                             var rtmoney = row.BaoJiaMoney == null ? 0 : row.BaoJiaMoney;
+                             if (row.HanShui == "含税") {
+                                 rtmoney = (row.BaoJiaMoney / 1.17);
+                             }
+                             return rtmoney==0?"": rtmoney.toFixed(2);
+                         }
+                     },
+                    {
+                        field: 'BaoJiaYunFei', title: '运费单价', align: 'center', formatter: function (value, row, index) {
+                            return value == null ? "" : value.toFixed(2);
+                        }
+                    },
+                     {
+                         field: 'summoney', title: '单价总金额',align:'center',
+                         formatter: function (value, row, index) {
+                             var str = row.BaoJiaMoney + row.BaoJiaYunFei;
+                             return str==0?"": str.toFixed(2);
+                         }
+                     },
+                     {
+                         field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true, align: 'center', formatter: function (value, row, index) {
+                             return value == null ? "" : value.toFixed(2);
+                         }
+                     }, 
+                     {
+                         field: 'WinYunFei', title: '最终运费', hidden: win == 1 ? false : true, align: 'center', formatter: function (value, row, index) {
+                             return value == null ? "" : value.toFixed(2);
+                         }
+                     },
+                     {
+                         field: 'Winsummoney', title: '最终总价', hidden: win == 1 ? false : true,align:'center',
+                         formatter: function (value, row, index) {
+                             var str = row.WinMoney + row.WinYunFei;
+                             return str==0?"": str.toFixed(2);
+                         }
+                     }, {
+                         field: 'OldBaojia', title: '查询报价',align:'center', formatter: function (value, row, index) {
+                             var str = "<a href='javascript:Soldbaojia(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >历史报价</a>";
+                             return str;
+                         }
+
+                     },
+                      { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true, align: 'center', },
+                     { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
+                       {
+                           field: 'GhTime', title: '供货时间',
+                           formatter: function (value, row, index) {
+                               return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                           }
+                       },
+                    {
+                        field: 'AddTime', title: '申请时间', align: 'center',
+                        formatter: function (value, row, index) {
+                            return   value == null ? '' : ChangeDateFormat(value,true);;
+                        }
+                    },
+                     { field: 'KHname', title: '客户名称' },
+                      { field: 'KHperson', title: '客户联系人' },
+                      { field: 'KHzhiwu', title: '联系人职务' },
+                     { field: 'KHphoto', title: '联系人电话' },
+                      { field: 'KHfaren', title: '法人' },
+                    { field: 'JiShuYaoQiu', title: '技术要求' },
+                    { field: 'Addess', title: '供货地点' },
+                    { field: 'DaiBanYunShu', title: '代办运输' },
+                    { field: 'JieShuanFanShi', title: '结算方式' },
+                    { field: 'HeTongQianDing', title: '合同签订' },
+
+
+                ]],
+                onLoadSuccess: function () {                  
+                    $("#Sousuo").show();
+                    $("#Sousuo_win").hide();
+                  
+                }
+            });
+        }
+
+        function GetOverHeTong(pars) {
+
+            $('#tt').datagrid({
+                url: '/MasterBaoJia/OverHeTongt',
+                title: '完成合同',
+                height: $("#dgdiv").height() - 15,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'KHname', title: '客户名称' },
+                      { field: 'KHperson', title: '客户联系人' },
+                      { field: 'KHzhiwu', title: '联系人职务' },
+                     { field: 'KHphoto', title: '联系人电话' },
+                      { field: 'KHfaren', title: '法人' },
+                    { field: 'JiShuYaoQiu', title: '技术要求' },
+                    { field: 'Addess', title: '供货地点' },
+                    { field: 'DaiBanYunShu', title: '代办运输' },
+                    { field: 'JieShuanFanShi', title: '结算方式' },
+                    { field: 'Denjiu', title: '发票模式' },
+                    { field: 'HeTongQianDing', title: '合同签订' },
+                    {
+                        field: 'TOPaddtime', title: '申请时间', align: 'right',
+                        formatter: function (value, row, index) {
+                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                        }
+                    },
+                    {
+                        field: "edit", title: "操作", width: 120,
+                        formatter: function (value, row, index) {
+                            var str = "<a href='javascript:Chazuo(" + row.ID + ",true)' class='l-btn deletes' style='padding:2px 5px 2px 5px' >操作</a>";
+                            return str;
+                        }
+                    }
+                ]],
+                onLoadSuccess: function () {
+                    $('#tb').hide();
+                    $("#tb").css("height", "0");
+                    //$('#tt').datagrid("getPanel").panel("setTitle", "完成合同信息")
+                }
+            });
+        }
+        //数字验证
+        function num(obj) {
+            obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+            obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个, 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+        }
+        //完成操作的合同查询
+        function WinHeTong(pars) {
+            $('#tt').datagrid({
+                url: '/MasterBaoJia/GetWinHeTongWinData',
+                title: '多选查询',
+                height: $("#dgdiv").height() - 15,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'KHname', title: '客户名称' },
+                      { field: 'KHperson', title: '客户联系人' },
+                      { field: 'KHzhiwu', title: '联系人职务' },
+                     { field: 'KHphoto', title: '联系人电话' },
+                      { field: 'KHfaren', title: '法人' },
+                    { field: 'JiShuYaoQiu', title: '技术要求' },
+                    { field: 'Addess', title: '供货地点' },
+                    { field: 'DaiBanYunShu', title: '代办运输' },
+                    { field: 'JieShuanFanShi', title: '结算方式' },
+                    { field: 'HeTongQianDing', title: '合同签订' },
+                     { field: 'WinStr', title: '是否成功' },
+                     { field: 'Winbak', title: '备注信息' },
+                      { field: 'WinMoney', title: '报价总金额' },
+                      { field: "FahuoMoney", title: "发货金额" },
+                      {
+                          field: "FahuoBFB", title: "发货百分比", formatter: function (value, row, index) {
+                              return ((row.FahuoMoney / row.WinMoney) * 100).toFixed(2);
+                          }
+                      },
+                    {
+                        field: 'GhTime', title: '供货时间',
+                        formatter: function (value, row, index) {
+                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                        }
+                    },
+                    {
+                        field: 'AddTime', title: '申请时间', align: 'right',
+                        formatter: function (value, row, index) {
+                            return (eval(value.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"))).pattern("yyyy-M-d");
+                        }
+                    },
+                    {
+                        field: "edit", title: "操作",
+                        formatter: function (value, row, index) {
+                            var str = "<a href='javascript:Chazuo(" + row.TopId + ",false)' class='l-btn deletes' style='padding:2px 5px 2px 5px' >查看</a>";
+                            return str;
+                        }
+                    },
+                    {
+                        field: "Fahuo", title: "发货", id: "FaHuoBtn",
+                        formatter: function (value, row, index) {
+                            var str = "";
+                            if (row.WinStr == "成交") {
+                                str = "<a href='javascript:FaHuo(" + row.TopId + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >发货</a>";
+                            }
+                            else {
+                                str = "";
+                            }
+                            return str;
+                        }
+                    }
+                ]],
+                onLoadSuccess: function () {
+                    $("#toolbarIm").hide();
+                    $("#tb").show();
+                    $(".tbb0").show();
+                    $("#tb").css("height", "auto");
+                    $("#Sousuo").hide();
+                    $("#Sousuo_win").show();
+                }
+            });
+            var pager = $('#tt').datagrid().datagrid('getPager');
+            pager.pagination({
+                buttons: [{
+                    iconCls: 'icon-search',
+                    text: '导出报表',
+                    handler: function () {
+                        //查询参数直接添加在url中
+
+                        /* var url =$('#test').datagrid('options').url;
+
+                        // url = 'http://127.0.0.1:8080/web/AppAndRemoveServer.server?state=' +stateVal;
+
+                       //重新赋值url 属性
+
+                         $('#test').datagrid('options').url=url;
+
+                         $("#test").datagrid('reload');
+
+                         */
+                        $(location).attr('href', '/MasterBaoJia/DownLoadExcel');
+
+                        return;
+                        $('#tt').datagrid('options').url = "/MasterBaoJia/DownLoadExcel";
+                        var queryParams = $('#tt').datagrid('options').queryParams;
+
+                        queryParams.outexe = true;
+
+                        $('#tt').datagrid('options').queryParams = queryParams;
+                       // alert($('#tt').datagrid('options').url)
+                        $("#tt").datagrid('reload');
+                    }
+                }]
+            });
+        }
+        //情况选项
+        function qingkou() {
+            $('#Person').combobox('clear');
+            $('#SeeDint').combobox('clear');
+            $('#CitySee').combobox('clear');
+            $('#VillageSee').combobox('clear');
+            $('#KHname').combobox('clear');
+            $('#CPname').combobox('clear');
+            $('#CPxh').combobox('clear');
+            $('#YyZt').combobox('clear');
+        }
+        //报价提交方法
+        function suFm() {
+            var resultId = $("#BaoJiaID").val();//信息ID
+            if (resultId == "") {
+                $.messager.alert('提醒', '错误没有选中修改信息');
+                $("#tt").datagrid('reload');
+                return;
+            }
+            var finalRusult = $("#moneyBJ").val();//
+            var finalRusult1 = $("#yunfeiBJ").val();
+            var r = /^-?[0-9]/;//判断输入的是正整数
+            if (!r.test(finalRusult)) {
+                $.messager.alert('提醒', '请输入正整数！');
+                return;
+            }
+            if (!r.test(finalRusult1)) {
+                $.messager.alert('提醒', '请输入正整数！');
+                return;
+            }
+            $.ajax({
+                type: "post",
+                async: false,
+                url: "/MasterBaojia/editMoney",
+                data: {
+                    "resultId": resultId,
+                    "PMoney": finalRusult,
+                    "Yunfei": finalRusult1
+                },
+                success: function (data) {
+                    if (data.ret == true) {
+                        $("#tt").datagrid('reload');
+                        clearForm();
+                    }else if(data.ret == false){
+                        $.messager.alert("提示","修改报价错误,请仔细核对！");
+                    }
+                }
+            })
+        }
+        function clearForm() {
+            $('#ff').form('clear');
+            $('#dlg').dialog('close');
+        }
+        function submitForm(index, row, changes) {
+            //  alert( row.resultId+"--"+changes.finalResult)daliyResultRate;
+
+        }
+
+        //获取导航列表
+        function GetItemMeun() {
+            $("#BaoJiaShenhe").hide();
+            $.post("/MasterBaoJia/GetMenum", {}, function (data) {             
+                if (data.rows != null)
+                {
+                    var a = "<a href='#' class='easyui-linkbutton l-btn l-btn-small' data-options='toggle:true,group:'g1'' id='" + data.rows[0].url + "' group='g1'><span class='l-btn-left'><span class='l-btn-text'>" + data.rows[0].title + "</span></span></a>";
+                   // alert(data.rows[0].url)
+                    $("#" + data.rows[0].url).show();
+                }  
+            })
+        }
+        //报价审核
+        function BaoJiaShenhe(pars) {
+           
+            $('#tt').datagrid({
+                url: '/MasterBaoJia/GetSHbaojia',
+                title: '审核报价',
+                height: $("#dgdiv").height() - 15,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     {
+                         field: 'shenghe', title: '审核',
+                         formatter: function (value, row, index) {
+                             var str = "<a href='javascript:CheckBaoJia(" + row.ID + " )' class='l-btn deletes' style='padding:2px 5px 2px 5px' >审核报价</a>";
+                             return str;
+                         }
+                     }, {
+                         field: 'ZhuangTai', title: '审核状态',
+                         formatter: function (value, row, index) {
+                             if (value == 0) {
+                                 var state = "申请中";
+                             } else if (value == 1) {
+                                 var state = "已报价";
+                             } else if (value == 2) {
+                                 var state = "审核通过";
+                             } else if (value == 3) {
+                                 var state = "审核失败";
+                             }
+                             else {
+                                 var state = "未知错误";
+                             }
+                             return state;
+                         }
+                     },
+                    { field: 'CPname', title: '产品名称' },
+                    { field: 'CPXingHao', title: '产品型号' },
+                    { field: 'CPShuLiang', title: '产品数量',align:'center' },
+                     { field: 'WinStr', title: '是否成功', hidden: win == 1 ? false : true, align: 'center' },
+                     { field: 'bak', title: '备注信息', hidden: win == 1 ? false : true },
+
+                    { field: 'HanShui', title: '是否含税', align: 'center' },
+                      { field: 'CpJB', title: '产品级别', align: 'center' },
+                     { field: 'Denjiu', title: '产品单据', align: 'center' },
+                    { field: 'Remark', title: '备注' },
+                    { field: 'BaoJiaYunFei', title: '运费金额', align: 'center' },
+                     {
+                         field: 'summoney', title: '总金额',align:'center',
+                         formatter: function (value, row, index) {
+                             var str = row.BaoJiaMoney + row.BaoJiaYunFei;
+                             return str;
+                         }
+                     },
+                     { field: 'WinMoney', title: '最终报价', hidden: win == 1 ? false : true, align: 'center' },
+                     {
+                         field: 'GhTime', title: '供货时间', align: 'center', align: 'center',
+                         formatter: function (value, row, col) {
+                             var sd = value == null ? '' : ChangeDateFormat(value);
+                             return sd;
+                         }
+                     },
+                    {
+                        field: 'AddTime', title: '申请时间', align: 'center',
+                        formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value, true);
+                            return sd;
+                        }
+                    },
+                     { field: 'KHname', title: '客户名称' },
+                      { field: 'KHperson', title: '客户联系人' },
+                      { field: 'KHzhiwu', title: '联系人职务' },
+                     { field: 'KHphoto', title: '联系人电话' },
+                      { field: 'KHfaren', title: '法人' },
+                    { field: 'JiShuYaoQiu', title: '技术要求' },
+                    { field: 'Addess', title: '供货地点' },
+                    { field: 'DaiBanYunShu', title: '代办运输' },
+                    { field: 'JieShuanFanShi', title: '结算方式' },
+                    { field: 'HeTongQianDing', title: '合同签订' }
+                ]],
+                onLoadSuccess: function () {
+                    $('#tb').hide();
+                    $("#tb").css("height", "0");
+                }
+            });
+        }
+        //查询历史报价 
+        function Soldbaojia(id) {
+            $.post("/MasterBaoJia/GetOldBaojia", { "id": id }, function (data) {
+                if (data.ret == "ok") {
+                    $("#oldadd").html("");
+                    $.each(data.msg, function (i, e) {
+                        var str = "<tr><td>" + e["ID"] + "</td><td>" + e["EditBJMoney"] + "</td><td>" + e["EditYFMoney"] + "</td><td>" +
+                            ChangeDateFormat( e["EidtTime"]) + "</td><td>" + e["PerSonName"] + "</td></tr>";
+                        $("#oldadd").append(str);                       
+                    })
+                   
+                    $('#oldbaojia').dialog('open');
+                }
+                else {
+                    $.messager.show({
+                        title: '提示',
+                        msg: '无历史数据！',
+                        showType:'show'
+                    })
+                }             
+                
+            })
+        }
+
+        //报价查询
+        function Khbbbtn() {
+            var UpTime = $('#StTime').combobox('getValue');
+            if (UpTime == undefined||UpTime.trim().length <= 0) {
+                $.messager.alert("提示", "开始时间不可为空！")
+                return;
+            }
+            var DwTime = $('#DwTime').combobox('getValue');
+            if (DwTime == undefined || DwTime.trim().length <= 0) {
+                $.messager.alert("提示", "结束时间不可为空！")
+                return;
+            }
+            var yxy = $('#Person').combobox('getValue');
+            yxy =yxy==undefined?0: yxy.trim().length < 0 ? 0 : yxy;
+            var khn = $('#KHname').combobox('getValue');
+          
+            khn = yxy == undefined ? 0 : khn == undefined ? 0 : khn;
+            
+            showdilag2();
+            var pars = {
+                UpTime: UpTime, DwTime: DwTime, yxy: yxy, khn: khn,  addess: RetAddess()
+            };
+            $('#Citytt').datagrid({
+                url: '/MasterBaoJia/GetKeHuBaoBei',
+                title: UpTime + "至" + DwTime + '客户报备信息',
+                height: $("#City_Div").height() - 40,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'ck', checkbox: true, title: '', width: 30 },
+                    {
+                        field: 'ZhuangTai', title: '审核状态',hidden:true,
+                        formatter: function (value, row, index) {
+                            return "客户报备阶段";
+                        }
+                    },
+                    {
+                        field: 'NewTime', title: '创建时间', align: 'center',
+                        formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value, true);
+                            return sd;
+                        }
+                    },
+                     {
+                         field: 'UName', title: '创建人员', align: 'center'
+                     },
+                     { field: 'KHname', title: '客户名称', align: 'center' },
+                      { field: 'KHperson', title: '客户联系人', align: 'center' },
+                      { field: 'KHzhiwu', title: '联系人职务', align: 'center' },
+                     { field: 'KHphoto', title: '联系人电话', align: 'center' },
+                      { field: 'KHfaren', title: '法人', align: 'center' },
+                      { field: 'KHphoto', title: '施工地址', align: 'center' },
+                      { field: 'KHfaren', title: '备注', align: 'center' },
+                       {
+                           field: 'Jiezz', title: '是否借资质', align: 'center', formatter: function (value, row, index) {
+                               return value == null ? "" : value ? "借用" : "未借";
+                           }
+                       },
+                      {
+                          field: 'deletes', title: '操作', align: 'center', formatter: function (value, row, index) {
+                             str = "<a href='javascript:delBBdate(" + row.ID + ")' class='l-btn deletes' style='padding:2px 5px 2px 5px' >删除</a>";
+                             return str;
+                          }
+                      }
+                ]],
+                toolbar:"",
+                onLoadSuccess: function () {
+                }
+            });
+
+        }
+
+
+
+        //产品除税列表
+        function Cpcsbtn() {
+            var UpTime = $('#StTime').combobox('getValue');
+            if (UpTime.length <= 0) {
+                $.messager.alert("提示", "开始时间不可为空！")
+                return;
+            }
+            var DwTime = $('#DwTime').combobox('getValue');
+            if (DwTime.length <= 0) {
+                $.messager.alert("提示", "结束时间不可为空！")
+                return;
+            }
+            showdilag();
+            var pars = {
+                UpTime: UpTime, DwTime: DwTime
+            };
+            $('#Citytt').datagrid({
+                url: '/MasterBaoJia/GetChuShuiTable',
+                title:UpTime+"至"+DwTime+ '除税表',
+                height: $("#City_Div").height()-40,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                     { field: 'Cpname', title: '产品名称', align: "center" },
+                     { field: 'CpXinghao', title: '产品型号', align: "center" },
+                     {
+                         field: 'maxMoney', title: '除税后高价格', align: "center", formatter: function (valuer, r, index) {
+                             return valuer.toFixed(2);
+                         }
+                     },
+                     { field: 'maxPerson', title: '营销员', align: "center" },
+                     { field: 'maxKhname', title: '客户公司' },
+                     {
+                         field: 'minMoney', title: '除税后低价格', align: "center", formatter: function (valuer, r, index) {
+                             return valuer.toFixed(2);
+                         }
+                     },
+                     { field: 'minPerson', title: '营销员', align: "center" },
+                     { field: 'minKhname', title: '客户公司' }                   
+                ]],
+                onLoadSuccess: function () {                  
+                }
+            });
+            
+        }
+        function showdilag() {
+            $('#City_Div').dialog({
+                title: "产品税后信息表",
+                width: $("#dgdiv").width() / 2,
+                height: $("#dgdiv").height() / 1.5,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '取消',
+                    handler: function () {
+                        $('#City_Div').dialog('close');
+                    }
+                }]
+            });
+        }
+        function showdilag2() {
+            $('#City_Div').dialog({
+                title: "客户报备信息",
+                width: $("#dgdiv").width() /1.2,
+                height: $("#dgdiv").height() / 1.5,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '取消',
+                    handler: function () {
+                        $('#City_Div').dialog('close');
+                    }
+                }]
+            });
+        }
+
+        function cancel() {
+            $("#EditBJInfoDiv").window("close");
+        }
+
+        function OkToEdit() {
+            if($("#ProvinceID").combobox("getValue").trim().length < 0){
+                $.messager.alert("提示", "供货地址不能为空！");
+                return;
+            }if($("#CPxh2").combobox("getValue").trim().length < 0){
+                $.messager.alert("提示", "产品型号不能为空！");
+                return;
+            }
+
+            $("#CPname3").val($("#CPname2").combobox("getValue"));
+            $("#CPxh3").val($("#CPxh2").combobox("getValue"));
+            $("#HanShuiID3").val($("#HanShuiID2").combobox("getValue"));
+            $("#CPDengJiID3").val($("#CPDengJiID2").combobox("getValue"));
+            $("#PiaoJuID3").val($("#PiaoJuID2").combobox("getValue"));
+            $("#ProvinceID3").val($("#ProvinceID").combobox("getValue"));
+            $("#CityID3").val($("#CityID").combobox("getValue"));
+            $("#VillageID3").val($("#VillageID").combobox("getValue"));
+            $("#GHTime3").val($("#GHTime2").datebox("getValue"));
+
+            $("#editbjinfoform").submit();
+        }
+
+        function afterEditBJInfo(data) {
+            if (data.ret = "yes") {
+                $("#EditBJInfoDiv").window("close");
+                $("#tt").datagrid("reload");
+
+            } else if (data.ret = "no") {
+                $.message.alert("提示",data.msg);
+            } else {
+                $.message.alert("提示","未知错误，请联系管理员");
+            }
+        }
+
+        function delBBdate(val) {
+            $.post("/MasterBaoJia/DELbbdata", {id:val}, function (data) {
+                if (data.ret == "ok") {
+                    $("#Citytt").datagrid("reload");
+                }
+
+            })
+        }
+
+    </script>
+    <style>
+        html, body {
+            height:80%;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .btnlink a {
+            width: 90%;
+            margin-top: 3px;
+        }
+        thead {
+           font-size:18px;
+           font-weight:bold;
+        }
+      
+    </style>
+</head>
+<body class="easyui-layout">
+    <div>
+        <div id="FaHuoDIV" style="height:100%; width:100%;">
+
+            <table id="FaHuoTT" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化" iconcls="icon-edit">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="AddFaHuoOneDiv" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("AddFahuo", "MasterBaoJia", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "AddFahuoOne" }))
+            {
+            <input type="hidden" id="BaoJia_ID" name="BaoJia_ID" />
+            <table>
+                <thead>
+                    <tr><td>发货时间</td><td><input type="text" class="easyui-datebox" name="FaHuoTime" id="FaHuoTime" /></td></tr>
+                    <tr><td>发货数量</td><td><input type="text" onkeyup='num(this)' name="FahuoInt" id="FahuoInt" /></td></tr>
+                    <tr><td>备注</td><td><input type="text" name="FaHuoBak" id="FaHuoBak" /></td></tr>
+                </thead>
+
+
+            </table>
+            }
+        </div>
+        <div id="dlg" class="easyui-dialog" title="Basic Dialog" data-options="iconCls:'icon-save'" style="width:400px;height:360px;padding:10px">
+            <div style="padding:20px 30px 20px 30px">
+                <form id="ff" method="post">
+                    <table cellpadding="5">
+                        <tr>
+                            <td>ID号:</td>
+                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="BaoJiaID" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品名称:</td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="ProductName" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品型号:</td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="ProductType" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品等级</td>
+                            <td><input class="easyui-textbox" type="text" name="" readonly="readonly" id="ProductLevel" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>是否含税:</td>
+                            <td><input class="easyui-textbox" type="text" name="name" readonly="readonly" id="HanSHuiput" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>产品金额:</td>
+                            <td><input class="easyui-textbox" type="text" name="moneyBJ" id="moneyBJ" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>运费金额:</td>
+                            <td><input class="easyui-textbox" type="text" name="yunfeiBJ" id="yunfeiBJ" data-options="required:true" /></td>
+                        </tr>
+
+                    </table>
+                </form>
+                <div style="text-align:center;padding:5px">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="suFm()">提交</a>
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">关闭</a>
+                </div>
+            </div>
+        </div>
+        <div id="XiangXiDIV">
+            <table id="XiangXiTT" class="easyui-datagrid" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!---------------修改用户信息--------------------->
+        <div id="EditDivTable" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("WinChuLi", "MasterBaoJia", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "bollForm" }))
+            {
+            <table>
+                <thead>
+                    <tr><td>处理编号</td><td><input type="text" readonly="readonly" name="BaoJiaTOPID" id="WinID" /></td></tr>
+                    <tr><td>项目名称</td><td><input type="text" readonly="readonly" name="XiangMuName" id="XiangMuName" /></td></tr>
+                    <tr><td>是否含税</td><td><input type="text" readonly="readonly" name="HanShuiTD" id="HanShuiTD" /></td></tr>
+                    <tr>
+                        <td>处理方式</td>
+                        <td>
+                            <select class="easyui-combobox" name="YuanYin" id="Ceclfs" style="width:100px;">
+                                @{foreach (T_YSItems Item in ViewBag.items)
+                                    {
+                                    <option value="@Item.ID">@Item.MyText</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td>处理备注</td>
+                        <td>
+                            <textarea rows="10" name="Bak" id="Bak"></textarea>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
+                                    }
+        </div>
+    </div>
+           <div>
+            <div id="oldbaojia" class="easyui-dialog" title="历史报价" style="width:500px;height:300px;padding:10px"
+                 data-options="iconCls:'icon-save' ,buttons:'#oldbaojia-buttons'">
+                <table style="BORDER-COLLAPSE: collapse; text-align:center;width:100%;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
+    <thead>
+        <tr><td>id</td><td>产品单价</td><td>运费单价</td><td>报价时间</td><td>报价人员</td></tr>
+    </thead>
+    <tbody id="oldadd"></tbody>
+
+             </table>
+             </div>
+               <div id="oldbaojia-buttons">
+                   @*<a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:alert('save')">Save</a>*@
+                   <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript: $('#oldbaojia').dialog('close')">Close</a>
+               </div>
+            </div>
+         <div>
+
+        <div id="CityDint" class="easyui-dialog" title="城市控制器" style="width:400px;height:300px;padding:10px"
+             data-options="iconCls:'icon-save' , toolbar:'#CityDint-toolbar' ,buttons:'#CityDint-buttons'">
+            <div>
+            &nbsp;&nbsp;省份
+            <input class="easyui-combobox Province" id="CityAdd"
+                 name="Province"
+                 url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
+                 valueField="ID"
+                 textField="MyTexts"
+                 panelHeight="auto" style="width:100px" /></div>
+            <div>
+                &nbsp;&nbsp;城市
+                <input class="easyui-combobox CityAdd"
+                       id="VillageAdd"
+                       name="City"
+                       url=""
+                       valueField="ID"
+                       textField="MyTexts"
+                       panelHeight="auto" style="width:100px" />
+            </div>            
+           <div>输入名称<input type="text" id="AddCptVal"  width="100" /></div>
+                    <a class="easyui-linkbutton" id="Naddessbtn">录入</a>    
+                    <a class="easyui-linkbutton" id="remoeybtn">重置</a>    
+            </div>
+        </div>
+        <div id="CityDint-toolbar" style="padding:2px 0">
+            <table cellpadding="0" cellspacing="0" style="width:100%">
+                <tr>
+                    <td style="padding-left:2px">
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加省份</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加城市</a>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加区域</a>
+                    </td>                   
+                </tr>
+            </table>
+        </div>
+        <div id="CityDint-buttons">
+            @*<a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:alert('save')">Save</a>*@
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript: $('#CityDint').dialog('close')">Close</a>
+        </div>
+    
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink" style="width:150px;height:100%;">
+        <div class="easyui-accordion" >
+            <div title="搜索选项" data-options="iconCls:'icon-search'" style="overflow:auto;padding:10px; " id="bannearbtn">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="Bjlb">报价列表</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Ybj">完成报价</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BaoJiaShenhe">报价审核</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="OverHeTong">合同完成</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="Winlb">报价查询</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="WinHeTong">签订合同查询</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MonthTable">月信息总汇表</a>
+            </div>           
+            <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="CityEdit">编辑城市</a>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'center',title:'数据报表'" id="dgdiv">
+        <div id="TTdiv">
+            <table id="tt" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
+                   data-options="toolbar:'#tb'">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                        <th data-options="field:'UName'">申请报价人</th>
+                        <th data-options="field:'KHComname'">工程项目名称</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mothdiv" class="easyui-layout" style="height:100%;">
+            <div data-options="region:'north',title:'查询选项',iconCls:'icon-search'" style="height:auto;">
+                <div class="easyui-panel" style="padding:5px;">
+                    <a class="">查询时间</a>
+                    <input class="easyui-datebox" id="Mutime" value="2017-01-01" style="width:120px">
+                    To: <input class="easyui-datebox" id="Mdtime" value="2017-12-30" style="width:120px">
+                    <a href="#" id="MonthBTN" class="easyui-linkbutton">提交</a>
+                    <a href="#" id="PrintMonth" class="easyui-linkbutton" data-options="iconCls:'icon-print'">打印</a>
+                </div>
+                <div class="easyui-panel" style="padding:5px">
+                    <a href="#" class="easyui-linkbutton" id="ZhList">总汇列表</a>
+                    <a href="#" class="easyui-linkbutton" id="MxList">明细列表</a>
+                </div>
+            </div>
+            <div data-options="region:'center',title:'Main Title',iconCls:'icon-ok'" style="padding:10px">
+                <div id="Print_div">
+                    <div style="height:25px"></div>
+                    <div id="divZhList">
+                        <div style="text-align:center;"><h1><span id="h1time">___________</span> 创 建 信 息 总 汇 表</h1></div>
+                        <div style="height:35px"></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
+                            <thead><tr><td>分类</td><td>成功</td><td>待定</td><td>失败</td><td>合计</td></tr></thead>
+                            <tbody id="GetMonThData"></tbody>
+                        </table>
+                        <div style="height:25px"></div>
+                        <div style="text-align:center;"><h1><span id="h2time">___________</span>  信 息 金 额 总 汇 表</h1></div>
+                        <div style="height:35px; width:80%; text-align:center"></div>
+                        <div style="width:80%; text-align:right; margin-left:auto; margin-right:auto"><span style="font-size:18px">单位(元)&nbsp;&nbsp;</span></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
+                            <thead><tr><td>分类</td><td>成功</td><td>待定</td><td>失败</td><td>合计</td></tr></thead>
+                            <tbody id="GetmoneyThData"></tbody>
+                        </table>
+                        <div style="height:65px"></div>
+                        <div id="BFBdiv" style="width:80%; text-align:right; margin-left:auto; margin-right:auto"><span style="font-size:18px">单位(百分比)&nbsp;&nbsp;</span></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1" id="DDpercent"></table>
+                    </div>
+
+                    <div id="divMxList">
+                        <div style="width:80%; text-align:right; margin-left:auto; margin-right:auto"><span style="font-size:18px">单位(元)&nbsp;&nbsp;</span></div>
+                        <table style="BORDER-COLLAPSE: collapse; width:80%; text-align:center;font-size:18px" borderColor="#000000" align="center" cellSpacing="0" bgColor="#ffffff" border="1">
+                            <thead style=""><tr><td>姓名</td><td>成功金额</td><td>百分比</td><td>待定金额</td><td>百分比</td><td>失败金额</td><td>百分比</td></tr></thead>
+                            <tbody id="MoneyListDa"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div id="City_Div" class="easyui-dialog">         
+            <table id="Citytt" class="easyui-datagrid"  title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit" />
+        </div>
+    </div>
+    <div id="tb" style="padding:5px;height:auto">
+
+        <div  class="tbb0" style="margin-bottom:5px">
+            &nbsp;&nbsp; &nbsp;&nbsp;
+            开始时间: <input class="easyui-datebox" id="StTime"  style="width:120px">
+            To: <input class="easyui-datebox" id="DwTime"  style="width:120px">
+            &nbsp;&nbsp; &nbsp;&nbsp;
+          
+            营销员:
+            <select class="easyui-combobox"  panelHeight="auto" id="Person" >
+                @{foreach (UserInfo Item in ViewBag.user)
+                    {
+            <option value="@Item.ID">@Item.PerSonName</option>
+                    }
+                }
+            </select> &nbsp;&nbsp; &nbsp;&nbsp;
+
+            <span id="SpanYyZt">
+                原因:
+                <select class="easyui-combobox" id="YyZt" panelHeight="auto" >
+                    <option value="-99">失败</option>
+                    @{foreach (T_YSItems Item in ViewBag.items)
+                        {
+                    <option value="@Item.ID">@Item.MyText</option>
+                        }
+                    }
+                </select>
+            </span>&nbsp;&nbsp; &nbsp;&nbsp;
+        </div>
+        <div  class="tbb0">
+            &nbsp;&nbsp; &nbsp;&nbsp;  客户名称:
+<select class="easyui-combobox" panelHeight="auto" id="KHname" style="width:auto">
+    @{foreach (YXB_Kh_list Item in ViewBag.KeHuName)
+        {
+            <option value="@Item.id">@Item.KHname</option>
+        }
+    }
+</select> &nbsp;&nbsp; &nbsp;&nbsp;
+            <span id="CanPinSelect">
+                &nbsp;&nbsp; &nbsp;&nbsp;
+                产品名称:
+
+                <input class="easyui-combobox"
+                       id="CPname"
+                       name="CPname"
+                       url="/YXBJ/GetChanPinName"
+                       valueField="ID"
+                       textField="MyText"
+                       panelHeight="auto" style="width:auto" />
+
+                &nbsp;&nbsp; &nbsp;&nbsp;
+                产品型号:
+                <input class="easyui-combobox"
+                       id="CPxh"
+                       name="CPxh"
+                       url=""
+                       valueField="ID"
+                       textField="MyText"
+                       panelHeight="auto" style="width:100px" />
+
+            </span>
+          
+
+          
+        </div>
+        <div  class="tbb0">
+
+            &nbsp;&nbsp; &nbsp;&nbsp;
+            供货地点:&nbsp;&nbsp;省份
+            <input class="easyui-combobox Province" id="CitySee"
+                    name="Province"
+                    url="/YXBJ/GetAddress?parentiD=0&MyColums=Province"
+                    valueField="ID"
+                    textField="MyTexts"
+                    panelHeight="auto" />
+            &nbsp;&nbsp;城市
+            <input class="easyui-combobox CitySee"
+                   id="VillageSee"
+                   name="City"
+                   url=""
+                   valueField="ID"
+                   textField="MyTexts"
+                   panelHeight="auto" />
+            &nbsp;&nbsp;区/县
+            <input class="easyui-combobox VillageSee"
+                   id="SeeDint"
+                   name="Village"
+                   url=""
+                   valueField="ID"
+                   textField="MyTexts"
+                   panelHeight="auto" style="width:auto" />
+            &nbsp;&nbsp; &nbsp;&nbsp;
+            @*是否含税：
+            <select  class="easyui-combobox">
+                <option>全部</option>
+                <option>含税</option>
+                <option>不含税</option>
+            </select>*@
+            <a href="#" class="easyui-linkbutton" id="qingkou" iconCls="icon-reload">清空</a>
+
+
+            <a href="javascript:void(0)" class="easyui-menubutton" id="Sousuo" iconCls="icon-search" style="margin-left:10px;" data-options="menu:'#xmm',iconCls:'icon-edit'">搜索项</a>
+            <div id="xmm" style="width:150px;">
+                <div data-options="iconCls:'icon-undo'" onclick="SousuoP()" id="Sousuo">搜索</div>
+                <div class="menu-sep"></div>
+                <div onclick="Khbbbtn()">客户报备查询</div>
+            </div>
+
+            <a href="javascript:void(0)" style="margin-left:10px;" id="Sousuo_win" class="easyui-menubutton"
+               data-options="menu:'#mm',iconCls:'icon-edit'">搜索项</a>
+            <div id="mm" style="width:150px;">
+                <div data-options="iconCls:'icon-undo'" id="SousuoA">搜索</div>
+                <div class="menu-sep"></div>
+                <div onclick="Cpcsbtn()">产品除税表</div>
+                <div class="menu-sep"></div>
+                <div data-options="iconCls:'icon-redo'">除税高价</div>
+                <div data-options="iconCls:'icon-redo'">除税低价</div>
+                
+            </div>
+        </div>
+        <div id="toolbarIm" style="padding:5px;height:auto">
+            <div style="">
+                按状态显示
+                <select class="easyui-combobox" panelHeight="auto" id="TableZT"  style="width:auto">
+                    <option value="1">全部</option>
+                    <option value="0">申请中</option>
+                    <option value="4">已报价</option>
+                    <option value="2">审核通过</option>
+                    <option value="3">审核失败</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-------------------修改报价信息--------------------->
+    <div id="EditBJInfoDiv" class="easyui-window" title="修改报价信息" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:500px;height:470px">
+        @using (Ajax.BeginForm("EditBJInfo", "YXBJ", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEditBJInfo" }, new { id = "editbjinfoform" }))
+        {
+        <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+            <div style="text-align:center">
+                <div>
+                    <label>&nbsp;<b>产品名称:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="CPname2"
+                               name="CPname2"
+                               url="/YXBJ/GetChanPinName"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:auto" /><input type="hidden" id="CPname3" name="CPname" />
+                    </label>
+                </div>
+                <div>
+                    <label>&nbsp;<b>产品型号:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="CPxh2"
+                               name="CPxh2"
+                               url=""
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="CPxh3" name="CPxh" />
+                    </label>
+                </div>
+                <div><label>&nbsp;<b>产品数量:</b></label><label><input type="text" id="CPShuLiang2" name="CPShuLiang" /></label></div>
+                <div>
+                    <label>&nbsp;<b>是否含税:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="HanShuiID2"
+                               name="HanShuiID2"
+                               url="/YXBJ/GetHSYesOrNo"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="HanShuiID3" name="HanShuiID" />
+                    </label>
+                </div>
+                <div>
+                    <label>&nbsp;<b>产品级别:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="CPDengJiID2"
+                               name="CPDengJiID2"
+                               url="/YXBJ/GetChanPinJB"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="CPDengJiID3" name="CPDengJiID" />
+                    </label>
+                </div>
+                <div>
+                    <label>&nbsp;<b>产品单据:</b></label>
+                    <label>
+                        <input class="easyui-combobox"
+                               id="PiaoJuID2"
+                               name="PiaoJuID2"
+                               url="/YXBJ/GetChanPinDJ"
+                               valueField="ID"
+                               textField="MyText"
+                               panelHeight="auto" style="width:100px" /><input type="hidden" id="PiaoJuID3" name="PiaoJuID" />
+                    </label>
+                </div>
+                <div><label>&nbsp;&nbsp;&nbsp;<b>备注:</b></label><label><input type="text" id="BeiZhu2" name="BeiZhu" /></label></div>
+                <div><label>&nbsp;&nbsp;<b>供货时间:</b></label><label><input class="easyui-datebox" id="GHTime2" name="GhTime2" /><input type="hidden" id="GHTime3" name="GhTime" /></label></div>
+                <div><label>&nbsp;<b>客户名称:</b></label><label><input type="text" id="KHname2" name="KHname" /></label></div>
+                <div><label><b>客户联系人:</b></label><label><input type="text" id="KHperson2" name="KHperson" /></label></div>
+                <div><label><b>联系人职务:</b></label><label><input type="text" id="KHzhiwu2" name="KHzhiwu" /></label></div>
+                <div><label><b>联系人电话:</b></label><label><input type="text" id="KHphoto2" name="KHphoto" /></label></div>
+                <div><label>&nbsp;&nbsp;&nbsp;<b>法人:</b></label><label><input type="text" id="KHfaren2" name="KHfaren" /></label></div>
+                <div><label>&nbsp;<b>技术要求:</b></label><label><input type="text" id="JiShuYaoQiu2" name="JiShuYaoQiu" /></label></div>
+                <div><div>&nbsp;<b>供货地点:</b>
+                    <input class="easyui-combobox"
+                           id="ProvinceID"
+                           name="ProvinceIDname2"
+                           url="/YXBJ/GetAddress?MyColums=Province"
+                           valueField="ID"
+                           textField="MyTexts"
+                           panelHeight="auto" style="width:auto" /><input type="hidden" id="ProvinceID3" name="ProvinceIDname" />
+                    </div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input class="easyui-combobox"
+                               id="CityID"
+                               name="CityIDname2"
+                               url=""
+                               valueField="ID"
+                               textField="MyTexts"
+                               panelHeight="auto" style="width:auto" /><input type="hidden" id="CityID3" name="CityIDname" />
+                    </div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input class="easyui-combobox"
+                               id="VillageID"
+                               name="VillageIDname2"
+                               url=""
+                               valueField="ID"
+                               textField="MyTexts"
+                               panelHeight="auto" style="width:auto" /><input type="hidden" id="VillageID3" name="VillageIDname" />
+                    </div>
+                </div>
+                <div><label>&nbsp;<b>代办运输:</b></label><label><input type="text" id="DaiBanYunShu2" name="DaiBanYunShu" /></label></div>
+                <div><label>&nbsp;<b>结算方式:</b></label><label><input type="text" id="JieShuanFanShi2" name="JieShuanFanShi" /></label></div>
+                <div><label>&nbsp;<b>合同签订:</b></label><label><input type="text" id="HeTongQianDing2" name="HeTongQianDing" /></label></div>
+                <div><label><input type="hidden" id="BaoJiaID2" name="BaoJiaID" /></label></div>
+            </div>
+            <div style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToEdit()">确定</a>
+                <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+            </div>
+        </form>
+        }
+    </div>
+  
+</body>
+</html>

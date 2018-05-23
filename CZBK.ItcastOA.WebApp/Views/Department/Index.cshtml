@@ -1,0 +1,569 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>部门管理</title>
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyNewJS.js"></script>
+
+    <script type="text/javascript">
+
+        $.fn.extend({
+
+            resizeDataGrid: function (heightMargin, widthMargin, minHeight, minWidth) {
+
+                var height = $("#dgdiv").height() - heightMargin;
+                var width = $("#dgdiv").width() - widthMargin;
+                height = height < minHeight ? minHeight : height;
+                width = width < minWidth ? minWidth : width;
+                $(this).datagrid('resize', {
+                    height: height,
+                    width: width
+                });
+            }
+        });
+
+        $(function () {
+            $(window).resize(function () {
+                $('#tt').resizeDataGrid(0, 0, 200, 500);
+            });
+            
+
+            $("#AddBuMenBtnDIV").css("display", "none");
+            $("#AddUpOrDownBtnDIV").css("display", "none");
+
+
+
+            loadData();
+            //搜索
+            //$("#btnSearch").click(function () {
+            //    var pars = {
+            //        name: $("#txtUserName").val(),
+            //        remark: $("#txtUserRemark").val()
+            //    };
+            //    loadData(pars);
+            //});
+            $("#divBtn a").click(function () {
+                var ClickA = $(this).attr("id");
+                if (ClickA == "MenuBuMenGL") {
+                    $("#AddBuMenBtnDIV").css("display", "block");
+                    $("#AddUpOrDownBtnDIV").css("display", "none");
+                    loadData();
+                } else if (ClickA == "MenuUserUpOrDown") {
+                    $("#AddBuMenBtnDIV").css("display", "none");
+                    $("#AddUpOrDownBtnDIV").css("display", "block");
+                    loadUpOrDown();
+                }
+            })
+
+            $("#AddBuMenBtn").click(function () {
+                $("#AddBMDiv").window("open");
+            })
+
+            $("#AddUpOrDownBtn").click(function () {
+                $("#AddUpOrDownDiv").window('open');
+            })
+
+            //点击上级用户部门触发方法
+            $("#UpUserBM").combobox({
+                onChange: function () {
+                    var BMidval = $("#UpUserBM").combobox("getValue");
+                    $("#UpUser").combobox("setValue", "");
+                    if (BMidval == -1) {
+                        cleanDatagrid();
+                    } else {
+                        $("#UpUser").combobox("reload", "/Department/GetAllBMUser?BMid=" + BMidval);
+                    }
+                }
+            })
+
+            //点击下级用户部门触发方法
+            $("#DownUserBM").combobox({
+                onChange: function () {
+                    var BMidval = $("#DownUserBM").combobox("getValue");
+                    $("#DownUser").combobox("setValue", "");
+                    if (BMidval == -1) {
+                        cleanDatagrid();
+                    } else {
+                        $("#DownUser").combobox("reload", "/Department/GetAllBMUser?BMid=" + BMidval);
+                    }
+                }
+            })
+
+
+        });
+
+        //清空datagrid数据
+        function cleanDatagrid() {
+            var item = $('#tt').datagrid('getRows');
+            if (item) {
+                for (var i = item.length - 1; i >= 0; i--) {
+                    var index = $('#tt').datagrid('getRowIndex', item[i]);
+                    $('#tt').datagrid('deleteRow', index);
+                }
+            }
+        }
+
+        //加载部门信息
+        function loadData(pars) {
+            $('#tt').datagrid({
+                url: '/Department/GetDepartment',
+                title: '部门信息',
+                fitColumns: true, //列自适应
+                nowrap: false,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载用户的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 10,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [5, 10, 20],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'ck', checkbox: true, align: 'left', width: 50 },
+					{ field: 'ID', title: '部门编号', align: 'center' },
+					{ field: 'DepName', title: '部门名称', align: 'center' },
+                    {
+                        field: 'AddTime', title: '创建时间', align: 'center', formatter: function (value, row, col) {
+                            var sd = value == null ? '' : ChangeDateFormat(value);
+                            return sd;
+                        }
+                    },{
+                        field: 'EDITu', title: '编辑框', align: 'center', formatter: function (value, row, index) {
+                            return "<a href='javascript:editBuMenName()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>修改</a>";
+                        }
+                    }
+                ]], toolbar: "#AddBuMenBtnDIV",
+            });
+        }
+
+        //加载上下级页面
+        function loadUpOrDown(pars) {
+            $('#tt').datagrid({
+                url: '/Department/GetScheduleUser',
+                title: '上下级信息',
+                fitColumns: true, //列自适应
+                nowrap: false,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载用户的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 10,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [5, 10, 20],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'ck', checkbox: true, align: 'left', width: 50 },
+					{ field: 'ID', title: '编号', align: 'center' },
+					{ field: 'UserID', title: '用户', align: 'center' },
+                    { field: 'UpID', title: '上级用户', align: 'center' },
+                    {
+                        field: 'EDITu', title: '编辑框', align: 'center', formatter: function (value, row, index) {
+                            return "<a href='javascript:delUser()' class='l-btn'  style='margin:0px 5px;padding:2px 8px '>删除</a>";
+                        }
+                    }
+                ]], toolbar: "#AddUpOrDownBtnDIV",
+            })
+        }
+
+        //修改部门名称按钮单击事件
+        function editBuMenName() {
+            var row = $("#tt").datagrid("getSelected");
+            $("#OldBMName").val(row.DepName);
+            $("#OldBMName").attr("readonly","readonly");
+            $("#EditBMNameDiv").window('open');
+            $("#hiddenBMID").val(row.ID);
+        }
+
+
+
+        //删除上下级信息
+        function delUser() {
+            var row = $("#tt").datagrid("getSelected");
+            $.post("/Department/DelUpOrDown", { "id": row.ID }, function (data) {
+                if(data.ret == "ok"){
+                    $("#tt").datagrid("reload");
+                }else if(data.ret = "no"){
+                        $.messager.alert("提示", data.msg);
+                } else {
+                        $.messager.alert("提示", "操作失败！");
+                }
+            })
+        }
+
+
+
+        //添加信息
+        function addInfo() {
+            $("#addDiv").css("display", "block");
+            $('#addDiv').dialog({
+                title: "添加用户信息",
+                width: 300,
+                height: 300,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        $("#addForm").submit();//提交表单
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#addDiv').dialog('close');
+                    }
+                }]
+            });
+        }
+        //添加完成以后调用该方法
+        function afterAdd(data) {
+            $("#AddBMDiv").window('close');
+            $(".SmallWindow input").val("");
+            $('#tt').datagrid('reload');
+            $.messager.alert("提醒", "添加成功!!");
+        }
+
+        //添加上下级关系后调用方法
+        function afterAddUpOrDown(data) {
+            if (data.ret == "ok") {
+                $("#AddUpOrDownDiv").window('close');
+                $(".SmallWindow input").val("");
+                $('#tt').datagrid('reload');
+                $.messager.alert("提示","添加关系成功！");
+            }else if(data.ret == "no"){
+                $.messager.alert("提示", data.msg);
+            }
+        }
+
+        //修改完成以后调用该方法
+        function afterEdit(data) {
+            $("#EditBMNameDiv").window('close');
+            $(".SmallWindow input").val("");
+            $('#tt').datagrid('reload');
+            $.messager.alert("提醒", "修改成功!!");
+        }
+ 
+        //添加部门的确定按钮
+        function OkToAdd() {
+            if ($("#DepName").val().trim().length <= 0) {
+                $.messager.alert("提示", "请输入部门名称！");
+                return;
+            }
+            $("#addbumenform").submit();
+        }
+        //修改部门名称的确定按钮
+        function OkToEdit() {
+            if ($("#NewBMName").val().trim().length <= 0) {
+                $.messager.alert("提示", "请输入新的部门名称！");
+                return;
+            }
+            $("#editbmnameform").submit();
+        }
+        //添加上下级关系的确定按钮
+        function OkToAddUpOrDown() {
+            if ($("#UpUserBM").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择上级员工部门！");
+                return;
+            }
+            if ($("#UpUser").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择上级员工！");
+                return;
+            }
+            if ($("#DownUserBM").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择下级员工部门！");
+                return;
+            }
+            if ($("#DownUser").combobox("getValue").trim().length <= 0) {
+                $.messager.alert("提示", "请选择下级员工！");
+                return;
+            }
+            $("#addupordownform").submit();
+        }
+
+        //窗口取消功能
+        function cancel() {
+            $("#EditBMNameDiv").window('close');
+            $("#AddBMDiv").window('close');
+            $("#AddUpOrDownDiv").window('close');
+            $(".SmallWindow input").val("");
+            $("#UpUserBM").combobox("setValue", "");
+            $("#UpUser").combobox("setValue", "");
+            $("#DownUserBM").combobox("setValue", "");
+            $("#DownUser").combobox("setValue", "");
+        }
+        
+
+        //将序列化成json格式后日期(毫秒数)转成日期格式
+        function ChangeDateFormat(cellval) {
+            var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return date.getFullYear() + "-" + month + "-" + currentDate + " " + hour + ":" + minutes + ":" + seconds;
+        }
+
+
+    </script>
+</head>
+<body class="easyui-layout">
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink " style="width:150px; padding:8px;">
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuBuMenGL" style="width:98%;margin:10px auto">部门管理</a>
+        <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="MenuUserUpOrDown" style="width:98%;margin:10px auto">上下级管理</a>
+    </div>
+    <div data-options="region:'center',title:'数据报表'" id="dgdiv">
+        <div id="TTdiv">
+            <table id="tt" class="easyui-datagrid" title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit">
+                <!--插入表格数据-->
+            </table>
+        </div>
+
+        <!---------------添加部门按钮-------------------->
+        <div id="AddBuMenBtnDIV" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px">
+                <a href="#" class="easyui-linkbutton" id="AddBuMenBtn" iconCls="icon-add" plain="true">添加部门</a>
+            </div>
+        </div>
+        <!---------------添加上下级关系按钮-------------------->
+        <div id="AddUpOrDownBtnDIV" style="padding:5px;height:auto">
+            <div style="margin-bottom:5px">
+                <a href="#" class="easyui-linkbutton" id="AddUpOrDownBtn" iconCls="icon-add" plain="true">添加上下级关系</a>
+            </div>
+        </div>
+
+        <!---------------添加部门信息--------------------->
+        <div id="AddBMDiv" class="easyui-window" title="添加部门" closed="true" closable="false" collapsible="falsa" minimizable="false" maximizable="false" style="width:auto;height:auto;">
+            @using (Ajax.BeginForm("AddBuMen", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "addbumenform" }))
+            {
+                <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+                    <p>部门名称： <input type="text" id="DepName" name="Name"/></p>
+                    <div style="padding:5px;text-align:center;">
+                        <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAdd()">确定</a>
+                        <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+                    </div>
+                </form>
+            }
+        </div>
+        <!---------------修改部门信息--------------------->
+        <div id="EditBMNameDiv" class="easyui-window" title="修改部门名称" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:auto;height:auto;">
+            @using (Ajax.BeginForm("EditBuMenName", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "editbmnameform" }))
+            {
+               <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+                   <p>旧部门名： <input type="text" id="OldBMName" /></p>
+                   <p>新部门名： <input type="text" id="NewBMName" name="New"/></p>
+                   <input type="hidden" id="hiddenBMID" name="bmid"/>
+                   <div style="padding:5px;text-align:center;">
+                       <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToEdit()">确定</a>
+                       <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+                   </div>
+               </form>
+            }
+        </div>
+        <!---------------添加上下级关系--------------------->
+        <div id="AddUpOrDownDiv" class="easyui-window" title="添加上下级关系" closed="true" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:auto;height:auto;">
+            @using (Ajax.BeginForm("AddUpOrDown", "Department", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAddUpOrDown" }, new { id = "addupordownform" }))
+            {
+                <form class="SmallWindow" style="padding:10px 20px 10px 40px;">
+                    <table>
+                        <tr>
+                            <td>上级员工所属部门：</td>
+                            <td>
+                                <input class="easyui-combobox" id="UpUserBM"
+                                       name="UpUserBM"
+                                       url="/Department/GetAllBuMen"
+                                       valueField="ID"
+                                       textField="Name"
+                                       style="width:100px" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>上级员工：</td>
+                            <td>
+                                <input class="easyui-combobox" id="UpUser"
+                                       name="UpID"
+                                       valueField="ID"
+                                       textField="Name"
+                                       style="width:100px" />
+                            </td>
+                        </tr>
+                        <tr style="height:10px"></tr>
+                        <tr>
+                            <td>下级员工所属部门：</td>
+                            <td>
+                                <input class="easyui-combobox" id="DownUserBM"
+                                       name="DownUserBM"
+                                       url="/Department/GetAllBuMen"
+                                       valueField="ID"
+                                       textField="Name"
+                                       style="width:100px" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>下级员工：</td>
+                            <td>
+                                <input class="easyui-combobox" id="DownUser"
+                                       name="UserID"
+                                       valueField="ID"
+                                       textField="Name"
+                                       style="width:100px" />
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="padding:5px;text-align:center;">
+                        <a href="#" class="easyui-linkbutton" icon="icon-ok" onclick="OkToAddUpOrDown()">确定</a>
+                        <a href="#" class="easyui-linkbutton" icon="icon-cancel" onclick="cancel()">取消</a>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+            @*//为特殊用户分配权限
+            function SetUserAction() {
+                var rows = $('#tt').datagrid('getSelections');
+                if (rows.length != 1) {
+                    //alert("请选择要修改的商品！");
+                    $.messager.alert("提醒", "请选择要分配权限的一条记录!", "error");
+                    return;
+                }
+
+                $("#SetUserActionFrame").attr("src", "/UserInfo/SetUserAction/?UserId=" + rows[0].ID);
+                $("#SetUserActionDIV").css("display", "block");
+                $('#SetUserActionDIV').dialog({
+                    title: "为用户分配权限信息",
+                    width: 500,
+                    height: 400,
+                    collapsible: true,
+                    resizable: true,
+                    modal: true,
+                    buttons: [{
+                        text: '确定',
+                        iconCls: 'icon-ok',
+                        handler: function () {
+                            //$("#editForm").submit();//提交表单
+                            var childWindow = $("#SetUserActionFrame")[0].contentWindow;//获取子窗体的window对象.
+                            childWindow.subForm();
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function () {
+                            $('#SetUserActionDIV').dialog('close');
+                        }
+                    }]
+                });
+            }
+            //为用户分配角色
+            function setUserRoleInfo() {
+                var rows = $('#tt').datagrid('getSelections');
+                if (rows.length != 1) {
+                    //alert("请选择要修改的商品！");
+                    $.messager.alert("提醒", "请选择要设置角色的1条用户记录!", "error");
+                    return;
+                }
+                $("#setRoleFrame").attr("src", "/UserInfo/SetUserRoleInfo/?userId=" + rows[0].ID);
+                $("#setRoleDiv").css("display", "block");
+                $('#setRoleDiv').dialog({
+                    title: "为用户设置角色信息",
+                    width: 300,
+                    height: 300,
+                    collapsible: true,
+                    resizable: true,
+                    modal: true,
+                    buttons: [{
+                        text: '确定',
+                        iconCls: 'icon-ok',
+                        handler: function () {
+                            // $("#addForm").submit();//提交表单
+
+                            var childwindow = $("#setRoleFrame")[0].contentWindow;
+
+                            childwindow.subForm();
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function () {
+                            $('#setRoleDiv').dialog('close');
+                        }
+                    }]
+                });
+
+            }
+            //为用户分配完角色以后调用该方法
+            function setuserroleafter(data) {
+                if (data == "OK") {
+                    $('#setRoleDiv').dialog('close');
+                } else {
+                }
+            }
+
+            //编辑用户信息
+            function eidtInfo() {
+                var rows = $('#tt').datagrid('getSelections');
+                if (rows.length != 1) {
+                    //alert("请选择要修改的商品！");
+                    $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                    return;
+                }
+                $.post("/UserInfo/GetUserInfoModel", { "id": rows[0].ID }, function (serverData) {
+
+                    var data = $.parseJSON(serverData);
+
+                    if (data.msg == "ok") {
+                        $("#txtUName").val(data.serverData.UName);
+                        $("#txtUPwd").val(data.serverData.UPwd);
+                        $("#txtRemark").val(data.serverData.Remark);
+                        $("#txtSort").val(data.serverData.Sort);
+                        $("#txtSubTime").val(data.serverData.SubTime);
+                        $("#txtDelFlag").val(data.serverData.DelFlag);
+                        $("#txtId").val(data.serverData.ID);
+                        $("#editDiv").css("display", "block");
+                        $('#editDiv').dialog({
+                            title: "编辑用户信息",
+                            width: 300,
+                            height: 300,
+                            collapsible: true,
+                            resizable: true,
+                            modal: true,
+                            buttons: [{
+                                text: '确定',
+                                iconCls: 'icon-ok',
+                                handler: function () {
+                                    $("#editForm").submit();//提交表单
+                                }
+                            }, {
+                                text: '取消',
+                                handler: function () {
+                                    $('#editDiv').dialog('close');
+                                }
+                            }]
+                        });
+                    } else {
+                        $.messager.alert("提醒", "展示数据错误!!", "error");
+                    }
+                });
+
+            }*@
