@@ -1,5 +1,373 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    Layout = null;
 }
+@using CZBK.ItcastOA.Model
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>控制中心</title>
+    <link href="~/Content/themes/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Content/Print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/Scripts/datapattern.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/MyAjaxForm.js"></script>
+    <script src="~/Scripts/MyNewJS.js"></script>
+    <script src="~/Scripts/jquery.jqprint-0.3.js"></script>
+    <script type="text/javascript">
+        $.fn.extend({
+            resizeDataGrid: function (heightMargin, widthMargin, minHeight, minWidth) {
 
-<h2>Index</h2>
+                var height = $("#dgdiv").height() - heightMargin;
+                var width = $("#dgdiv").width() - widthMargin;
+                height = height < minHeight ? minHeight : height;
+                width = width < minWidth ? minWidth : width;
+                $(this).datagrid('resize', {
+                    height: height,
+                    width: width
+                });
+            }
+        });
+        $(function () {         
+            // 当窗口大小发生变化时，调整DataGrid的大小
+            $(window).resize(function () {
+                $('#tt').resizeDataGrid(0, 0, 200, 500);
+            });          
+            loadData();
+            $("#DelImageBtn").hide();
+            //文件上传
+            $("#btnFileUp").click(function () {
+                if ($("#fileUp").val() == "") {
+                    $.messager.alert("提示", "请选择上传文件", "errer");
+                    return;
+                }
+                //开始进行异步上传图片文件
+                $("#AddFCKXFrom").ajaxSubmit({
+                    success: function (data) {
+                        var serverData = data.split(":");
+                        if (serverData[0] == "yes") {
+                            $("#showImage").append("<img id='DivShowImage' src='" + serverData[1] + "' width='200' height='100'/>");
+                            $("#hiddenMenuIcon").val(serverData[1]);//将上传成功的图片地址放在隐藏input中
+                        }
+                        else {
+                            $.messager.alert("提示", serverData[1], "errer");
+                        }
+                    },
+                    url: "/BZCM/FileUpload",
+                    type: "post"
+                })
+                $("#DelImageBtn").show();
+            });
+            //删除上传图片
+            $("#DelImageBtn").click(function () {
+                var image = $("#DivShowImage").attr("src");
+                $.post("/BZCM/DelImage", { str: image }, function (data) {
+                    if (data.ret = "ok") {
+                        $("#DivShowImage").remove();
+                        $("#hiddenMenuIcon").val("");
+                        $("#fileUp").val("");
+                        $("#DelImageBtn").hide();
+                        
+                    }                    
+                })
+            })
+            $("#AddFCKX").css("display", "none");
+            $(".easyui-combobox").combobox("select", "2");
+        });
+        function loadData(pars) {
+            $('#tt').datagrid({
+                url: '/BZCM/GetFanChan',
+                title: '百战传媒',
+                width: $("#dgdiv").width() - 2,
+                height: $("#dgdiv").height() - 2,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    {
+                        field: 'Addtime', title: '创建时间', formatter: function (value, row, index) {
+                          
+                            var str = ChangeDateFormatHours_Minute(value);
+                            return str;
+                        }
+                    },
+                    {
+                        field: 'IsTopStartTime', title: '置顶开始时间', formatter: function (value, row, index) {
+                           
+                            var str = ChangeDateFormatHours_Minute(value);
+                            return str;
+                        }
+                    },
+                    {
+                        field: 'IsTopStopTime', title: '置顶结束时间', formatter: function (value, row, index) {
+                           
+                            var str = ChangeDateFormatHours_Minute(value);
+                            return str;
+                        }
+                    },
+                    { field: 'IsFristItemsID', title: '归属项' },
+                    { field: 'AddUser', title: '创建人员' },
+                    { field: 'DEL', title: '是否删除' },
+                    { field: 'FYXX_Name', title: '借款人' },
+                    { field: 'FYXX_ONE', title: '借款人' },
+                    { field: 'FYXX_Photo', title: '借款人' },
+                    { field: 'FYXX_SHRER', title: '借款人' },
+                    { field: 'FYXX_TWO', title: '借款人' },                    
+                    { field: 'IsTop', title: '借款人' },
+                    { field: 'IsTop_shor', title: '借款人' },
+                    { field: 'News_Addess', title: '借款人' },
+                    { field: 'News_Danwei', title: '开户行' },
+                    { field: 'News_Item', title: '账号(卡号)' },
+                    { field: 'News_KaiFaShang', title: '备注' },
+                    { field: 'News_Money', title: '状态' },
+                    { field: 'News_Name', title: '状态' },
+                    { field: 'News_Photo', title: '状态' },
+                    { field: 'News_Text', title: '状态' },
+                    { field: 'News_YouHui', title: '状态' },
+                    { field: 'Str_Image', title: '图片地址' },
+                    { field: 'Str_Name', title: '状态' },
+                    { field: 'Wx__BzcmText', title: '状态' }
+                    ,
+                     {
+                         field: "Print", title: "打印预览", formatter: function (value, row, index) {
+                             return "<a href='javascript:DigPrint()' class='l-btn' style='padding:2px 5px;'>打印预览</a>";
+                         }
+                     }
+                ]],
+                toolbar: "#Topbtn",
+                onLoadSuccess: function () {
+                }
+            });
+        }
+        function afterAdd(data) {
+            if (data.ret == "ok") {
+                try {
+                    alert(data.ret)
+                }
+                catch (e) { }
+                try {
+                    $('#tt').datagrid('reload');
+                    $('#AddBxBill').dialog('close');
+                }
+                catch (e) { }
+                try {
+                    $('#BillShow').datagrid('reload');
+                }
+                catch (e) {}
+            } else  {
+                $.messager.alert("提示", data.ret, "error");
+            }
+        }
+        function formatCurrency(num) {
+            num = num.toString().replace(/\$|\,/g, '');
+            if (isNaN(num))
+                num = "0";
+            sign = (num == (num = Math.abs(num)));
+            num = Math.floor(num * 100 + 0.50000000001);
+            cents = num % 100;
+            num = Math.floor(num / 100).toString();
+            if (cents < 10)
+                cents = "0" + cents;
+            for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+                num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+                num.substring(num.length - (4 * i + 3));
+            return (((sign) ? '' : '-') + num + '.' + cents);
+        }
+        function Addbtn() {
+            $("#AddFCKX").css("display", "block");
+            $('#AddFCKX').dialog({
+                title: "新增信息",
+                width: 600,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        
+                        $("#AddFCKXFrom").submit();//提交表单     
+                        $('#AddFCKX').dialog('close');
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#AddFCKX').dialog('close');
+                    }
+                }]
+            });
+        }
+       
+       
+    </script>
+    <style>
+        html, body {
+            height: 80%;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .btnlink a {
+            width: 90%;
+            margin-top: 3px;
+        }
+
+        thead {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .JKtable {
+            padding: 10px;
+        }
+
+            .JKtable input {
+                width: 100%;
+                height: 150%;
+            }
+
+        .Ptable {
+            BORDER-COLLAPSE: collapse;
+            width: 840px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+            .Ptable tr td {
+                height: 60px;
+            }
+
+        .Pbxtable {
+            BORDER-COLLAPSE: collapse;
+            width: 670px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+            .Pbxtable tr td {
+                height: 45px;
+            }
+
+        .BxpzTop {
+            width: 670px;
+            height: 10px;
+        }
+
+        .zpttable {
+            BORDER-COLLAPSE: collapse;
+            width: 700px;
+            font-size: 10px;
+            text-align: center;
+        }
+
+            .zpttable tr td {
+                height: 15px;
+            }
+
+        .inheght tr td {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body class="easyui-layout">
+    <div>
+        <div id="" style="height:100%; width:100%;">
+            @using (Ajax.BeginForm("AddOrEditJiekuan", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "JKBillFrom" }))
+            {
+                <input type="hidden" id="JieKuanID" name="ID" />
+                
+            }
+        </div>
+ 
+       
+      
+    </div>
+    <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink" style="width:150px;height:100%">
+        <div class="easyui-accordion">
+            <div title="控制菜单" data-options="iconCls:'icon-search'" style="overflow:auto;padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="BtnJkd">房产信息</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BtnBaoXiao">家具信息</a>
+            </div>
+            <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="CityEdit">其他</a>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'center',title:'控制中心'" id="dgdiv">
+        <div id="TTdiv">
+            <table id="tt" class="easyui-datagrid" style="width: 700px; " title="标题，可以使用代码进行初始化，也可以使用这种属性的方式" iconcls="icon-edit"
+                   data-options="toolbar:'#tb'">
+                <thead data-options="frozen:true">
+                    <tr>
+                        <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
+                        <th data-options="field:'ID', width: 40">编号</th>
+                    </tr>
+                </thead>
+
+
+            </table>
+        </div>
+
+    </div>
+ 
+    <div id="Topbtn" class="Topbtn" style="padding:5px;height:auto;">                    
+        <div style="font-size:16px;">
+            选项列表：<input class="easyui-combobox" id="BaoXiaoName"
+                        name="BaoXiaoName1" 
+                      data-options="url: '/BZCM/Bzkx?items=0',
+				      method: 'get',
+				      valueField: 'ID',
+				      textField: 'Str',
+			 	      panelWidth: 200,
+			        	" />
+        </div>
+        <div>
+            <div style="font-size:16px;">
+                <button class="btn-block" value="" onclick="Addbtn()">新增数据</button>
+            </div>
+        </div>
+    </div>
+    <div id="AddFCKX" style="height:100%; width:100%;">
+        @using (Ajax.BeginForm("AddBzcmImage", "BZCM", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "AddFCKXFrom" }))
+            {
+            <input type="hidden" id="ZPTID" name="ID" />
+                <table class="JKtable">
+                    <thead>
+                        <tr><td>选项列表</td><td>
+                            <input class="easyui-combobox" id="FristItems"
+                      name="IsFristItemsID" data-options="url: '/BZCM/Bzkx?items=0',
+				      method: 'get',
+				      valueField: 'ID',
+				      textField: 'Str',
+			 	      panelWidth: 200,
+			        	" />
+                        </td></tr>
+                        <tr><td>开始时间</td><td><input class="easyui-datetimebox" name="IsTopStartTime" id="IsTopStartTime" /></td></tr>
+                        <tr><td>结束时间</td><td><input class="easyui-datetimebox" name="IsTopStopTime" id="IsTopStopTime" /></td></tr>
+                        <tr><td>企业名称</td><td><input type="text" name="Str_Name" id="Str_Name" /></td></tr>
+                        <tr><td>上传图片</td><td>
+                            
+                                             <input type="file" name="fileIconUp" id="fileUp" />                                           
+                                             <input type="hidden" name="Str_Image" id="hiddenMenuIcon" />
+                                             <div id="showImage" ></div>
+                            </td><td><input type="button" value="上传图片" id="btnFileUp" /><input type="button" value="删除图片" id="DelImageBtn" /></td></tr>                      
+                        <tr><td>排序</td><td><input type="text" name="IsTop_shor" id="IsTop_shor"  onkeyup="num(this)" /></td></tr>
+                    </thead>
+                </table>
+        }
+    </div>
+    
+</body>
+</html>

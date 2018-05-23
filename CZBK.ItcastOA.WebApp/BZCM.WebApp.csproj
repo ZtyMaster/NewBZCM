@@ -1264,8 +1264,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\UserInfo\Index.cshtml" />
     <Content Include="Views\Login\Index1.cshtml" />
     <Content Include="Views\Home\master.cshtml" />
@@ -1277,29 +1275,23 @@
     <Content Include="Views\ActionInfo\SetActionRole.cshtml" />
     <Content Include="Views\UserInfo\SetUserAction.cshtml" />
     <Content Include="Views\Department\Index.cshtml" />
-    <Content Include="Views\HrefInfo\Index.cshtml" />
-    <Content Include="Views\MyhtmlInfo\Index1.cshtml" />
-    <Content Include="Views\MyhtmlInfo\Index.cshtml" />
     <Content Include="Views\UserSaveInfo\Index.cshtml" />
     <Content Include="Views\RoleInfo\ShowEditInfo.cshtml" />
     <Content Include="Views\UserInfo\Zhgl.cshtml" />
     <Content Include="Views\AllData\Index.cshtml" />
-    <Content Include="Views\psave\Index.cshtml" />
-    <Content Include="Views\HrefInfo\GetMap.cshtml" />
     <Content Include="Views\Login\index.cshtml" />
     <Content Include="Views\Home\index.cshtml" />
-    <Content Include="Views\YXBJ\Index.cshtml" />
     <Content Include="Scripts\jQuery.1.10.2\jquery-1.10.2.min.map" />
-    <Content Include="Views\OldOa\Index.cshtml" />
-    <Content Include="Views\SltJxzz\Index.cshtml" />
     <Content Include="Views\BZCM\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="BZCMimage\topbanner\" />
     <Folder Include="files\ScheduleFiles\" />
     <Folder Include="files\ShareFiles\" />
     <Folder Include="Log\" />
     <Folder Include="MenuIcon\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -1329,28 +1321,7 @@
     <Content Include="Views\Home\logindex.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\MasterBaoJia\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\GeRen\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\NewChanPin\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shengchanzhizao\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\SczzAdmin\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\EverDayWork\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\BillPrint\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\ShareFileOrNotice\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

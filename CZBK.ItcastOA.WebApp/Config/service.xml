@@ -12,5 +12,10 @@
   <object type="CZBK.ItcastOA.BLL.BumenInfoSetService, CZBK.ItcastOA.BLL" singleton="false" name="BumenInfoSetService" >
   </object>
 
-
+  <object type="CZBK.ItcastOA.BLL.BzcmText_FanChanService, CZBK.ItcastOA.BLL" singleton="false" name="BzcmText_FanChanService" >
+  </object>
+  <object type="CZBK.ItcastOA.BLL.IsFristItemService, CZBK.ItcastOA.BLL" singleton="false" name="IsFristItemService" >
+  </object>
+  <object type="CZBK.ItcastOA.BLL.Wx__BzcmTextService, CZBK.ItcastOA.BLL" singleton="false" name="Wx__BzcmTextService" >
+  </object>
 </objects>

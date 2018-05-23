@@ -33,7 +33,11 @@
     <property name="UserInfoService" ref="UserInfoService" />
     <property name="BumenInfoSetService" ref="BumenInfoSetService" />
   </object>
-
+  <object type="CZBK.ItcastOA.WebApp.Controllers.BZCMController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="BzcmText_FanChanService" ref="BzcmText_FanChanService" />
+    <property name="IsFristItemService" ref="IsFristItemService" />
+    <property name="Wx__BzcmTextService" ref="Wx__BzcmTextService" />
+  </object>
 
 
 
