@@ -11,7 +11,7 @@ namespace CZBK.ItcastOA.BLL
 {
     public partial class BzcmText_FanChanService : BaseService<BzcmText_FanChan>, IBzcmText_FanChanService
     {
-        public IQueryable<BzcmText_FanChan> LoadSearchEntities(UserInfoParam userInfoSearchParam)
+        public IQueryable<BzcmText_FanChan> LoadSearchEntities(UserInfoParam astr)
         {
             /// <summary>
             /// 多条件搜索用户信息
@@ -23,12 +23,13 @@ namespace CZBK.ItcastOA.BLL
             
             var temp = this.GetCurrentDbSession.BzcmText_FanChanDal.LoadEntities(c => c.DEL == 0);
            
-            if (!string.IsNullOrEmpty(userInfoSearchParam.Remark))
+            if (!string.IsNullOrEmpty(astr.Items))
             {
-                temp = temp.Where<BzcmText_FanChan>(u => u.News_Text.Contains(userInfoSearchParam.Remark));
+                int id = Convert.ToInt32(astr.Items);
+                temp = temp.Where<BzcmText_FanChan>(u => u.IsFristItemsID==id);
             }
-            userInfoSearchParam.TotalCount = temp.Count();
-            return temp.OrderBy<BzcmText_FanChan, long>(u => u.ID).Skip<BzcmText_FanChan>((userInfoSearchParam.PageIndex - 1) * userInfoSearchParam.PageSize).Take<BzcmText_FanChan>(userInfoSearchParam.PageSize);
+            astr.TotalCount = temp.Count();
+            return temp.OrderBy<BzcmText_FanChan, long>(u => u.ID).Skip<BzcmText_FanChan>((astr.PageIndex - 1) * astr.PageSize).Take<BzcmText_FanChan>(astr.PageSize);
 
         }
     }

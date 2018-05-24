@@ -75,9 +75,26 @@
                 })
             })
             $("#AddFCKX").css("display", "none");
+           
+            $("#JingPinFangYuan").hide();
+            $("#FangYuanXinXi").hide();
             $(".easyui-combobox").combobox("select", "2");
+           
+            
         });
         function loadData(pars) {
+            var Jpfy = true;
+            var Fckx = true;
+            var Fyxx = true;
+            if (pars != undefined) {
+                switch (pars.item) {
+                    case "2": Jpfy = false;
+                        break;
+                    case "7": Fyxx = false;
+                        break;
+                }
+            }            
+           
             $('#tt').datagrid({
                 url: '/BZCM/GetFanChan',
                 title: '百战传媒',
@@ -117,15 +134,15 @@
                         }
                     },
                     { field: 'IsFristItemsID', title: '归属项' },
+                    { field: 'Str_Name', title: '企业名称', align: 'center' },
                     { field: 'AddUser', title: '创建人员' },
-                    { field: 'DEL', title: '是否删除' },
-                    { field: 'FYXX_Name', title: '借款人' },
-                    { field: 'FYXX_ONE', title: '借款人' },
-                    { field: 'FYXX_Photo', title: '借款人' },
-                    { field: 'FYXX_SHRER', title: '借款人' },
-                    { field: 'FYXX_TWO', title: '借款人' },                    
+                    { field: 'IsTop_shor', title: '排序' },
+                    { field: 'FYXX_Name', title: '房源信息名称', align: 'center', hidden: Fyxx },
+                     { field: 'FYXX_Photo', title: '房源信息电话', hidden: Fyxx },
+                    { field: 'FYXX_ONE', title: '房源信息第一行', hidden: Fyxx },
+                    { field: 'FYXX_SHRER', title: '房源信息第二行', hidden: Fyxx },
+                    { field: 'FYXX_TWO', title: '房源信息第三行', hidden: Fyxx },
                     { field: 'IsTop', title: '借款人' },
-                    { field: 'IsTop_shor', title: '借款人' },
                     { field: 'News_Addess', title: '借款人' },
                     { field: 'News_Danwei', title: '开户行' },
                     { field: 'News_Item', title: '账号(卡号)' },
@@ -135,8 +152,7 @@
                     { field: 'News_Photo', title: '状态' },
                     { field: 'News_Text', title: '状态' },
                     { field: 'News_YouHui', title: '状态' },
-                    { field: 'Str_Image', title: '图片地址' },
-                    { field: 'Str_Name', title: '状态' },
+                    { field: 'Str_Image', title: '图片地址' },                    
                     { field: 'Wx__BzcmText', title: '状态' }
                     ,
                      {
@@ -186,6 +202,7 @@
         }
         function Addbtn() {
             $("#AddFCKX").css("display", "block");
+            $("#JingPinFangYuan").show();
             $('#AddFCKX').dialog({
                 title: "新增信息",
                 width: 600,
@@ -209,8 +226,30 @@
                 }]
             });
         }
-       
-       
+        function changeScenes() {
+            TabIsHide();
+            var val = $("#FristItems").combobox("getValue");
+            if (val == "2") {
+                $("#JingPinFangYuan").show();
+            }
+            else if (val == "7") {
+                $("#FangYuanXinXi").show();
+            }            
+        }
+        function BanrChangeScenes() {
+            var val = $("#BtnInput").combobox("getValue");
+            var pars = { "item": val }
+            loadData(pars)
+            if (val == "2") {               
+            }
+            else if (val == "7") {
+            }
+        }
+        function TabIsHide() {
+            $("#JingPinFangYuan").hide();
+            $("#FangYuanXinXi").hide();
+        }
+      
     </script>
     <style>
         html, body {
@@ -324,13 +363,14 @@
  
     <div id="Topbtn" class="Topbtn" style="padding:5px;height:auto;">                    
         <div style="font-size:16px;">
-            选项列表：<input class="easyui-combobox" id="BaoXiaoName"
+            选项列表：<input class="easyui-combobox" id="BtnInput"
                         name="BaoXiaoName1" 
                       data-options="url: '/BZCM/Bzkx?items=0',
 				      method: 'get',
 				      valueField: 'ID',
 				      textField: 'Str',
 			 	      panelWidth: 200,
+                      onSelect:function(){BanrChangeScenes();}
 			        	" />
         </div>
         <div>
@@ -344,27 +384,49 @@
             {
             <input type="hidden" id="ZPTID" name="ID" />
                 <table class="JKtable">
+                    
                     <thead>
-                        <tr><td>选项列表</td><td>
-                            <input class="easyui-combobox" id="FristItems"
-                      name="IsFristItemsID" data-options="url: '/BZCM/Bzkx?items=0',
+                        <tr>
+                            <td>选项列表</td>
+                            <td>
+                                <input class="easyui-combobox" id="FristItems"
+                                       name="IsFristItemsID" data-options="url: '/BZCM/Bzkx?items=0',
 				      method: 'get',
 				      valueField: 'ID',
 				      textField: 'Str',
 			 	      panelWidth: 200,
+                      onSelect:function(){changeScenes();}
 			        	" />
-                        </td></tr>
-                        <tr><td>开始时间</td><td><input class="easyui-datetimebox" name="IsTopStartTime" id="IsTopStartTime" /></td></tr>
-                        <tr><td>结束时间</td><td><input class="easyui-datetimebox" name="IsTopStopTime" id="IsTopStopTime" /></td></tr>
-                        <tr><td>企业名称</td><td><input type="text" name="Str_Name" id="Str_Name" /></td></tr>
-                        <tr><td>上传图片</td><td>
-                            
-                                             <input type="file" name="fileIconUp" id="fileUp" />                                           
-                                             <input type="hidden" name="Str_Image" id="hiddenMenuIcon" />
-                                             <div id="showImage" ></div>
-                            </td><td><input type="button" value="上传图片" id="btnFileUp" /><input type="button" value="删除图片" id="DelImageBtn" /></td></tr>                      
-                        <tr><td>排序</td><td><input type="text" name="IsTop_shor" id="IsTop_shor"  onkeyup="num(this)" /></td></tr>
+                            </td>
+                        </tr>
+
                     </thead>
+                    <tr><td>开始时间</td><td><input class="easyui-datetimebox" name="IsTopStartTime" id="IsTopStartTime" /></td></tr>
+                    <tr><td>结束时间</td><td><input class="easyui-datetimebox" name="IsTopStopTime" id="IsTopStopTime" /></td></tr>
+                    <tr><td>排序</td><td><input type="text" name="IsTop_shor" id="IsTop_shor" onkeyup="num(this)" value="0" /></td></tr>  
+                    <tbody id="JingPinFangYuan">                       
+                        <tr><td>企业名称</td><td><input type="text" name="Str_Name1" id="Str_Name" /></td></tr>
+                        <tr>
+                            <td>上传图片</td>
+                            <td>
+
+                                <input type="file" name="fileIconUp" id="fileUp" />
+                                <input type="hidden" name="Str_Image" id="hiddenMenuIcon" />
+                                <div id="showImage"></div>
+                            </td>
+                            <td><input type="button" value="上传图片" id="btnFileUp" /><input type="button" value="删除图片" id="DelImageBtn" /></td>
+                        </tr>     
+
+                    </tbody>
+                               
+                    <tbody id="FangYuanXinXi">
+                        <tr><td>信息名称</td><td><input type="text" name="FYXX_Name" id="FYXX_Name" /></td></tr>
+                        <tr><td>信息电话</td><td><input type="text" name="FYXX_Photo" id="FYXX_Photo" onkeyup="ReadPhoto(this)" /></td></tr>
+                        <tr><td>第一排</td><td><input type="text" name="FYXX_ONE" id="FYXX_ONE" /></td></tr>
+                        <tr><td>第二排</td><td><input type="text" name="FYXX_TWO" id="FYXX_TWO" /></td></tr>
+                        <tr><td>第三排</td><td><input type="text" name="FYXX_SHRER" id="FYXX_SHRER" /></td></tr>
+                    </tbody> 
+                                          
                 </table>
         }
     </div>

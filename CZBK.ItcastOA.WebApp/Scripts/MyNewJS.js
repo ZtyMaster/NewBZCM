@@ -123,6 +123,15 @@ function num(obj) {
     obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
     obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
 }
+function ReadPhoto(obj) {
+    obj.value = obj.value.replace(/[^\d]/g, ""); //清除"数字"和"."以外的字符    
+    obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+    if (obj.value.length > 11) {
+        obj.value = obj.value.substr(0, obj.value.length - 1)
+        $.messager.alert("提示", "不可超出电话长度，系统自动删除多余数字！", 'err')
+    }
+
+}
 //金额小写转大写
 function Arabia_to_Chinese(Num) {
 

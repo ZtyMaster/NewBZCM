@@ -105,6 +105,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult GetFanChan() {
             int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
             int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 5;
+            
             //构建搜索条件
             int totalCount = 0;
             UserInfoParam userInfoParam = new UserInfoParam()
@@ -112,6 +113,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalCount = totalCount,
+                Items = Request["item"]==null?"2":Request["item"]
             };
             var BzcmFC = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
             var temp = from a in BzcmFC
