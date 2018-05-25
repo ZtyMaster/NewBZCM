@@ -42,6 +42,8 @@
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.WXXLoginController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="WXXUserInfoService" ref="WXXUserInfoService" />
+    <property name="BzcmText_FanChanService" ref="BzcmText_FanChanService" />
+    <property name="T_BoolItemService" ref="T_BoolItemService" />
   </object>
 
 

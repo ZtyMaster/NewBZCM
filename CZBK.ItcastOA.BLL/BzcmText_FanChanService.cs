@@ -24,7 +24,7 @@ namespace CZBK.ItcastOA.BLL
             var temp = this.GetCurrentDbSession.BzcmText_FanChanDal.LoadEntities(c => c.DEL == (astr.IsMaster?1: 0));
             
             if (astr.IsTop) {
-                temp = temp.Where(x => x.IsTop == 1&&x.IsTopStartTime>=DateTime.Now&&x.IsTopStopTime<=DateTime.Now);
+                temp = temp.Where(x => x.IsTop == 1&&x.IsTopStartTime<=DateTime.Now&&x.IsTopStopTime>=DateTime.Now);
             }
            
             if (!string.IsNullOrEmpty(astr.Items))
