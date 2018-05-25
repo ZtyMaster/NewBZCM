@@ -79,10 +79,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 PageSize = int.MaxValue,
                 TotalCount = totalCount,
                 Items = Request["item"] == null ? "2" : Request["item"],
-                IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"])
+                IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"]),
+                IsTop=true
             };
-            var temp = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
-
+            var temp =BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
             return Json(new { rows = temp, total = userInfoParam.TotalCount }, JsonRequestBehavior.AllowGet);
         }
         //获取首页没栏显示数
