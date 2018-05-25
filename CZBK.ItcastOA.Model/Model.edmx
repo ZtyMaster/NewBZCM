@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BZCMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BZCMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ActionInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -612,7 +612,8 @@
             <End Role="WXXUserInfo" EntitySet="WXXUserInfo" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BZCMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -651,6 +652,89 @@
           <Property Name="DelFlag" Type="Int16" Nullable="false" />
           <NavigationProperty Name="UserInfoes" Relationship="Self.FK_Bumen" FromRole="BumenInfoSet" ToRole="UserInfo" />
         </EntityType>
+        <EntityType Name="BZCMLouPanJianJie">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DEL" Type="Int32" Nullable="false" />
+          <Property Name="BzcmTextID" Type="Int64" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+          <Property Name="AddUserID" Type="Int32" />
+          <Property Name="Texts" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShuoSuQuYu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Addess" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Photo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="XiaoShouZT" Type="Int32" />
+          <Property Name="XiangMuTeShe" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KaiFaShang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KaiPanTime" Type="DateTime" Precision="3" />
+          <Property Name="RuzuTime" Type="DateTime" Precision="3" />
+          <Property Name="Money" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ShouLouAddess" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="ChanQuanYear" Type="Int32" />
+          <Property Name="HuXing" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="JianZhuMianJi" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ZhanDiMianJi" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="JianZhuLeiBie" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ZhuangXiuQingKuang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LouCheZhuanKuang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ChengJianShang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DaiLiShang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WuYeLeiBie" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RongJiLv" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="LvHuaLv" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="GongShui" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GongQi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GongNuan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="KuanDai" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WuYeGongShi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WuYeFei" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StopCar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GongJiaoXianLu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Shool" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Shop" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="YiYuan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Sty" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Game" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EAC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BzcmText_FanChan" Relationship="Self.FK_BZCMLouPanJianJie_BzcmText_FanChan" FromRole="BZCMLouPanJianJie" ToRole="BzcmText_FanChan" />
+          <NavigationProperty Name="UserInfo" Relationship="Self.FK_BZCMLouPanJianJie_UserInfo" FromRole="BZCMLouPanJianJie" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="BzcmText_FanChan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Addtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AddUser" Type="Int32" Nullable="false" />
+          <Property Name="DEL" Type="Int32" Nullable="false" />
+          <Property Name="Str_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Str_Image" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Str_Photo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="IsTop" Type="Double" />
+          <Property Name="IsTop_shor" Type="Int32" />
+          <Property Name="IsTopStartTime" Type="DateTime" Precision="3" />
+          <Property Name="IsTopStopTime" Type="DateTime" Precision="3" />
+          <Property Name="IsFristItemsID" Type="Int32" Nullable="false" />
+          <Property Name="News_Name" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Name="News_KaiFaShang" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Name="News_Addess" Type="String" MaxLength="260" FixedLength="false" Unicode="true" />
+          <Property Name="News_Money" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="News_Danwei" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="News_Item" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="News_Photo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="News_YouHui" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="News_Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_Photo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_ONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_TWO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FYXX_SHRER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BZCMLouPanJianJies" Relationship="Self.FK_BZCMLouPanJianJie_BzcmText_FanChan" FromRole="BzcmText_FanChan" ToRole="BZCMLouPanJianJie" />
+          <NavigationProperty Name="IsFristItem" Relationship="Self.FK_BzcmText_FanChan_IsFristItems" FromRole="BzcmText_FanChan" ToRole="IsFristItems" />
+          <NavigationProperty Name="UserInfo" Relationship="Self.FK_BzcmText_FanChan_UserInfo" FromRole="BzcmText_FanChan" ToRole="UserInfo" />
+        </EntityType>
         <EntityType Name="Department">
           <Key>
             <PropertyRef Name="ID" />
@@ -664,6 +748,18 @@
           <Property Name="DelFlag" Type="Int16" Nullable="false" />
           <NavigationProperty Name="ActionInfoes" Relationship="Self.DepartmentActionInfo" FromRole="Department" ToRole="ActionInfo" />
           <NavigationProperty Name="UserInfoes" Relationship="Self.UserInfoDepartment" FromRole="Department" ToRole="UserInfo" />
+        </EntityType>
+        <EntityType Name="IsFristItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Str" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Str_int" Type="Int32" Nullable="false" />
+          <Property Name="Del" Type="Int32" Nullable="false" />
+          <Property Name="Items" Type="Int32" />
+          <Property Name="Itemsstr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BzcmText_FanChan" Relationship="Self.FK_BzcmText_FanChan_IsFristItems" FromRole="IsFristItems" ToRole="BzcmText_FanChan" />
         </EntityType>
         <EntityType Name="Login_list">
           <Key>
@@ -752,14 +848,27 @@
           <Property Name="QuXian" Type="Int32" />
           <Property Name="BuMenID" Type="Int32" />
           <NavigationProperty Name="BumenInfoSet" Relationship="Self.FK_Bumen" FromRole="UserInfo" ToRole="BumenInfoSet" />
+          <NavigationProperty Name="BZCMLouPanJianJies" Relationship="Self.FK_BZCMLouPanJianJie_UserInfo" FromRole="UserInfo" ToRole="BZCMLouPanJianJie" />
+          <NavigationProperty Name="BzcmText_FanChan" Relationship="Self.FK_BzcmText_FanChan_UserInfo" FromRole="UserInfo" ToRole="BzcmText_FanChan" />
           <NavigationProperty Name="Login_list" Relationship="Self.FK_Login_list_UserInfo" FromRole="UserInfo" ToRole="Login_list" />
           <NavigationProperty Name="R_UserInfo_ActionInfo" Relationship="Self.FK_UserInfoR_UserInfo_ActionInfo" FromRole="UserInfo" ToRole="R_UserInfo_ActionInfo" />
           <NavigationProperty Name="Userbaks" Relationship="Self.FK_Userbak_UserInfo" FromRole="UserInfo" ToRole="Userbaks" />
+          <NavigationProperty Name="WXXUserInfoes" Relationship="Self.FK_WXXUserInfo_UserInfo" FromRole="UserInfo" ToRole="WXXUserInfo" />
           <NavigationProperty Name="Departments" Relationship="Self.UserInfoDepartment" FromRole="UserInfo" ToRole="Department" />
           <NavigationProperty Name="RoleInfoes" Relationship="Self.UserInfoRoleInfo" FromRole="UserInfo" ToRole="RoleInfo" />
-          <NavigationProperty Name="BzcmText_FanChan" Relationship="BZCMModel.FK_BzcmText_FanChan_UserInfo" FromRole="UserInfo" ToRole="BzcmText_FanChan" />
-          <NavigationProperty Name="BZCMLouPanJianJies" Relationship="BZCMModel.FK_BZCMLouPanJianJie_UserInfo" FromRole="UserInfo" ToRole="BZCMLouPanJianJie" />
-          <NavigationProperty Name="WXXUserInfoes" Relationship="BZCMModel.FK_WXXUserInfo_UserInfo" FromRole="UserInfo" ToRole="WXXUserInfo" />
+        </EntityType>
+        <EntityType Name="Wx__BzcmText">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Str_Text" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BzcmText_FanChan_ID" Type="Int64" />
+          <Property Name="DEL" Type="Int32" Nullable="false" />
+          <Property Name="WXuserID" Type="Int64" Nullable="false" />
+          <Property Name="AltTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AltPhoto" Type="Double" Nullable="false" />
+          <NavigationProperty Name="WXXUserInfo" Relationship="Self.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="Wx__BzcmText" ToRole="WXXUserInfo" />
         </EntityType>
         <EntityType Name="WXX_FormID">
           <Key>
@@ -771,6 +880,22 @@
           <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="StopTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CanUse" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WXXUserInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UID" Type="Int32" />
+          <Property Name="WXID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PersonName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="Int32" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="Photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="bak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DEL" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserInfo" Relationship="Self.FK_WXXUserInfo_UserInfo" FromRole="WXXUserInfo" ToRole="UserInfo" />
+          <NavigationProperty Name="Wx__BzcmText" Relationship="Self.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="WXXUserInfo" ToRole="Wx__BzcmText" />
         </EntityType>
         <Association Name="FK_ActionInfoR_UserInfo_ActionInfo">
           <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
@@ -793,6 +918,54 @@
             </Principal>
             <Dependent Role="UserInfo">
               <PropertyRef Name="BuMenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BZCMLouPanJianJie_BzcmText_FanChan">
+          <End Role="BzcmText_FanChan" Type="Self.BzcmText_FanChan" Multiplicity="1" />
+          <End Role="BZCMLouPanJianJie" Type="Self.BZCMLouPanJianJie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BzcmText_FanChan">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BZCMLouPanJianJie">
+              <PropertyRef Name="BzcmTextID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BZCMLouPanJianJie_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="BZCMLouPanJianJie" Type="Self.BZCMLouPanJianJie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BZCMLouPanJianJie">
+              <PropertyRef Name="AddUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BzcmText_FanChan_IsFristItems">
+          <End Role="IsFristItems" Type="Self.IsFristItem" Multiplicity="1" />
+          <End Role="BzcmText_FanChan" Type="Self.BzcmText_FanChan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IsFristItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BzcmText_FanChan">
+              <PropertyRef Name="IsFristItemsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BzcmText_FanChan_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+          <End Role="BzcmText_FanChan" Type="Self.BzcmText_FanChan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BzcmText_FanChan">
+              <PropertyRef Name="AddUser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -832,6 +1005,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_WXXUserInfo_UserInfo">
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="0..1" />
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="WXXUserInfo">
+              <PropertyRef Name="UID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Wx__BzcmText_BzcmText_FanChan">
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="1" />
+          <End Role="Wx__BzcmText" Type="Self.Wx__BzcmText" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WXXUserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Wx__BzcmText">
+              <PropertyRef Name="WXuserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="DepartmentActionInfo">
           <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="*" />
           <End Role="Department" Type="Self.Department" Multiplicity="*" />
@@ -851,14 +1048,19 @@
         <EntityContainer Name="BZCMEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ActionInfoes" EntityType="Self.ActionInfo" />
           <EntitySet Name="BumenInfoSets" EntityType="Self.BumenInfoSet" />
+          <EntitySet Name="BZCMLouPanJianJies" EntityType="Self.BZCMLouPanJianJie" />
+          <EntitySet Name="BzcmText_FanChan" EntityType="Self.BzcmText_FanChan" />
           <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="IsFristItems" EntityType="Self.IsFristItem" />
           <EntitySet Name="Login_list" EntityType="Self.Login_list" />
           <EntitySet Name="R_UserInfo_ActionInfo" EntityType="Self.R_UserInfo_ActionInfo" />
           <EntitySet Name="RoleInfoes" EntityType="Self.RoleInfo" />
           <EntitySet Name="T_BoolItem" EntityType="Self.T_BoolItem" />
           <EntitySet Name="Userbaks" EntityType="Self.Userbak" />
           <EntitySet Name="UserInfoes" EntityType="Self.UserInfo" />
+          <EntitySet Name="Wx__BzcmText" EntityType="Self.Wx__BzcmText" />
           <EntitySet Name="WXX_FormID" EntityType="Self.WXX_FormID" />
+          <EntitySet Name="WXXUserInfoes" EntityType="Self.WXXUserInfo" />
           <AssociationSet Name="FK_ActionInfoR_UserInfo_ActionInfo" Association="Self.FK_ActionInfoR_UserInfo_ActionInfo">
             <End Role="ActionInfo" EntitySet="ActionInfoes" />
             <End Role="R_UserInfo_ActionInfo" EntitySet="R_UserInfo_ActionInfo" />
@@ -866,6 +1068,22 @@
           <AssociationSet Name="FK_Bumen" Association="Self.FK_Bumen">
             <End Role="BumenInfoSet" EntitySet="BumenInfoSets" />
             <End Role="UserInfo" EntitySet="UserInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BZCMLouPanJianJie_BzcmText_FanChan" Association="Self.FK_BZCMLouPanJianJie_BzcmText_FanChan">
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+            <End Role="BZCMLouPanJianJie" EntitySet="BZCMLouPanJianJies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BZCMLouPanJianJie_UserInfo" Association="Self.FK_BZCMLouPanJianJie_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="BZCMLouPanJianJie" EntitySet="BZCMLouPanJianJies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BzcmText_FanChan_IsFristItems" Association="Self.FK_BzcmText_FanChan_IsFristItems">
+            <End Role="IsFristItems" EntitySet="IsFristItems" />
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BzcmText_FanChan_UserInfo" Association="Self.FK_BzcmText_FanChan_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
           </AssociationSet>
           <AssociationSet Name="FK_Login_list_UserInfo" Association="Self.FK_Login_list_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfoes" />
@@ -878,6 +1096,14 @@
           <AssociationSet Name="FK_Userbak_UserInfo" Association="Self.FK_Userbak_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfoes" />
             <End Role="Userbaks" EntitySet="Userbaks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WXXUserInfo_UserInfo" Association="Self.FK_WXXUserInfo_UserInfo">
+            <End Role="UserInfo" EntitySet="UserInfoes" />
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wx__BzcmText_BzcmText_FanChan" Association="Self.FK_Wx__BzcmText_BzcmText_FanChan">
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
+            <End Role="Wx__BzcmText" EntitySet="Wx__BzcmText" />
           </AssociationSet>
           <AssociationSet Name="DepartmentActionInfo" Association="Self.DepartmentActionInfo">
             <End Role="ActionInfo" EntitySet="ActionInfoes" />
@@ -895,250 +1121,7 @@
             <End Role="RoleInfo" EntitySet="RoleInfoes" />
             <End Role="UserInfo" EntitySet="UserInfoes" />
           </AssociationSet>
-          <EntitySet Name="BzcmText_FanChan" EntityType="BZCMModel.BzcmText_FanChan" />
-          <EntitySet Name="IsFristItems" EntityType="BZCMModel.IsFristItem" />
-          <EntitySet Name="Wx__BzcmText" EntityType="BZCMModel.Wx__BzcmText" />
-          <AssociationSet Name="FK_BzcmText_FanChan_IsFristItems" Association="BZCMModel.FK_BzcmText_FanChan_IsFristItems">
-            <End Role="IsFristItem" EntitySet="IsFristItems" />
-            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BzcmText_FanChan_UserInfo" Association="BZCMModel.FK_BzcmText_FanChan_UserInfo">
-            <End Role="UserInfo" EntitySet="UserInfoes" />
-            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Wx__BzcmText_BzcmText_FanChan" Association="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan">
-            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
-            <End Role="Wx__BzcmText" EntitySet="Wx__BzcmText" />
-          </AssociationSet>
-          <EntitySet Name="BZCMLouPanJianJies" EntityType="BZCMModel.BZCMLouPanJianJie" />
-          <AssociationSet Name="FK_BZCMLouPanJianJie_BzcmText_FanChan" Association="BZCMModel.FK_BZCMLouPanJianJie_BzcmText_FanChan">
-            <End Role="BzcmText_FanChan" EntitySet="BzcmText_FanChan" />
-            <End Role="BZCMLouPanJianJie" EntitySet="BZCMLouPanJianJies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BZCMLouPanJianJie_UserInfo" Association="BZCMModel.FK_BZCMLouPanJianJie_UserInfo">
-            <End Role="UserInfo" EntitySet="UserInfoes" />
-            <End Role="BZCMLouPanJianJie" EntitySet="BZCMLouPanJianJies" />
-          </AssociationSet>
-          <EntitySet Name="WXXUserInfoes" EntityType="BZCMModel.WXXUserInfo" />
-          <AssociationSet Name="FK_WXXUserInfo_UserInfo" Association="BZCMModel.FK_WXXUserInfo_UserInfo">
-            <End Role="UserInfo" EntitySet="UserInfoes" />
-            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Wx__BzcmText_BzcmText_FanChan1" Association="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan1">
-            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
-            <End Role="Wx__BzcmText" EntitySet="Wx__BzcmText" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="BzcmText_FanChan">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Addtime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="AddUser" Type="Int32" Nullable="false" />
-          <Property Name="DEL" Type="Int32" Nullable="false" />
-          <Property Name="Str_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Str_Image" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Name="Str_Photo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
-          <Property Name="IsTop" Type="Double" />
-          <Property Name="IsTop_shor" Type="Int32" />
-          <Property Name="IsTopStartTime" Type="DateTime" Precision="3" />
-          <Property Name="IsTopStopTime" Type="DateTime" Precision="3" />
-          <Property Name="IsFristItemsID" Type="Int32" Nullable="false" />
-          <Property Name="News_Name" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
-          <Property Name="News_KaiFaShang" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
-          <Property Name="News_Addess" Type="String" MaxLength="260" FixedLength="false" Unicode="true" />
-          <Property Name="News_Money" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="News_Danwei" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="News_Item" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="News_Photo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="News_YouHui" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="News_Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FYXX_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="FYXX_Photo" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
-          <Property Name="FYXX_ONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FYXX_TWO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FYXX_SHRER" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="IsFristItem" Relationship="BZCMModel.FK_BzcmText_FanChan_IsFristItems" FromRole="BzcmText_FanChan" ToRole="IsFristItem" />
-          <NavigationProperty Name="UserInfo" Relationship="BZCMModel.FK_BzcmText_FanChan_UserInfo" FromRole="BzcmText_FanChan" ToRole="UserInfo" />
-          <NavigationProperty Name="Wx__BzcmText" Relationship="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="BzcmText_FanChan" ToRole="Wx__BzcmText" />
-          <NavigationProperty Name="BZCMLouPanJianJies" Relationship="BZCMModel.FK_BZCMLouPanJianJie_BzcmText_FanChan" FromRole="BzcmText_FanChan" ToRole="BZCMLouPanJianJie" />
-        </EntityType>
-        <EntityType Name="IsFristItem">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Str" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Str_int" Type="Int32" Nullable="false" />
-          <Property Name="Del" Type="Int32" Nullable="false" />
-          <Property Name="Items" Type="Int32" />
-          <Property Name="Itemsstr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BzcmText_FanChan" Relationship="BZCMModel.FK_BzcmText_FanChan_IsFristItems" FromRole="IsFristItem" ToRole="BzcmText_FanChan" />
-        </EntityType>
-        <EntityType Name="Wx__BzcmText">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Str_Text" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BzcmText_FanChan_ID" Type="Int64" />
-          <Property Name="DEL" Type="Int32" Nullable="false" />
-          <Property Name="WXuserID" Type="Int64" Nullable="false" />
-          <Property Name="AltTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="AltPhoto" Type="Double" Nullable="false" />
-          <NavigationProperty Name="BzcmText_FanChan" Relationship="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="Wx__BzcmText" ToRole="BzcmText_FanChan" />
-          <NavigationProperty Name="WXXUserInfo" Relationship="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan1" FromRole="Wx__BzcmText" ToRole="WXXUserInfo" />
-        </EntityType>
-        <Association Name="FK_BzcmText_FanChan_IsFristItems">
-          <End Type="BZCMModel.IsFristItem" Role="IsFristItem" Multiplicity="1" />
-          <End Type="BZCMModel.BzcmText_FanChan" Role="BzcmText_FanChan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="IsFristItem">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="BzcmText_FanChan">
-              <PropertyRef Name="IsFristItemsID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BzcmText_FanChan_UserInfo">
-          <End Type="BZCMModel.UserInfo" Role="UserInfo" Multiplicity="1" />
-          <End Type="BZCMModel.BzcmText_FanChan" Role="BzcmText_FanChan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="BzcmText_FanChan">
-              <PropertyRef Name="AddUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Wx__BzcmText_BzcmText_FanChan">
-          <End Type="BZCMModel.BzcmText_FanChan" Role="BzcmText_FanChan" Multiplicity="0..1" />
-          <End Type="BZCMModel.Wx__BzcmText" Role="Wx__BzcmText" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BzcmText_FanChan">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Wx__BzcmText">
-              <PropertyRef Name="BzcmText_FanChan_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="BZCMLouPanJianJie">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DEL" Type="Int32" Nullable="false" />
-          <Property Name="BzcmTextID" Type="Int64" Nullable="false" />
-          <Property Name="AddTime" Type="DateTime" Precision="3" />
-          <Property Name="AddUserID" Type="Int32" />
-          <Property Name="Texts" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShuoSuQuYu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Addess" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="Photo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
-          <Property Name="XiaoShouZT" Type="Int32" />
-          <Property Name="XiangMuTeShe" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="KaiFaShang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="KaiPanTime" Type="DateTime" Precision="3" />
-          <Property Name="RuzuTime" Type="DateTime" Precision="3" />
-          <Property Name="Money" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="ShouLouAddess" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Name="ChanQuanYear" Type="Int32" />
-          <Property Name="HuXing" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="JianZhuMianJi" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="ZhanDiMianJi" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="JianZhuLeiBie" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ZhuangXiuQingKuang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LouCheZhuanKuang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ChengJianShang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DaiLiShang" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="WuYeLeiBie" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RongJiLv" Type="Decimal" Precision="18" Scale="4" />
-          <Property Name="LvHuaLv" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="GongShui" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GongQi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GongNuan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="KuanDai" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="WuYeGongShi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="WuYeFei" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StopCar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GongJiaoXianLu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Shool" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Shop" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="YiYuan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Sty" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Game" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="EAC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BzcmText_FanChan" Relationship="BZCMModel.FK_BZCMLouPanJianJie_BzcmText_FanChan" FromRole="BZCMLouPanJianJie" ToRole="BzcmText_FanChan" />
-          <NavigationProperty Name="UserInfo" Relationship="BZCMModel.FK_BZCMLouPanJianJie_UserInfo" FromRole="BZCMLouPanJianJie" ToRole="UserInfo" />
-        </EntityType>
-        <Association Name="FK_BZCMLouPanJianJie_BzcmText_FanChan">
-          <End Type="BZCMModel.BzcmText_FanChan" Role="BzcmText_FanChan" Multiplicity="1" />
-          <End Type="BZCMModel.BZCMLouPanJianJie" Role="BZCMLouPanJianJie" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BzcmText_FanChan">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="BZCMLouPanJianJie">
-              <PropertyRef Name="BzcmTextID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BZCMLouPanJianJie_UserInfo">
-          <End Type="BZCMModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="BZCMModel.BZCMLouPanJianJie" Role="BZCMLouPanJianJie" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="BZCMLouPanJianJie">
-              <PropertyRef Name="AddUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="WXXUserInfo">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UID" Type="Int32" />
-          <Property Name="WXID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PersonName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Gender" Type="Int32" />
-          <Property Name="Age" Type="Int32" />
-          <Property Name="Photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="bak" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DEL" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="UserInfo" Relationship="BZCMModel.FK_WXXUserInfo_UserInfo" FromRole="WXXUserInfo" ToRole="UserInfo" />
-          <NavigationProperty Name="Wx__BzcmText" Relationship="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan1" FromRole="WXXUserInfo" ToRole="Wx__BzcmText" />
-        </EntityType>
-        <Association Name="FK_WXXUserInfo_UserInfo">
-          <End Type="BZCMModel.UserInfo" Role="UserInfo" Multiplicity="0..1" />
-          <End Type="BZCMModel.WXXUserInfo" Role="WXXUserInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="WXXUserInfo">
-              <PropertyRef Name="UID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Wx__BzcmText_BzcmText_FanChan1">
-          <End Type="BZCMModel.WXXUserInfo" Role="WXXUserInfo" Multiplicity="1" />
-          <End Type="BZCMModel.Wx__BzcmText" Role="Wx__BzcmText" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="WXXUserInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Wx__BzcmText">
-              <PropertyRef Name="WXuserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1178,6 +1161,86 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BZCMLouPanJianJies">
+            <EntityTypeMapping TypeName="BZCMModel.BZCMLouPanJianJie">
+              <MappingFragment StoreEntitySet="BZCMLouPanJianJie">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="BzcmTextID" ColumnName="BzcmTextID" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="AddUserID" ColumnName="AddUserID" />
+                <ScalarProperty Name="Texts" ColumnName="Texts" />
+                <ScalarProperty Name="ShuoSuQuYu" ColumnName="ShuoSuQuYu" />
+                <ScalarProperty Name="Addess" ColumnName="Addess" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="XiaoShouZT" ColumnName="XiaoShouZT" />
+                <ScalarProperty Name="XiangMuTeShe" ColumnName="XiangMuTeShe" />
+                <ScalarProperty Name="KaiFaShang" ColumnName="KaiFaShang" />
+                <ScalarProperty Name="KaiPanTime" ColumnName="KaiPanTime" />
+                <ScalarProperty Name="RuzuTime" ColumnName="RuzuTime" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="ShouLouAddess" ColumnName="ShouLouAddess" />
+                <ScalarProperty Name="ChanQuanYear" ColumnName="ChanQuanYear" />
+                <ScalarProperty Name="HuXing" ColumnName="HuXing" />
+                <ScalarProperty Name="JianZhuMianJi" ColumnName="JianZhuMianJi" />
+                <ScalarProperty Name="ZhanDiMianJi" ColumnName="ZhanDiMianJi" />
+                <ScalarProperty Name="JianZhuLeiBie" ColumnName="JianZhuLeiBie" />
+                <ScalarProperty Name="ZhuangXiuQingKuang" ColumnName="ZhuangXiuQingKuang" />
+                <ScalarProperty Name="LouCheZhuanKuang" ColumnName="LouCheZhuanKuang" />
+                <ScalarProperty Name="ChengJianShang" ColumnName="ChengJianShang" />
+                <ScalarProperty Name="DaiLiShang" ColumnName="DaiLiShang" />
+                <ScalarProperty Name="WuYeLeiBie" ColumnName="WuYeLeiBie" />
+                <ScalarProperty Name="RongJiLv" ColumnName="RongJiLv" />
+                <ScalarProperty Name="LvHuaLv" ColumnName="LvHuaLv" />
+                <ScalarProperty Name="GongShui" ColumnName="GongShui" />
+                <ScalarProperty Name="GongQi" ColumnName="GongQi" />
+                <ScalarProperty Name="GongNuan" ColumnName="GongNuan" />
+                <ScalarProperty Name="KuanDai" ColumnName="KuanDai" />
+                <ScalarProperty Name="WuYeGongShi" ColumnName="WuYeGongShi" />
+                <ScalarProperty Name="WuYeFei" ColumnName="WuYeFei" />
+                <ScalarProperty Name="StopCar" ColumnName="StopCar" />
+                <ScalarProperty Name="GongJiaoXianLu" ColumnName="GongJiaoXianLu" />
+                <ScalarProperty Name="Shool" ColumnName="Shool" />
+                <ScalarProperty Name="Shop" ColumnName="Shop" />
+                <ScalarProperty Name="YiYuan" ColumnName="YiYuan" />
+                <ScalarProperty Name="Sty" ColumnName="Sty" />
+                <ScalarProperty Name="Game" ColumnName="Game" />
+                <ScalarProperty Name="EAC" ColumnName="EAC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BzcmText_FanChan">
+            <EntityTypeMapping TypeName="BZCMModel.BzcmText_FanChan">
+              <MappingFragment StoreEntitySet="BzcmText_FanChan">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Addtime" ColumnName="Addtime" />
+                <ScalarProperty Name="AddUser" ColumnName="AddUser" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="Str_Name" ColumnName="Str_Name" />
+                <ScalarProperty Name="Str_Image" ColumnName="Str_Image" />
+                <ScalarProperty Name="Str_Photo" ColumnName="Str_Photo" />
+                <ScalarProperty Name="IsTop" ColumnName="IsTop" />
+                <ScalarProperty Name="IsTop_shor" ColumnName="IsTop_shor" />
+                <ScalarProperty Name="IsTopStartTime" ColumnName="IsTopStartTime" />
+                <ScalarProperty Name="IsTopStopTime" ColumnName="IsTopStopTime" />
+                <ScalarProperty Name="IsFristItemsID" ColumnName="IsFristItemsID" />
+                <ScalarProperty Name="News_Name" ColumnName="News_Name" />
+                <ScalarProperty Name="News_KaiFaShang" ColumnName="News_KaiFaShang" />
+                <ScalarProperty Name="News_Addess" ColumnName="News_Addess" />
+                <ScalarProperty Name="News_Money" ColumnName="News_Money" />
+                <ScalarProperty Name="News_Danwei" ColumnName="News_Danwei" />
+                <ScalarProperty Name="News_Item" ColumnName="News_Item" />
+                <ScalarProperty Name="News_Photo" ColumnName="News_Photo" />
+                <ScalarProperty Name="News_YouHui" ColumnName="News_YouHui" />
+                <ScalarProperty Name="News_Text" ColumnName="News_Text" />
+                <ScalarProperty Name="FYXX_Name" ColumnName="FYXX_Name" />
+                <ScalarProperty Name="FYXX_Photo" ColumnName="FYXX_Photo" />
+                <ScalarProperty Name="FYXX_ONE" ColumnName="FYXX_ONE" />
+                <ScalarProperty Name="FYXX_TWO" ColumnName="FYXX_TWO" />
+                <ScalarProperty Name="FYXX_SHRER" ColumnName="FYXX_SHRER" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Departments">
             <EntityTypeMapping TypeName="BZCMModel.Department">
               <MappingFragment StoreEntitySet="Department">
@@ -1188,6 +1251,18 @@
                 <ScalarProperty Name="Level" ColumnName="Level" />
                 <ScalarProperty Name="IsLeaf" ColumnName="IsLeaf" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IsFristItems">
+            <EntityTypeMapping TypeName="BZCMModel.IsFristItem">
+              <MappingFragment StoreEntitySet="IsFristItems">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Str" ColumnName="Str" />
+                <ScalarProperty Name="Str_int" ColumnName="Str_int" />
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="Items" ColumnName="Items" />
+                <ScalarProperty Name="Itemsstr" ColumnName="Itemsstr" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1227,13 +1302,13 @@
           <EntitySetMapping Name="T_BoolItem">
             <EntityTypeMapping TypeName="BZCMModel.T_BoolItem">
               <MappingFragment StoreEntitySet="T_BoolItem">
-                <ScalarProperty Name="ThisItem" ColumnName="ThisItem" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="str" ColumnName="str" />
                 <ScalarProperty Name="BOLL_" ColumnName="BOLL_" />
                 <ScalarProperty Name="int" ColumnName="int" />
                 <ScalarProperty Name="timener" ColumnName="timener" />
                 <ScalarProperty Name="ItemsID" ColumnName="ItemsID" />
+                <ScalarProperty Name="ThisItem" ColumnName="ThisItem" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1278,6 +1353,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Wx__BzcmText">
+            <EntityTypeMapping TypeName="BZCMModel.Wx__BzcmText">
+              <MappingFragment StoreEntitySet="Wx_ BzcmText">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Str_Text" ColumnName="Str_Text" />
+                <ScalarProperty Name="BzcmText_FanChan_ID" ColumnName="BzcmText_FanChan_ID" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
+                <ScalarProperty Name="WXuserID" ColumnName="WXuserID" />
+                <ScalarProperty Name="AltTime" ColumnName="AltTime" />
+                <ScalarProperty Name="AltPhoto" ColumnName="AltPhoto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="WXX_FormID">
             <EntityTypeMapping TypeName="BZCMModel.WXX_FormID">
               <MappingFragment StoreEntitySet="WXX_FormID">
@@ -1287,6 +1375,21 @@
                 <ScalarProperty Name="AddTime" ColumnName="AddTime" />
                 <ScalarProperty Name="StopTime" ColumnName="StopTime" />
                 <ScalarProperty Name="CanUse" ColumnName="CanUse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXXUserInfoes">
+            <EntityTypeMapping TypeName="BZCMModel.WXXUserInfo">
+              <MappingFragment StoreEntitySet="WXXUserInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="WXID" ColumnName="WXID" />
+                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="bak" ColumnName="bak" />
+                <ScalarProperty Name="DEL" ColumnName="DEL" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1322,126 +1425,6 @@
               <ScalarProperty Name="ID" ColumnName="UserInfoes_ID" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="BzcmText_FanChan">
-            <EntityTypeMapping TypeName="BZCMModel.BzcmText_FanChan">
-              <MappingFragment StoreEntitySet="BzcmText_FanChan">
-                <ScalarProperty Name="FYXX_SHRER" ColumnName="FYXX_SHRER" />
-                <ScalarProperty Name="FYXX_TWO" ColumnName="FYXX_TWO" />
-                <ScalarProperty Name="FYXX_ONE" ColumnName="FYXX_ONE" />
-                <ScalarProperty Name="FYXX_Photo" ColumnName="FYXX_Photo" />
-                <ScalarProperty Name="FYXX_Name" ColumnName="FYXX_Name" />
-                <ScalarProperty Name="News_Text" ColumnName="News_Text" />
-                <ScalarProperty Name="News_YouHui" ColumnName="News_YouHui" />
-                <ScalarProperty Name="News_Photo" ColumnName="News_Photo" />
-                <ScalarProperty Name="News_Item" ColumnName="News_Item" />
-                <ScalarProperty Name="News_Danwei" ColumnName="News_Danwei" />
-                <ScalarProperty Name="News_Money" ColumnName="News_Money" />
-                <ScalarProperty Name="News_Addess" ColumnName="News_Addess" />
-                <ScalarProperty Name="News_KaiFaShang" ColumnName="News_KaiFaShang" />
-                <ScalarProperty Name="News_Name" ColumnName="News_Name" />
-                <ScalarProperty Name="IsFristItemsID" ColumnName="IsFristItemsID" />
-                <ScalarProperty Name="IsTopStopTime" ColumnName="IsTopStopTime" />
-                <ScalarProperty Name="IsTopStartTime" ColumnName="IsTopStartTime" />
-                <ScalarProperty Name="IsTop_shor" ColumnName="IsTop_shor" />
-                <ScalarProperty Name="IsTop" ColumnName="IsTop" />
-                <ScalarProperty Name="Str_Photo" ColumnName="Str_Photo" />
-                <ScalarProperty Name="Str_Image" ColumnName="Str_Image" />
-                <ScalarProperty Name="Str_Name" ColumnName="Str_Name" />
-                <ScalarProperty Name="DEL" ColumnName="DEL" />
-                <ScalarProperty Name="AddUser" ColumnName="AddUser" />
-                <ScalarProperty Name="Addtime" ColumnName="Addtime" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IsFristItems">
-            <EntityTypeMapping TypeName="BZCMModel.IsFristItem">
-              <MappingFragment StoreEntitySet="IsFristItems">
-                <ScalarProperty Name="Itemsstr" ColumnName="Itemsstr" />
-                <ScalarProperty Name="Items" ColumnName="Items" />
-                <ScalarProperty Name="Del" ColumnName="Del" />
-                <ScalarProperty Name="Str_int" ColumnName="Str_int" />
-                <ScalarProperty Name="Str" ColumnName="Str" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Wx__BzcmText">
-            <EntityTypeMapping TypeName="BZCMModel.Wx__BzcmText">
-              <MappingFragment StoreEntitySet="Wx_ BzcmText">
-                <ScalarProperty Name="AltPhoto" ColumnName="AltPhoto" />
-                <ScalarProperty Name="AltTime" ColumnName="AltTime" />
-                <ScalarProperty Name="WXuserID" ColumnName="WXuserID" />
-                <ScalarProperty Name="DEL" ColumnName="DEL" />
-                <ScalarProperty Name="BzcmText_FanChan_ID" ColumnName="BzcmText_FanChan_ID" />
-                <ScalarProperty Name="Str_Text" ColumnName="Str_Text" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BZCMLouPanJianJies">
-            <EntityTypeMapping TypeName="BZCMModel.BZCMLouPanJianJie">
-              <MappingFragment StoreEntitySet="BZCMLouPanJianJie">
-                <ScalarProperty Name="EAC" ColumnName="EAC" />
-                <ScalarProperty Name="Game" ColumnName="Game" />
-                <ScalarProperty Name="Sty" ColumnName="Sty" />
-                <ScalarProperty Name="YiYuan" ColumnName="YiYuan" />
-                <ScalarProperty Name="Shop" ColumnName="Shop" />
-                <ScalarProperty Name="Shool" ColumnName="Shool" />
-                <ScalarProperty Name="GongJiaoXianLu" ColumnName="GongJiaoXianLu" />
-                <ScalarProperty Name="StopCar" ColumnName="StopCar" />
-                <ScalarProperty Name="WuYeFei" ColumnName="WuYeFei" />
-                <ScalarProperty Name="WuYeGongShi" ColumnName="WuYeGongShi" />
-                <ScalarProperty Name="KuanDai" ColumnName="KuanDai" />
-                <ScalarProperty Name="GongNuan" ColumnName="GongNuan" />
-                <ScalarProperty Name="GongQi" ColumnName="GongQi" />
-                <ScalarProperty Name="GongShui" ColumnName="GongShui" />
-                <ScalarProperty Name="LvHuaLv" ColumnName="LvHuaLv" />
-                <ScalarProperty Name="RongJiLv" ColumnName="RongJiLv" />
-                <ScalarProperty Name="WuYeLeiBie" ColumnName="WuYeLeiBie" />
-                <ScalarProperty Name="DaiLiShang" ColumnName="DaiLiShang" />
-                <ScalarProperty Name="ChengJianShang" ColumnName="ChengJianShang" />
-                <ScalarProperty Name="LouCheZhuanKuang" ColumnName="LouCheZhuanKuang" />
-                <ScalarProperty Name="ZhuangXiuQingKuang" ColumnName="ZhuangXiuQingKuang" />
-                <ScalarProperty Name="JianZhuLeiBie" ColumnName="JianZhuLeiBie" />
-                <ScalarProperty Name="ZhanDiMianJi" ColumnName="ZhanDiMianJi" />
-                <ScalarProperty Name="JianZhuMianJi" ColumnName="JianZhuMianJi" />
-                <ScalarProperty Name="HuXing" ColumnName="HuXing" />
-                <ScalarProperty Name="ChanQuanYear" ColumnName="ChanQuanYear" />
-                <ScalarProperty Name="ShouLouAddess" ColumnName="ShouLouAddess" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="RuzuTime" ColumnName="RuzuTime" />
-                <ScalarProperty Name="KaiPanTime" ColumnName="KaiPanTime" />
-                <ScalarProperty Name="KaiFaShang" ColumnName="KaiFaShang" />
-                <ScalarProperty Name="XiangMuTeShe" ColumnName="XiangMuTeShe" />
-                <ScalarProperty Name="XiaoShouZT" ColumnName="XiaoShouZT" />
-                <ScalarProperty Name="Photo" ColumnName="Photo" />
-                <ScalarProperty Name="Addess" ColumnName="Addess" />
-                <ScalarProperty Name="ShuoSuQuYu" ColumnName="ShuoSuQuYu" />
-                <ScalarProperty Name="Texts" ColumnName="Texts" />
-                <ScalarProperty Name="AddUserID" ColumnName="AddUserID" />
-                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
-                <ScalarProperty Name="BzcmTextID" ColumnName="BzcmTextID" />
-                <ScalarProperty Name="DEL" ColumnName="DEL" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="WXXUserInfoes">
-            <EntityTypeMapping TypeName="BZCMModel.WXXUserInfo">
-              <MappingFragment StoreEntitySet="WXXUserInfo">
-                <ScalarProperty Name="DEL" ColumnName="DEL" />
-                <ScalarProperty Name="bak" ColumnName="bak" />
-                <ScalarProperty Name="Photo" ColumnName="Photo" />
-                <ScalarProperty Name="Age" ColumnName="Age" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
-                <ScalarProperty Name="WXID" ColumnName="WXID" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

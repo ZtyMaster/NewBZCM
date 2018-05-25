@@ -16,7 +16,7 @@ namespace CZBK.ItcastOA.Model
     {
         public BumenInfoSet()
         {
-            this.UserInfo = new HashSet<UserInfo>();
+            this.UserInfoes = new HashSet<UserInfo>();
         }
     
         public int ID { get; set; }
@@ -26,6 +26,6 @@ namespace CZBK.ItcastOA.Model
         public System.DateTime SubTime { get; set; }
         public short DelFlag { get; set; }
     
-        public virtual ICollection<UserInfo> UserInfo { get; set; }
+        public virtual ICollection<UserInfo> UserInfoes { get; set; }
     }
 }

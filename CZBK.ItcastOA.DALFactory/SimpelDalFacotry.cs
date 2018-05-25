@@ -81,17 +81,17 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IDepartmentDal;
         }
 		
-	    public static IIsFristItemsDal CreateIsFristItemsDal()
+	    public static IIsFristItemDal CreateIsFristItemDal()
         {
 
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".IsFristItemsDal";
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".IsFristItemDal";
 
 
             //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
             var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
 
 
-            return obj as IIsFristItemsDal;
+            return obj as IIsFristItemDal;
         }
 		
 	    public static ILogin_listDal CreateLogin_listDal()
@@ -146,17 +146,17 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_BoolItemDal;
         }
 		
-	    public static IUserbaksDal CreateUserbaksDal()
+	    public static IUserbakDal CreateUserbakDal()
         {
 
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".UserbaksDal";
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".UserbakDal";
 
 
             //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
             var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
 
 
-            return obj as IUserbaksDal;
+            return obj as IUserbakDal;
         }
 		
 	    public static IUserInfoDal CreateUserInfoDal()

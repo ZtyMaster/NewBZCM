@@ -137,7 +137,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             short delflag = (short)DelFlagEnum.Normarl;
             var AllRoleList = RoleInfoService.LoadEntities(a => a.DelFlag == delflag).ToList();
             //获取当前权限已经有的角色信息
-            var AllExtRoleIdList = (from r in actioninfo.RoleInfo
+            var AllExtRoleIdList = (from r in actioninfo.RoleInfoes
                                     select r.ID).ToList();
             ViewBag.RoleList = AllRoleList;
             ViewBag.AllExtRoleIdList = AllExtRoleIdList;

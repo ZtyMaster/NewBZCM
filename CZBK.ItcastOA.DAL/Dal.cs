@@ -36,7 +36,7 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
-	public partial class IsFristItemsDal :BaseDal<IsFristItems>,IIsFristItemsDal
+	public partial class IsFristItemDal :BaseDal<IsFristItem>,IIsFristItemDal
     {
 
     }
@@ -61,7 +61,7 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
-	public partial class UserbaksDal :BaseDal<Userbaks>,IUserbaksDal
+	public partial class UserbakDal :BaseDal<Userbak>,IUserbakDal
     {
 
     }

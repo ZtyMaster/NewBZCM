@@ -27,18 +27,18 @@ namespace CZBK.ItcastOA.Model
     
         public DbSet<ActionInfo> ActionInfoes { get; set; }
         public DbSet<BumenInfoSet> BumenInfoSets { get; set; }
+        public DbSet<BZCMLouPanJianJie> BZCMLouPanJianJies { get; set; }
+        public DbSet<BzcmText_FanChan> BzcmText_FanChan { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<IsFristItem> IsFristItems { get; set; }
         public DbSet<Login_list> Login_list { get; set; }
         public DbSet<R_UserInfo_ActionInfo> R_UserInfo_ActionInfo { get; set; }
         public DbSet<RoleInfo> RoleInfoes { get; set; }
         public DbSet<T_BoolItem> T_BoolItem { get; set; }
         public DbSet<Userbak> Userbaks { get; set; }
         public DbSet<UserInfo> UserInfoes { get; set; }
-        public DbSet<WXX_FormID> WXX_FormID { get; set; }
-        public DbSet<BzcmText_FanChan> BzcmText_FanChan { get; set; }
-        public DbSet<IsFristItem> IsFristItems { get; set; }
         public DbSet<Wx__BzcmText> Wx__BzcmText { get; set; }
-        public DbSet<BZCMLouPanJianJie> BZCMLouPanJianJies { get; set; }
+        public DbSet<WXX_FormID> WXX_FormID { get; set; }
         public DbSet<WXXUserInfo> WXXUserInfoes { get; set; }
     }
 }

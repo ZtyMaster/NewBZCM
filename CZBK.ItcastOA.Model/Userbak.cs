@@ -12,7 +12,7 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Userbaks
+    public partial class Userbak
     {
         public int ID { get; set; }
         public int UserInfoID { get; set; }

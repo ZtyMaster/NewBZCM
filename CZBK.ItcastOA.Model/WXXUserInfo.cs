@@ -14,6 +14,11 @@ namespace CZBK.ItcastOA.Model
     
     public partial class WXXUserInfo
     {
+        public WXXUserInfo()
+        {
+            this.Wx__BzcmText = new HashSet<Wx__BzcmText>();
+        }
+    
         public long ID { get; set; }
         public Nullable<int> UID { get; set; }
         public string WXID { get; set; }
@@ -23,5 +28,8 @@ namespace CZBK.ItcastOA.Model
         public string Photo { get; set; }
         public string bak { get; set; }
         public int DEL { get; set; }
+    
+        public virtual UserInfo UserInfo { get; set; }
+        public virtual ICollection<Wx__BzcmText> Wx__BzcmText { get; set; }
     }
 }

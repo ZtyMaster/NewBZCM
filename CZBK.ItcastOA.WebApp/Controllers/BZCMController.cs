@@ -76,7 +76,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //获取信息列表
         public ActionResult Bzkx() {
             var p =Convert.ToInt32(Request["items"]);
-            //p==0时 返回广告位信息  ==0时返回历史记录            
+            //p==0时 返回广告位信息  ==0时返回历史记录 
             var temps = IsFristItemService.LoadEntities(x=>x.Items==p).DefaultIfEmpty();
             var temp = from a in temps
                        select new {
@@ -141,39 +141,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 Items = Request["item"] == null ? "2" : Request["item"],
                 IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"])                
             };
-            var BzcmFC = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
-            var temp = from a in BzcmFC
-                       select new
-                       {
-                           a.ID,
-                           a.Addtime,
-                           AddUser = a.UserInfo.PerSonName,
-                           a.DEL,
-                           a.FYXX_Name,
-                           a.FYXX_ONE,
-                           a.FYXX_Photo,
-                           a.FYXX_SHRER,
-                           a.FYXX_TWO,
-                           IsFristItemsID = a.IsFristItem.Str,
-                           itemsid=a.IsFristItemsID,
-                           a.IsTop,
-                           a.IsTopStartTime,
-                           a.IsTopStopTime,
-                           a.IsTop_shor,
-                           a.News_Addess,
-                           a.News_Danwei,
-                           a.News_Item,
-                           a.News_KaiFaShang,
-                           a.News_Money,
-                           a.News_Name,
-                           a.News_Photo,
-                           a.News_Text,
-                           a.News_YouHui,
-                           a.Str_Image,
-                           a.Str_Name,
-                           a.Str_Photo,
-                           a.Wx__BzcmText
-                       };
+
+            var temp = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
+          
             return Json(new { rows = temp, total = userInfoParam.TotalCount }, JsonRequestBehavior.AllowGet);
         }
         #endregion

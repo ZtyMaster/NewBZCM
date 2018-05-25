@@ -17,14 +17,14 @@ namespace CZBK.ItcastOA.Model
     {
         public UserInfo()
         {
+            this.BZCMLouPanJianJies = new HashSet<BZCMLouPanJianJie>();
+            this.BzcmText_FanChan = new HashSet<BzcmText_FanChan>();
             this.Login_list = new HashSet<Login_list>();
             this.R_UserInfo_ActionInfo = new HashSet<R_UserInfo_ActionInfo>();
             this.Userbaks = new HashSet<Userbak>();
+            this.WXXUserInfoes = new HashSet<WXXUserInfo>();
             this.Departments = new HashSet<Department>();
             this.RoleInfoes = new HashSet<RoleInfo>();
-            this.BzcmText_FanChan = new HashSet<BzcmText_FanChan>();
-            this.BZCMLouPanJianJies = new HashSet<BZCMLouPanJianJie>();
-            this.WXXUserInfoes = new HashSet<WXXUserInfo>();
         }
     
         public int ID { get; set; }
@@ -50,20 +50,20 @@ namespace CZBK.ItcastOA.Model
         [JsonIgnore]
         public virtual BumenInfoSet BumenInfoSet { get; set; }
         [JsonIgnore]
+        public virtual ICollection<BZCMLouPanJianJie> BZCMLouPanJianJies { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<BzcmText_FanChan> BzcmText_FanChan { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Login_list> Login_list { get; set; }
         [JsonIgnore]
         public virtual ICollection<R_UserInfo_ActionInfo> R_UserInfo_ActionInfo { get; set; }
         [JsonIgnore]
         public virtual ICollection<Userbak> Userbaks { get; set; }
         [JsonIgnore]
+        public virtual ICollection<WXXUserInfo> WXXUserInfoes { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Department> Departments { get; set; }
         [JsonIgnore]
         public virtual ICollection<RoleInfo> RoleInfoes { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<BzcmText_FanChan> BzcmText_FanChan { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<BZCMLouPanJianJie> BZCMLouPanJianJies { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<WXXUserInfo> WXXUserInfoes { get; set; }
     }
 }

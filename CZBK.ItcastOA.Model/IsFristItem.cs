@@ -12,9 +12,9 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class IsFristItems
+    public partial class IsFristItem
     {
-        public IsFristItems()
+        public IsFristItem()
         {
             this.BzcmText_FanChan = new HashSet<BzcmText_FanChan>();
         }

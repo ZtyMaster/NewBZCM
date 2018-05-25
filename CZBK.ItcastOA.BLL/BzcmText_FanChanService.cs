@@ -11,7 +11,7 @@ namespace CZBK.ItcastOA.BLL
 {
     public partial class BzcmText_FanChanService : BaseService<BzcmText_FanChan>, IBzcmText_FanChanService
     {
-        public IQueryable<BzcmText_FanChan> LoadSearchEntities(UserInfoParam astr)
+        public object LoadSearchEntities(UserInfoParam astr)
         {
             /// <summary>
             /// 多条件搜索用户信息
@@ -29,8 +29,40 @@ namespace CZBK.ItcastOA.BLL
                 temp = temp.Where<BzcmText_FanChan>(u => u.IsFristItemsID==id);
             }
             astr.TotalCount = temp.Count();
-            return temp.OrderBy<BzcmText_FanChan, long>(u => u.ID).Skip<BzcmText_FanChan>((astr.PageIndex - 1) * astr.PageSize).Take<BzcmText_FanChan>(astr.PageSize);
+            var temps= temp.OrderBy<BzcmText_FanChan, long>(u => u.ID).Skip<BzcmText_FanChan>((astr.PageIndex - 1) * astr.PageSize).Take<BzcmText_FanChan>(astr.PageSize);
 
+            var ret = from a in temps
+                       select new
+                       {
+                           a.ID,
+                           a.Addtime,
+                           AddUser = a.UserInfo.PerSonName,
+                           a.DEL,
+                           a.FYXX_Name,
+                           a.FYXX_ONE,
+                           a.FYXX_Photo,
+                           a.FYXX_SHRER,
+                           a.FYXX_TWO,
+                           IsFristItemsID = a.IsFristItem.Str,
+                           itemsid = a.IsFristItemsID,
+                           a.IsTop,
+                           a.IsTopStartTime,
+                           a.IsTopStopTime,
+                           a.IsTop_shor,
+                           a.News_Addess,
+                           a.News_Danwei,
+                           a.News_Item,
+                           a.News_KaiFaShang,
+                           a.News_Money,
+                           a.News_Name,
+                           a.News_Photo,
+                           a.News_Text,
+                           a.News_YouHui,
+                           a.Str_Image,
+                           a.Str_Name,
+                           a.Str_Photo
+                       };
+            return ret;
         }
     }
        

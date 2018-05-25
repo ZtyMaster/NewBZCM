@@ -17,8 +17,8 @@ namespace CZBK.ItcastOA.Model
         public ActionInfo()
         {
             this.R_UserInfo_ActionInfo = new HashSet<R_UserInfo_ActionInfo>();
-            this.Department = new HashSet<Department>();
-            this.RoleInfo = new HashSet<RoleInfo>();
+            this.Departments = new HashSet<Department>();
+            this.RoleInfoes = new HashSet<RoleInfo>();
         }
     
         public int ID { get; set; }
@@ -38,7 +38,7 @@ namespace CZBK.ItcastOA.Model
         public int IconHeight { get; set; }
     
         public virtual ICollection<R_UserInfo_ActionInfo> R_UserInfo_ActionInfo { get; set; }
-        public virtual ICollection<Department> Department { get; set; }
-        public virtual ICollection<RoleInfo> RoleInfo { get; set; }
+        public virtual ICollection<Department> Departments { get; set; }
+        public virtual ICollection<RoleInfo> RoleInfoes { get; set; }
     }
 }

@@ -35,7 +35,7 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
-	public partial interface IIsFristItemsService : IBaseService<IsFristItems>
+	public partial interface IIsFristItemService : IBaseService<IsFristItem>
     {
        
     }   
@@ -60,7 +60,7 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
-	public partial interface IUserbaksService : IBaseService<Userbaks>
+	public partial interface IUserbakService : IBaseService<Userbak>
     {
        
     }   

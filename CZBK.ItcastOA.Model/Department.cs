@@ -16,8 +16,8 @@ namespace CZBK.ItcastOA.Model
     {
         public Department()
         {
-            this.ActionInfo = new HashSet<ActionInfo>();
-            this.UserInfo = new HashSet<UserInfo>();
+            this.ActionInfoes = new HashSet<ActionInfo>();
+            this.UserInfoes = new HashSet<UserInfo>();
         }
     
         public int ID { get; set; }
@@ -28,7 +28,7 @@ namespace CZBK.ItcastOA.Model
         public bool IsLeaf { get; set; }
         public short DelFlag { get; set; }
     
-        public virtual ICollection<ActionInfo> ActionInfo { get; set; }
-        public virtual ICollection<UserInfo> UserInfo { get; set; }
+        public virtual ICollection<ActionInfo> ActionInfoes { get; set; }
+        public virtual ICollection<UserInfo> UserInfoes { get; set; }
     }
 }
