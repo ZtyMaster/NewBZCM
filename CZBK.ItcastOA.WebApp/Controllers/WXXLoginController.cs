@@ -26,7 +26,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = WXXUserInfoService.LoadEntities(x => x.WXID == wxid).FirstOrDefault();
             if (temp != null)
             {
-                return Json(new { ret = "ok", msg = "登陆成功!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { ret = "ok", msg = "登陆成功!!" }, JsonRequestBehavior.AllowGet);
             }
             else
             {
