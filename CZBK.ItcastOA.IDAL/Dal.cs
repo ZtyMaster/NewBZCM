@@ -35,7 +35,7 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
-	public partial interface IIsFristItemDal :IBaseDal<IsFristItem>
+	public partial interface IIsFristItemsDal :IBaseDal<IsFristItems>
     {
       
     }
@@ -60,7 +60,7 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
-	public partial interface IUserbakDal :IBaseDal<Userbak>
+	public partial interface IUserbaksDal :IBaseDal<Userbaks>
     {
       
     }

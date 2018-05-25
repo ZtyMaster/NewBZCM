@@ -19,6 +19,7 @@ namespace CZBK.ItcastOA.DAL
         /// <returns></returns>
         public IQueryable<T> LoadEntities(System.Linq.Expressions.Expression<Func<T, bool>> whereLambda)
         {
+            Db.Configuration.ValidateOnSaveEnabled = false;
             return Db.Set<T>().Where<T>(whereLambda);
         }
         /// <summary>
@@ -53,6 +54,7 @@ namespace CZBK.ItcastOA.DAL
         /// <returns></returns>
         public bool DeleteEntity(T entity)
         {
+            Db.Configuration.ValidateOnSaveEnabled = false;
             Db.Entry<T>(entity).State = System.Data.EntityState.Deleted;
            // return Db.SaveChanges() > 0;
             return true;
@@ -64,6 +66,7 @@ namespace CZBK.ItcastOA.DAL
         /// <returns></returns>
         public bool EditEntity(T entity)
         {
+            Db.Configuration.ValidateOnSaveEnabled = false;
             Db.Entry<T>(entity).State = System.Data.EntityState.Modified;
            // return Db.SaveChanges() > 0;
             return true;
@@ -75,6 +78,7 @@ namespace CZBK.ItcastOA.DAL
         /// <returns></returns>
         public T AddEntity(T entity)
         {
+            Db.Configuration.ValidateOnSaveEnabled = false;
             Db.Set<T>().Add(entity);
            // Db.SaveChanges();
             return entity;

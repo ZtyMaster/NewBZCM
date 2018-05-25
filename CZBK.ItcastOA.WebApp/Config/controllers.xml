@@ -35,10 +35,13 @@
   </object>
   <object type="CZBK.ItcastOA.WebApp.Controllers.BZCMController, CZBK.ItcastOA.WebApp" singleton="false" >
     <property name="BzcmText_FanChanService" ref="BzcmText_FanChanService" />
-    <property name="IsFristItemService" ref="IsFristItemService" />
+    <property name="IsFristItemsService" ref="IsFristItemsService" />
     <property name="Wx__BzcmTextService" ref="Wx__BzcmTextService" />
     <property name="BZCMLouPanJianJieService" ref="BZCMLouPanJianJieService" />
     <property name="T_BoolItemService" ref="T_BoolItemService" />
+  </object>
+  <object type="CZBK.ItcastOA.WebApp.Controllers.WXXLoginController, CZBK.ItcastOA.WebApp" singleton="false" >
+    <property name="WXXUserInfoService" ref="WXXUserInfoService" />
   </object>
 
 

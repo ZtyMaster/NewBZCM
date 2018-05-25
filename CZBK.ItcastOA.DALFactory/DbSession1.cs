@@ -90,19 +90,19 @@ namespace CZBK.ItcastOA.DALFactory
             set { _DepartmentDal = value; }
         }
 	
-		private IIsFristItemDal _IsFristItemDal;
-        public IIsFristItemDal IsFristItemDal
+		private IIsFristItemsDal _IsFristItemsDal;
+        public IIsFristItemsDal IsFristItemsDal
         {
             get
             {
-                if(_IsFristItemDal == null)
+                if(_IsFristItemsDal == null)
                 {
-                   // _IsFristItemDal = new IsFristItemDal();
-				    _IsFristItemDal =AbstractFactory.CreateIsFristItemDal();
+                   // _IsFristItemsDal = new IsFristItemsDal();
+				    _IsFristItemsDal =AbstractFactory.CreateIsFristItemsDal();
                 }
-                return _IsFristItemDal;
+                return _IsFristItemsDal;
             }
-            set { _IsFristItemDal = value; }
+            set { _IsFristItemsDal = value; }
         }
 	
 		private ILogin_listDal _Login_listDal;
@@ -165,19 +165,19 @@ namespace CZBK.ItcastOA.DALFactory
             set { _T_BoolItemDal = value; }
         }
 	
-		private IUserbakDal _UserbakDal;
-        public IUserbakDal UserbakDal
+		private IUserbaksDal _UserbaksDal;
+        public IUserbaksDal UserbaksDal
         {
             get
             {
-                if(_UserbakDal == null)
+                if(_UserbaksDal == null)
                 {
-                   // _UserbakDal = new UserbakDal();
-				    _UserbakDal =AbstractFactory.CreateUserbakDal();
+                   // _UserbaksDal = new UserbaksDal();
+				    _UserbaksDal =AbstractFactory.CreateUserbaksDal();
                 }
-                return _UserbakDal;
+                return _UserbaksDal;
             }
-            set { _UserbakDal = value; }
+            set { _UserbaksDal = value; }
         }
 	
 		private IUserInfoDal _UserInfoDal;

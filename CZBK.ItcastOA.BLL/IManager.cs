@@ -51,11 +51,11 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
-	public partial class IsFristItemService :BaseService<IsFristItem>,IIsFristItemService
+	public partial class IsFristItemsService :BaseService<IsFristItems>,IIsFristItemsService
     {
         public override void SetCurretnDal()
         {
-            CurrentDal = this.GetCurrentDbSession.IsFristItemDal;
+            CurrentDal = this.GetCurrentDbSession.IsFristItemsDal;
         }
     }   
 	
@@ -91,11 +91,11 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
-	public partial class UserbakService :BaseService<Userbak>,IUserbakService
+	public partial class UserbaksService :BaseService<Userbaks>,IUserbaksService
     {
         public override void SetCurretnDal()
         {
-            CurrentDal = this.GetCurrentDbSession.UserbakDal;
+            CurrentDal = this.GetCurrentDbSession.UserbaksDal;
         }
     }   
 	
