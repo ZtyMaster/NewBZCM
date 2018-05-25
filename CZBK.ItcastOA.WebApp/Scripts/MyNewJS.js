@@ -113,7 +113,16 @@ function ChangeDateFormatHours_Minute(cellval) {
     var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
     var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
     var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    return date.getFullYear() + "-" + month + "-" + currentDate + " &nbsp" + date.getHours() + ":" + date.getMinutes();
+    return date.getFullYear() + "-" + month + "-" + currentDate + " &nbsp " + date.getHours() + ":" + date.getMinutes();
+}
+function CDFHoursMinute(cellval) {
+    if (cellval == undefined) {
+        return "";
+    }
+    var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+    var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    return date.getFullYear() + "-" + month + "-" + currentDate  +" "+ date.getHours() + ":" + date.getMinutes()+":"+date.getSeconds;
 }
 //数字验证
 function num(obj) {
@@ -127,7 +136,7 @@ function ReadPhoto(obj) {
     obj.value = obj.value.replace(/[^\d]/g, ""); //清除"数字"和"."以外的字符    
     obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
     if (obj.value.length > 11) {
-        obj.value = obj.value.substr(0, obj.value.length - 1)
+        obj.value = obj.value.substr(0, 11)
         $.messager.alert("提示", "不可超出电话长度，系统自动删除多余数字！", 'err')
     }
 

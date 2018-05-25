@@ -35,11 +35,10 @@ namespace CZBK.ItcastOA.Model
         public DbSet<Userbak> Userbaks { get; set; }
         public DbSet<UserInfo> UserInfoes { get; set; }
         public DbSet<WXX_FormID> WXX_FormID { get; set; }
-        public DbSet<WXXMenuInfo> WXXMenuInfoes { get; set; }
-        public DbSet<WXXUserInfo> WXXUserInfoes { get; set; }
         public DbSet<BzcmText_FanChan> BzcmText_FanChan { get; set; }
         public DbSet<IsFristItem> IsFristItems { get; set; }
         public DbSet<Wx__BzcmText> Wx__BzcmText { get; set; }
-        public DbSet<WXXLogin_bak> WXXLogin_bak { get; set; }
+        public DbSet<BZCMLouPanJianJie> BZCMLouPanJianJies { get; set; }
+        public DbSet<WXXUserInfo> WXXUserInfoes { get; set; }
     }
 }

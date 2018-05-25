@@ -16,6 +16,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IBumenInfoSetDal BumenInfoSetDal{get;set;}
 	
+		IBZCMLouPanJianJieDal BZCMLouPanJianJieDal{get;set;}
+	
 		IBzcmText_FanChanDal BzcmText_FanChanDal{get;set;}
 	
 		IDepartmentDal DepartmentDal{get;set;}
@@ -37,10 +39,6 @@ namespace CZBK.ItcastOA.IDAL
 		IWx__BzcmTextDal Wx__BzcmTextDal{get;set;}
 	
 		IWXX_FormIDDal WXX_FormIDDal{get;set;}
-	
-		IWXXLogin_bakDal WXXLogin_bakDal{get;set;}
-	
-		IWXXMenuInfoDal WXXMenuInfoDal{get;set;}
 	
 		IWXXUserInfoDal WXXUserInfoDal{get;set;}
 	}	

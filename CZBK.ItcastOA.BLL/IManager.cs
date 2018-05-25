@@ -27,6 +27,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class BZCMLouPanJianJieService :BaseService<BZCMLouPanJianJie>,IBZCMLouPanJianJieService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.BZCMLouPanJianJieDal;
+        }
+    }   
+	
 	public partial class BzcmText_FanChanService :BaseService<BzcmText_FanChan>,IBzcmText_FanChanService
     {
         public override void SetCurretnDal()
@@ -112,22 +120,6 @@ namespace CZBK.ItcastOA.BLL
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.WXX_FormIDDal;
-        }
-    }   
-	
-	public partial class WXXLogin_bakService :BaseService<WXXLogin_bak>,IWXXLogin_bakService
-    {
-        public override void SetCurretnDal()
-        {
-            CurrentDal = this.GetCurrentDbSession.WXXLogin_bakDal;
-        }
-    }   
-	
-	public partial class WXXMenuInfoService :BaseService<WXXMenuInfo>,IWXXMenuInfoService
-    {
-        public override void SetCurretnDal()
-        {
-            CurrentDal = this.GetCurrentDbSession.WXXMenuInfoDal;
         }
     }   
 	

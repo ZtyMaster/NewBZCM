@@ -17,11 +17,10 @@ namespace CZBK.ItcastOA.Model
         public WXXUserInfo()
         {
             this.Wx__BzcmText = new HashSet<Wx__BzcmText>();
-            this.WXXLogin_bak = new HashSet<WXXLogin_bak>();
         }
     
         public long ID { get; set; }
-        public int UID { get; set; }
+        public Nullable<int> UID { get; set; }
         public string WXID { get; set; }
         public string PersonName { get; set; }
         public Nullable<int> Gender { get; set; }
@@ -32,6 +31,5 @@ namespace CZBK.ItcastOA.Model
     
         public virtual UserInfo UserInfo { get; set; }
         public virtual ICollection<Wx__BzcmText> Wx__BzcmText { get; set; }
-        public virtual ICollection<WXXLogin_bak> WXXLogin_bak { get; set; }
     }
 }

@@ -16,6 +16,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IBzcmText_FanChanService BzcmText_FanChanService { get; set; }
         IBLL.IIsFristItemService IsFristItemService { get; set; }
         IBLL.IWx__BzcmTextService Wx__BzcmTextService { get; set; }
+        IBLL.IT_BoolItemService T_BoolItemService { get; set; }
+        IBLL.IBZCMLouPanJianJieService BZCMLouPanJianJieService { get; set; }
 
         public ActionResult Index()
         {
@@ -92,14 +94,37 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             btfc.AddUser = LoginUser.ID;
             btfc.IsFristItemsID = Convert.ToInt32(Request["IsFristItemsID"]);
             string str = "ok";
-            try { BzcmText_FanChanService.AddEntity(btfc); }
-            catch (Exception e)
-            {
-                NewDeletFile(btfc.Str_Image);
-                str = e.ToString();
+            if (btfc.ID > 0)
+            {                
+                BzcmText_FanChanService.EditEntity(btfc);
             }
+            else {
+                try { BzcmText_FanChanService.AddEntity(btfc); }
+                catch (Exception e)
+                {
+                    NewDeletFile(btfc.Str_Image);
+                    str = e.ToString();
+                }
+            }
+            
 
             return Json(new { ret = str }, JsonRequestBehavior.AllowGet);
+        }
+        //删除信息或撤销
+        public ActionResult deldata() {
+            long id = Convert.ToInt64(Request["id"]);
+            var fcdata= BzcmText_FanChanService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            string ret = "ok";
+            if (fcdata != null) {
+                fcdata.DEL = fcdata.DEL==0?1:0;
+                if (!BzcmText_FanChanService.EditEntity(fcdata)) {
+                    ret = "未修改成功！";
+                }
+            }
+            else {
+                ret = "未找到要删除的信息！";    
+            }            
+            return Json(new { ret = ret }, JsonRequestBehavior.AllowGet);
         }
         //获取信息
         public ActionResult GetFanChan() {
@@ -113,7 +138,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                Items = Request["item"]==null?"2":Request["item"]
+                Items = Request["item"] == null ? "2" : Request["item"],
+                IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"])                
             };
             var BzcmFC = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
             var temp = from a in BzcmFC
@@ -129,6 +155,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            a.FYXX_SHRER,
                            a.FYXX_TWO,
                            IsFristItemsID = a.IsFristItem.Str,
+                           itemsid=a.IsFristItemsID,
                            a.IsTop,
                            a.IsTopStartTime,
                            a.IsTopStopTime,

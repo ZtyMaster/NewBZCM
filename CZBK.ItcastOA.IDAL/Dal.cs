@@ -20,6 +20,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IBZCMLouPanJianJieDal :IBaseDal<BZCMLouPanJianJie>
+    {
+      
+    }
+	
 	public partial interface IBzcmText_FanChanDal :IBaseDal<BzcmText_FanChan>
     {
       
@@ -71,16 +76,6 @@ namespace CZBK.ItcastOA.IDAL
     }
 	
 	public partial interface IWXX_FormIDDal :IBaseDal<WXX_FormID>
-    {
-      
-    }
-	
-	public partial interface IWXXLogin_bakDal :IBaseDal<WXXLogin_bak>
-    {
-      
-    }
-	
-	public partial interface IWXXMenuInfoDal :IBaseDal<WXXMenuInfo>
     {
       
     }

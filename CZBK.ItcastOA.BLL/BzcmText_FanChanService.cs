@@ -21,7 +21,7 @@ namespace CZBK.ItcastOA.BLL
 
             short delFlag = (short)DelFlagEnum.Normarl;
             
-            var temp = this.GetCurrentDbSession.BzcmText_FanChanDal.LoadEntities(c => c.DEL == 0);
+            var temp = this.GetCurrentDbSession.BzcmText_FanChanDal.LoadEntities(c => c.DEL == (astr.IsMaster?1: 0));
            
             if (!string.IsNullOrEmpty(astr.Items))
             {

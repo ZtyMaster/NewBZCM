@@ -76,6 +76,9 @@
     <Compile Include="BumenInfoSet.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="BZCMLouPanJianJie.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="BzcmText_FanChan.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -128,12 +131,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="UserInfo.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WXXLogin_bak.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WXXMenuInfo.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="WXXUserInfo.cs">

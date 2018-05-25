@@ -20,5 +20,6 @@ namespace CZBK.ItcastOA.Model
         public Nullable<int> @int { get; set; }
         public Nullable<System.DateTime> timener { get; set; }
         public Nullable<int> ItemsID { get; set; }
+        public Nullable<int> ThisItem { get; set; }
     }
 }

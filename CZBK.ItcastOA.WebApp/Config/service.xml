@@ -18,4 +18,8 @@
   </object>
   <object type="CZBK.ItcastOA.BLL.Wx__BzcmTextService, CZBK.ItcastOA.BLL" singleton="false" name="Wx__BzcmTextService" >
   </object>
+  <object type="CZBK.ItcastOA.BLL.BZCMLouPanJianJieService, CZBK.ItcastOA.BLL" singleton="false" name="BZCMLouPanJianJieService" >
+  </object>
+  <object type="CZBK.ItcastOA.BLL.T_BoolItemService, CZBK.ItcastOA.BLL" singleton="false" name="T_BoolItemService" >
+  </object>
 </objects>

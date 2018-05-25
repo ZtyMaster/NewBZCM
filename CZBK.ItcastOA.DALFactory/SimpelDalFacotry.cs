@@ -42,6 +42,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IBumenInfoSetDal;
         }
 		
+	    public static IBZCMLouPanJianJieDal CreateBZCMLouPanJianJieDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".BZCMLouPanJianJieDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IBZCMLouPanJianJieDal;
+        }
+		
 	    public static IBzcmText_FanChanDal CreateBzcmText_FanChanDal()
         {
 
@@ -183,32 +196,6 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as IWXX_FormIDDal;
-        }
-		
-	    public static IWXXLogin_bakDal CreateWXXLogin_bakDal()
-        {
-
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXLogin_bakDal";
-
-
-            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
-            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
-
-
-            return obj as IWXXLogin_bakDal;
-        }
-		
-	    public static IWXXMenuInfoDal CreateWXXMenuInfoDal()
-        {
-
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXMenuInfoDal";
-
-
-            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
-            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
-
-
-            return obj as IWXXMenuInfoDal;
         }
 		
 	    public static IWXXUserInfoDal CreateWXXUserInfoDal()

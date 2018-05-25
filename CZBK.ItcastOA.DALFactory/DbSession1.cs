@@ -45,6 +45,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _BumenInfoSetDal = value; }
         }
 	
+		private IBZCMLouPanJianJieDal _BZCMLouPanJianJieDal;
+        public IBZCMLouPanJianJieDal BZCMLouPanJianJieDal
+        {
+            get
+            {
+                if(_BZCMLouPanJianJieDal == null)
+                {
+                   // _BZCMLouPanJianJieDal = new BZCMLouPanJianJieDal();
+				    _BZCMLouPanJianJieDal =AbstractFactory.CreateBZCMLouPanJianJieDal();
+                }
+                return _BZCMLouPanJianJieDal;
+            }
+            set { _BZCMLouPanJianJieDal = value; }
+        }
+	
 		private IBzcmText_FanChanDal _BzcmText_FanChanDal;
         public IBzcmText_FanChanDal BzcmText_FanChanDal
         {
@@ -208,36 +223,6 @@ namespace CZBK.ItcastOA.DALFactory
                 return _WXX_FormIDDal;
             }
             set { _WXX_FormIDDal = value; }
-        }
-	
-		private IWXXLogin_bakDal _WXXLogin_bakDal;
-        public IWXXLogin_bakDal WXXLogin_bakDal
-        {
-            get
-            {
-                if(_WXXLogin_bakDal == null)
-                {
-                   // _WXXLogin_bakDal = new WXXLogin_bakDal();
-				    _WXXLogin_bakDal =AbstractFactory.CreateWXXLogin_bakDal();
-                }
-                return _WXXLogin_bakDal;
-            }
-            set { _WXXLogin_bakDal = value; }
-        }
-	
-		private IWXXMenuInfoDal _WXXMenuInfoDal;
-        public IWXXMenuInfoDal WXXMenuInfoDal
-        {
-            get
-            {
-                if(_WXXMenuInfoDal == null)
-                {
-                   // _WXXMenuInfoDal = new WXXMenuInfoDal();
-				    _WXXMenuInfoDal =AbstractFactory.CreateWXXMenuInfoDal();
-                }
-                return _WXXMenuInfoDal;
-            }
-            set { _WXXMenuInfoDal = value; }
         }
 	
 		private IWXXUserInfoDal _WXXUserInfoDal;

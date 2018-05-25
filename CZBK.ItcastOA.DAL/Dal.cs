@@ -21,6 +21,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class BZCMLouPanJianJieDal :BaseDal<BZCMLouPanJianJie>,IBZCMLouPanJianJieDal
+    {
+
+    }
+		
 	public partial class BzcmText_FanChanDal :BaseDal<BzcmText_FanChan>,IBzcmText_FanChanDal
     {
 
@@ -72,16 +77,6 @@ namespace CZBK.ItcastOA.DAL
     }
 		
 	public partial class WXX_FormIDDal :BaseDal<WXX_FormID>,IWXX_FormIDDal
-    {
-
-    }
-		
-	public partial class WXXLogin_bakDal :BaseDal<WXXLogin_bak>,IWXXLogin_bakDal
-    {
-
-    }
-		
-	public partial class WXXMenuInfoDal :BaseDal<WXXMenuInfo>,IWXXMenuInfoDal
     {
 
     }

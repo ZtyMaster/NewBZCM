@@ -31,11 +31,16 @@
                 });
             }
         });
-        $(function () {         
+        var IsHSZ = false;
+
+        $(function () {           
             // 当窗口大小发生变化时，调整DataGrid的大小
             $(window).resize(function () {
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
-            });          
+            });
+            //隐藏所有模块
+            toggleKZ();
+            $("#TTdiv").show();
             loadData();
             $("#DelImageBtn").hide();
             //文件上传
@@ -79,21 +84,49 @@
             $("#JingPinFangYuan").hide();
             $("#FangYuanXinXi").hide();
             $(".easyui-combobox").combobox("select", "2");
-           
-            
+            //房产信息
+            $("#Btnfcdata").click(function () {
+                toggleKZ()
+                $("#TTdiv").show();
+                var pars = {"item":"2"}
+                loadData(pars);
+            })
+            //回收站
+            $("#BtnHsz").click(function () {
+                IsHSZ = IsHSZ?false:true;
+                $("#BtnHsz").val(IsHSZ ? "数据中心" : "回收站")
+                var sc = $("#BtnInput").combobox("getValue");
+                var pars = { "item": sc }
+                loadData(pars);
+            })
+            //微信系统设置
+            $("#Tooledit").click(function () {
+                toggleKZ()
+                $("#Wxdiv").show();
+            })
         });
         function loadData(pars) {
             var Jpfy = true;
             var Fckx = true;
             var Fyxx = true;
+            var NewKX = true;
+            var imagebol = true;
+            
             if (pars != undefined) {
                 switch (pars.item) {
-                    case "2": Jpfy = false;
+                    case "2": Jpfy = false, imagebol = false;
                         break;
                     case "7": Fyxx = false;
                         break;
+                    case "5": Jpfy = false, imagebol = false;
+                        break;
+                    case "6": NewKX = false, imagebol = false;
+                        break;
+                    case "4": Jpfy = false, imagebol = false;
+                        break;
                 }
-            }            
+                pars = { "item": pars.item, "IsHSZ": IsHSZ }
+            }
            
             $('#tt').datagrid({
                 url: '/BZCM/GetFanChan',
@@ -113,11 +146,26 @@
                 queryParams: pars,//往后台传递参数
                 columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
                     {
+                        field: 'edit', title: '操作', align: 'center', hidden: IsHSZ, formatter: function (value, row) {
+                            return "<a href='javascript:eidtdata()' class='l-btn' style='padding:2px 5px;'>修改</a>";
+                        }
+                    },
+                    {
+                        field: 'del', title: '删除', align: 'center', hidden: IsHSZ, formatter: function (value, row) {
+                            return "<a href='javascript:deldata()' class='l-btn' style='padding:2px 5px;'>删除</a>";
+                        }
+                    },
+                    {
+                        field: 'ReDel', title: '撤销', align: 'center', hidden: !IsHSZ, formatter: function (value, row) {
+                            return "<a href='javascript:ReDel()' class='l-btn' style='padding:2px 5px;'>撤销</a>";
+                        }
+                    },
+                    {
                         field: 'Addtime', title: '创建时间', formatter: function (value, row, index) {
                           
                             var str = ChangeDateFormatHours_Minute(value);
                             return str;
-                        }
+                        },
                     },
                     {
                         field: 'IsTopStartTime', title: '置顶开始时间', formatter: function (value, row, index) {
@@ -133,43 +181,49 @@
                             return str;
                         }
                     },
-                    { field: 'IsFristItemsID', title: '归属项' },
-                    { field: 'Str_Name', title: '企业名称', align: 'center' },
-                    { field: 'AddUser', title: '创建人员' },
-                    { field: 'IsTop_shor', title: '排序' },
-                    { field: 'FYXX_Name', title: '房源信息名称', align: 'center', hidden: Fyxx },
-                     { field: 'FYXX_Photo', title: '房源信息电话', hidden: Fyxx },
-                    { field: 'FYXX_ONE', title: '房源信息第一行', hidden: Fyxx },
-                    { field: 'FYXX_SHRER', title: '房源信息第二行', hidden: Fyxx },
-                    { field: 'FYXX_TWO', title: '房源信息第三行', hidden: Fyxx },
-                    { field: 'IsTop', title: '借款人' },
-                    { field: 'News_Addess', title: '借款人' },
-                    { field: 'News_Danwei', title: '开户行' },
-                    { field: 'News_Item', title: '账号(卡号)' },
-                    { field: 'News_KaiFaShang', title: '备注' },
-                    { field: 'News_Money', title: '状态' },
-                    { field: 'News_Name', title: '状态' },
-                    { field: 'News_Photo', title: '状态' },
-                    { field: 'News_Text', title: '状态' },
-                    { field: 'News_YouHui', title: '状态' },
-                    { field: 'Str_Image', title: '图片地址' },                    
-                    { field: 'Wx__BzcmText', title: '状态' }
-                    ,
-                     {
-                         field: "Print", title: "打印预览", formatter: function (value, row, index) {
-                             return "<a href='javascript:DigPrint()' class='l-btn' style='padding:2px 5px;'>打印预览</a>";
-                         }
-                     }
+                    { field: 'IsFristItemsID', title: '归属项', align: 'center' },
+                    { field: 'Str_Name', title: '企业名称', align: 'center', hidden: Jpfy,editor:'text' },
+                    { field: 'AddUser', title: '创建人员', align: 'center' },
+                    { field: 'IsTop_shor', title: '排序', align: 'center' },
+                    { field: 'FYXX_Name', title: '房源信息名称', align: 'center', hidden: Fyxx, align: 'center' },
+                     { field: 'FYXX_Photo', title: '房源信息电话', hidden: Fyxx, align: 'center' },
+                    { field: 'FYXX_ONE', title: '房源信息第一行', hidden: Fyxx, align: 'center' },
+                    { field: 'FYXX_TWO', title: '房源信息第三行', hidden: Fyxx, align: 'center' },
+                    { field: 'FYXX_SHRER', title: '房源信息第二行', hidden: Fyxx, align: 'center' },
+                    { field: 'News_Addess', title: '地址', align: 'center', hidden: NewKX },
+                    { field: 'News_Name', title: '项目名称', align: 'center', hidden: NewKX },
+                    { field: 'News_Item', title: '房屋类型', align: 'center', hidden: NewKX },
+                    { field: 'News_KaiFaShang', title: '开发商', align: 'center', hidden: NewKX },
+                    { field: 'News_Money', title: '房屋价位', align: 'center', hidden: NewKX },
+                    { field: 'News_Photo', title: '销售电话', align: 'center', hidden: NewKX },
+                    {
+                        field: 'News_Text', title: '项目简介', align: 'center', hidden: NewKX, formatter: function (value,row) {
+                            return "<textarea rows='5' cols='50' readonly='readonly' >"+value+"</textarea>"
+                        }
+                    },
+                    { field: 'News_YouHui', title: '优惠政策', align: 'center', hidden: NewKX },
+                    { field: 'Wx__BzcmText', title: '状态', align: 'center', hidden: NewKX },                    
+                    { field: 'News_Danwei', title: '开户行', align: 'center', hidden: NewKX },
+                    {
+                        field: 'IsTop', title: '是否置顶', align: 'center', formatter: function (value, row) {
+                            return value == null ? "" : value == 0 ? "否" : "是";
+                        }
+                    },
+                    {
+                        field: 'Str_Image', title: '图片地址', align: 'center', hidden: imagebol, formatter: function (value, row) {
+                            return  value==null?"":"<image src='"+value+"' width='150' height='50'>";
+                        }
+                    }
                 ]],
                 toolbar: "#Topbtn",
                 onLoadSuccess: function () {
                 }
             });
         }
+
         function afterAdd(data) {
             if (data.ret == "ok") {
                 try {
-                    alert(data.ret)
                 }
                 catch (e) { }
                 try {
@@ -201,11 +255,12 @@
             return (((sign) ? '' : '-') + num + '.' + cents);
         }
         function Addbtn() {
+            clenrInpyt()
             $("#AddFCKX").css("display", "block");
             $("#JingPinFangYuan").show();
             $('#AddFCKX').dialog({
                 title: "新增信息",
-                width: 600,
+                width: 750,
                 height: 400,
                 collapsible: true,
                 resizable: true,
@@ -231,25 +286,141 @@
             var val = $("#FristItems").combobox("getValue");
             if (val == "2") {
                 $("#JingPinFangYuan").show();
+                $("#Imagebody").show();
+            }
+            else if (val == "5") {
+                $("#JingPinFangYuan").show();
+                $("#Imagebody").show();
+            }
+            else if (val == "6") {
+                $("#NewKuaiXun").show();
+                $("#Imagebody").show();
             }
             else if (val == "7") {
                 $("#FangYuanXinXi").show();
-            }            
+            }
+            else if (val == "4") {
+                $("#JingPinFangYuan").show();
+                $("#Imagebody").show();
+            }
         }
         function BanrChangeScenes() {
             var val = $("#BtnInput").combobox("getValue");
             var pars = { "item": val }
             loadData(pars)
-            if (val == "2") {               
-            }
-            else if (val == "7") {
-            }
+            
         }
         function TabIsHide() {
             $("#JingPinFangYuan").hide();
             $("#FangYuanXinXi").hide();
+            $("#NewKuaiXun").hide();
+            $("#Imagebody").hide();
+            
+            
         }
-      
+        //修改房源信息
+        function eidtdata() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            Addbtn();
+            $("#AddID").val(rows[0].ID);
+            $("#IsTop").combobox("select", rows[0].IsTop)
+            $("#FristItems").combobox("select", rows[0].itemsid)
+            var startTime = CDFHoursMinute(rows[0].IsTopStartTime);
+            var stopTime = CDFHoursMinute(rows[0].IsTopStopTime);
+            $("#IsTopStartTime").datetimebox("setValue", startTime);
+            $("#IsTopStopTime").datetimebox("setValue", stopTime);
+            $("#IsTop_shor").val(rows[0].IsTop_shor);
+            $("#Str_Name").val(rows[0].Str_Name);
+            $("#hiddenMenuIcon").val(rows[0].Str_Image);
+            $("#DivShowImage").remove();
+            if (rows[0].Str_Image != null) {
+                $("#DelImageBtn").show();
+                $("#showImage").append("<img id='DivShowImage' src='" + rows[0].Str_Image + "' width='200' height='100'/>");
+            }
+
+            $("#FYXX_Name").val(rows[0].FYXX_Name);
+            $("#FYXX_Photo").val(rows[0].FYXX_Photo);
+            $("#FYXX_ONE").val(rows[0].FYXX_ONE);
+            $("#FYXX_TWO").val(rows[0].FYXX_TWO);
+            $("#FYXX_SHRER").val(rows[0].FYXX_SHRER);
+            $("#News_Name").val(rows[0].News_Name);
+            $("#News_Photo").val(rows[0].News_Photo);
+            $("#News_KaiFaShang").val(rows[0].News_KaiFaShang);
+            $("#News_Addess").val(rows[0].News_Addess);
+            $("#News_Money").val(rows[0].News_Money);
+            $("#News_Item").val(rows[0].News_Item);
+            $("#News_YouHui").val(rows[0].News_YouHui);
+            $("#News_Text").val(rows[0].News_Text);
+        }
+        //删除房源信息
+        function deldata() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+
+            messcon(rows[0].ID,"是否确认删除？");            
+        }
+        //撤销回收站
+        function ReDel() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+
+            messcon(rows[0].ID, "是否确认撤销？");
+        }
+        function messcon(val,str) {
+            $.messager.confirm("提示", str, function (r) {
+                if (r) {
+                    $.post("/bzcm/deldata", { id: val }, function (dat) {
+                        if (dat.ret == "ok") {
+                            $("#tt").datagrid("reload");
+                        } else {
+                            $.messager.alert("提示", dat.ret, "err");
+                        }
+                    })
+                }
+            })
+        }
+        function clenrInpyt() {
+            $("#AddID").val("");
+            $("#IsTop").combobox("select", 0)
+            $("#FristItems").combobox("select", 2)
+            $("#IsTopStartTime").datetimebox("setValue", "");
+            $("#IsTopStopTime").datetimebox("setValue", "");
+            $("#IsTop_shor").val("");
+            $("#Str_Name").val("");
+            $("#hiddenMenuIcon").val("");
+            $("#DivShowImage").remove();           
+            $("#FYXX_Name").val("");
+            $("#FYXX_Photo").val("");
+            $("#FYXX_ONE").val("");
+            $("#FYXX_TWO").val("");
+            $("#FYXX_SHRER").val("");
+            $("#News_Name").val("");
+            $("#News_Photo").val("");
+            $("#News_KaiFaShang").val("");
+            $("#News_Addess").val("");
+            $("#News_Money").val("");
+            $("#News_Item").val("");
+            $("#News_YouHui").val("");
+            $("#News_Text").val("");
+        }
+        function toggleKZ() {
+            $("#TTdiv").hide();
+            $("#Wxdiv").hide();
+            
+        }
     </script>
     <style>
         html, body {
@@ -336,11 +507,11 @@
     <div id="divBtn" data-options="region:'west',split:true,title:'选项'" class="easyui-panel btnlink" style="width:150px;height:100%">
         <div class="easyui-accordion">
             <div title="控制菜单" data-options="iconCls:'icon-search'" style="overflow:auto;padding:10px;">
-                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="BtnJkd">房产信息</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="Btnfcdata">房产信息</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BtnBaoXiao">家具信息</a>
             </div>
             <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
-                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="CityEdit">其他</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="Tooledit">微信系统设置</a>
             </div>
         </div>
     </div>
@@ -351,14 +522,46 @@
                 <thead data-options="frozen:true">
                     <tr>
                         <th data-options="field:'ck',checkbox: true, align: 'left', width: 30"></th>
-                        <th data-options="field:'ID', width: 40">编号</th>
+                        <th data-options="field:'ID', width: 40">编号</th>                      
                     </tr>
                 </thead>
 
 
             </table>
         </div>
-
+        <div id="Wxdiv" style="height:100%;">
+            <div class="easyui-tabs" style="height:initial">
+                <div title="微信设置" style="padding:10px">
+                    <p style="font-size:14px">首页显示数量设置</p>
+                    <ul style="list-style:none">
+                        <li><text>精品房源:</text>
+                        </li>
+                        <li style="margin:25px 5px">
+                            <input class="easyui-slider" style="width:300px"  data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                        </li>
+                        <li><text>最新快选:</text></li>
+                        <li style="margin:25px 5px">
+                            <input class="easyui-slider" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                        </li>
+                        <li><text>房源信息:</text></li>
+                        <li style="margin:25px 5px">
+                            <input class="easyui-slider" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                        </li>
+                        <li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
+                        <li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
+                        <li>complete framework for HTML5 web page.</li>
+                        <li>easyui save your time and scales while developing your products.</li>
+                        <li>easyui is very easy but powerful.</li>
+                    </ul>
+                </div>
+                <div title="My Documents" style="padding:10px">
+                    <ul class="easyui-tree" data-options="url:'tree_data1.json',method:'get',animate:true"></ul>
+                </div>
+                <div title="Help" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
+                    This is the help content.
+                </div>
+            </div>
+        </div>
     </div>
  
     <div id="Topbtn" class="Topbtn" style="padding:5px;height:auto;">                    
@@ -372,6 +575,8 @@
 			 	      panelWidth: 200,
                       onSelect:function(){BanrChangeScenes();}
 			        	" />
+            <a>|</a>
+            <input  class="easyui-linkbutton" value="回收站" id="BtnHsz"  style="width:100px;"/>
         </div>
         <div>
             <div style="font-size:16px;">
@@ -382,7 +587,7 @@
     <div id="AddFCKX" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddBzcmImage", "BZCM", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "AddFCKXFrom" }))
             {
-            <input type="hidden" id="ZPTID" name="ID" />
+               <input type="hidden" id="AddID" name="ID" />
                 <table class="JKtable">
                     
                     <thead>
@@ -403,20 +608,27 @@
                     </thead>
                     <tr><td>开始时间</td><td><input class="easyui-datetimebox" name="IsTopStartTime" id="IsTopStartTime" /></td></tr>
                     <tr><td>结束时间</td><td><input class="easyui-datetimebox" name="IsTopStopTime" id="IsTopStopTime" /></td></tr>
-                    <tr><td>排序</td><td><input type="text" name="IsTop_shor" id="IsTop_shor" onkeyup="num(this)" value="0" /></td></tr>  
+                    <tr><td>排序</td><td><input type="text" name="IsTop_shor" id="IsTop_shor" onkeyup="num(this)" value="0" /></td></tr>
+                    <tr><td>置顶</td><td>
+                        <select class="easyui-combobox" name="IsTop" id="IsTop">
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                        </td></tr>
                     <tbody id="JingPinFangYuan">                       
-                        <tr><td>企业名称</td><td><input type="text" name="Str_Name1" id="Str_Name" /></td></tr>
+                        <tr><td>企业名称</td><td><input type="text" name="Str_Name" id="Str_Name" /></td></tr> 
+                    </tbody>
+                    <tbody id="Imagebody">
                         <tr>
                             <td>上传图片</td>
                             <td>
 
-                                <input type="file" name="fileIconUp" id="fileUp" />
+                                <input  type="file" name="fileIconUp" id="fileUp"  />
                                 <input type="hidden" name="Str_Image" id="hiddenMenuIcon" />
                                 <div id="showImage"></div>
                             </td>
                             <td><input type="button" value="上传图片" id="btnFileUp" /><input type="button" value="删除图片" id="DelImageBtn" /></td>
-                        </tr>     
-
+                        </tr>   
                     </tbody>
                                
                     <tbody id="FangYuanXinXi">
@@ -426,7 +638,19 @@
                         <tr><td>第二排</td><td><input type="text" name="FYXX_TWO" id="FYXX_TWO" /></td></tr>
                         <tr><td>第三排</td><td><input type="text" name="FYXX_SHRER" id="FYXX_SHRER" /></td></tr>
                     </tbody> 
-                                          
+                    <tbody id="NewKuaiXun">
+                        <tr><td>项目名称</td><td><input type="text" name="News_Name" id="News_Name" /></td></tr>
+                        <tr><td>销售电话</td><td><input type="text" name="News_Photo" id="News_Photo" onkeyup="ReadPhoto(this)" /></td></tr>
+                        <tr><td>开发商</td><td><input type="text" name="News_KaiFaShang" id="News_KaiFaShang" /></td></tr>
+                        <tr><td>房屋地址</td><td><input type="text" name="News_Addess" id="News_Addess" /></td></tr>
+                        <tr><td>房屋价位</td><td><input type="text" name="News_Money" id="News_Money" /></td></tr>
+                        <tr><td>房屋类型</td><td><input type="text" name="News_Item" id="News_Item" /></td></tr>
+                        <tr><td>优惠政策</td><td>
+                            <textarea rows="5" cols="50" name="News_YouHui" id="News_YouHui"></textarea>
+                            </td></tr>
+                        <tr><td>项目简介</td><td>
+                            <textarea rows="5" cols="50"   name="News_Text" id="News_Text"></textarea>
+                    </tbody>                       
                 </table>
         }
     </div>

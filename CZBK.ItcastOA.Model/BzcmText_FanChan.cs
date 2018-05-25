@@ -17,6 +17,7 @@ namespace CZBK.ItcastOA.Model
         public BzcmText_FanChan()
         {
             this.Wx__BzcmText = new HashSet<Wx__BzcmText>();
+            this.BZCMLouPanJianJies = new HashSet<BZCMLouPanJianJie>();
         }
     
         public long ID { get; set; }
@@ -49,5 +50,6 @@ namespace CZBK.ItcastOA.Model
         public virtual IsFristItem IsFristItem { get; set; }
         public virtual UserInfo UserInfo { get; set; }
         public virtual ICollection<Wx__BzcmText> Wx__BzcmText { get; set; }
+        public virtual ICollection<BZCMLouPanJianJie> BZCMLouPanJianJies { get; set; }
     }
 }

@@ -42,6 +42,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     {
                         return;
                     }
+                    if (LoginUser.UName == "lius")
+                    {
+                        return;
+                    }
                     string actionurl = Request.Url.AbsolutePath.ToLower();//请求地址
                     string actionhttpmethod = Request.HttpMethod;//请求方式
                     //if (actionurl == "/home/index")
