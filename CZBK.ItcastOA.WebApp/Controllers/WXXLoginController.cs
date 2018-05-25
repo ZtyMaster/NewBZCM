@@ -1,4 +1,5 @@
 ﻿using CZBK.ItcastOA.Model;
+using CZBK.ItcastOA.Model.SearchParam;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //
         // GET: /WXXLogin/
         IBLL.IWXXUserInfoService WXXUserInfoService { get; set; }
+        IBLL.IBzcmText_FanChanService BzcmText_FanChanService { get; set; }
+        IBLL.IT_BoolItemService T_BoolItemService { get; set; }
+
 
         public ActionResult Index()
         {
@@ -60,5 +64,45 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret = "ok", openInfo = retString }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+        //获取信息
+        public ActionResult GetFanChan()
+        {
+            int pageIndex = Request["page"] != null ? int.Parse(Request["page"]) : 1;
+            int pageSize = Request["rows"] != null ? int.Parse(Request["rows"]) : 5;
+
+            //构建搜索条件
+            int totalCount = 0;
+            UserInfoParam userInfoParam = new UserInfoParam()
+            {
+                PageIndex = pageIndex,
+                PageSize = int.MaxValue,
+                TotalCount = totalCount,
+                Items = Request["item"] == null ? "2" : Request["item"],
+                IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"])
+            };
+            var temp = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
+
+            return Json(new { rows = temp, total = userInfoParam.TotalCount }, JsonRequestBehavior.AllowGet);
+        }
+        //获取首页没栏显示数
+        public ActionResult GetIndexPageSize()
+        {
+            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 1 || x.ThisItem == 2 || x.ThisItem == 3).DefaultIfEmpty().ToList();
+            List<getInfo> lgf = new List<getInfo>();
+            foreach(var a in temp)
+            {
+                getInfo gi = new getInfo();
+                gi.ID = a.ThisItem;
+                gi.Num = a.@int;
+                lgf.Add(gi);
+            }
+            return Json(lgf, JsonRequestBehavior.AllowGet);
+        }
+    }
+    public class getInfo
+    {
+        public int? ID { get; set; }
+        public int? Num { get; set; }
     }
 }
