@@ -120,6 +120,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SearchParam\BaseParam.cs" />
+    <Compile Include="SearchParam\BzcmClass.cs" />
     <Compile Include="SearchParam\EverDaySelect.cs" />
     <Compile Include="SearchParam\Month.cs" />
     <Compile Include="SearchParam\SlcClass.cs" />

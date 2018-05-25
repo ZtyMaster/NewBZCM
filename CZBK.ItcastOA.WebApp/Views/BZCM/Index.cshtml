@@ -107,12 +107,6 @@
 
            
 
-            //控制显示张数
-            $(".easyui-slider").slider({
-                onSlideEnd: function (e) {
-                    alert(e);
-                }
-            })
             
             
         });
@@ -201,9 +195,9 @@
                             return str;
                         }
                     },
-                    { field: 'IsFristItemsID', title: '归属项', align: 'center' },
+                    { field: 'Str', title: '归属项', align: 'center' },
                     { field: 'Str_Name', title: '企业名称', align: 'center', hidden: Jpfy,editor:'text' },
-                    { field: 'AddUser', title: '创建人员', align: 'center' },
+                    { field: 'PerSonName', title: '创建人员', align: 'center' },
                     { field: 'IsTop_shor', title: '排序', align: 'center' },
                     { field: 'FYXX_Name', title: '房源信息名称', align: 'center', hidden: Fyxx, align: 'center' },
                      { field: 'FYXX_Photo', title: '房源信息电话', hidden: Fyxx, align: 'center' },
@@ -441,6 +435,13 @@
             $("#Wxdiv").hide();
             
         }
+        function jssliderclik(v,id) {
+            $.post("/bzcm/editslider", { "id": id, "val": v }, function (dat) {
+                if (dat != "ok") {
+                    $.messager.alert("提示",dat.ret,"errer")
+                }
+            })
+        }
     </script>
     <style>
         html, body {
@@ -517,7 +518,7 @@
             @using (Ajax.BeginForm("AddOrEditJiekuan", "BillPrint", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterEdit" }, new { id = "JKBillFrom" }))
             {
                 <input type="hidden" id="JieKuanID" name="ID" />
-                
+
             }
         </div>
  
@@ -557,19 +558,19 @@
                         <li><text>精品房源:</text>
                         </li>
                         <li style="margin:25px 5px">
-                            <input class="easyui-slider" id="ipt1" style="width:300px"   data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                            <input class="easyui-slider" id="slider1" style="width:300px"   data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:@ViewBag.slider0,onComplete: function(value){ jssliderclik(value,1) }" />
                         </li>
                         <li><text>最新快选:</text></li>
                         <li style="margin:25px 5px">
-                            <input class="easyui-slider" id="ipt2" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                            <input class="easyui-slider" id="slider2" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:@ViewBag.slider1,onComplete: function(value){ jssliderclik(value,2) }"/>
                         </li>
                         <li><text>房源信息:</text></li>
                         <li style="margin:25px 5px">
-                            <input class="easyui-slider" id="ipt3" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                            <input class="easyui-slider" id="slider3" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:@ViewBag.slider2,onComplete: function(value){ jssliderclik(value,3) }" />
                         </li>
                         <li><text>导航下信息:</text></li>
                         <li style="margin:25px 5px">
-                            <input class="easyui-slider" id="ipt4" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                            <input class="easyui-slider" id="slider4" style="width:300px" data-options="showTip:true,rule:[1,'|','|',10],min:1,max:10,value:@ViewBag.slider3,onComplete: function(value){ jssliderclik(value,4) }" />
                         </li>
                     </ul>
                 </div>

@@ -11,7 +11,7 @@ namespace CZBK.ItcastOA.BLL
 {
     public partial class BzcmText_FanChanService : BaseService<BzcmText_FanChan>, IBzcmText_FanChanService
     {
-        public object LoadSearchEntities(UserInfoParam astr)
+        public IQueryable<BzcmClass> LoadSearchEntities(UserInfoParam astr)
         {
             /// <summary>
             /// 多条件搜索用户信息
@@ -36,35 +36,35 @@ namespace CZBK.ItcastOA.BLL
             var temps= temp.OrderBy<BzcmText_FanChan, long>(u => u.ID).Skip<BzcmText_FanChan>((astr.PageIndex - 1) * astr.PageSize).Take<BzcmText_FanChan>(astr.PageSize);
 
             var ret = from a in temps
-                       select new
+                       select new BzcmClass
                        {
-                           a.ID,
-                           a.Addtime,
-                           AddUser = a.UserInfo.PerSonName,
-                           a.DEL,
-                           a.FYXX_Name,
-                           a.FYXX_ONE,
-                           a.FYXX_Photo,
-                           a.FYXX_SHRER,
-                           a.FYXX_TWO,
-                           IsFristItemsID = a.IsFristItem.Str,
+                          ID= a.ID,
+                           Addtime=   a.Addtime,
+                           PerSonName = a.UserInfo.PerSonName,
+                           DEL= a.DEL,
+                           FYXX_Name=a.FYXX_Name,
+                           FYXX_ONE=  a.FYXX_ONE,
+                           FYXX_Photo= a.FYXX_Photo,
+                           FYXX_SHRER=a.FYXX_SHRER,
+                           FYXX_TWO=a.FYXX_TWO,
+                           Str = a.IsFristItem.Str,
                            itemsid = a.IsFristItemsID,
-                           a.IsTop,
-                           a.IsTopStartTime,
-                           a.IsTopStopTime,
-                           a.IsTop_shor,
-                           a.News_Addess,
-                           a.News_Danwei,
-                           a.News_Item,
-                           a.News_KaiFaShang,
-                           a.News_Money,
-                           a.News_Name,
-                           a.News_Photo,
-                           a.News_Text,
-                           a.News_YouHui,
-                           a.Str_Image,
-                           a.Str_Name,
-                           a.Str_Photo
+                           IsTop= a.IsTop,
+                           IsTopStartTime=a.IsTopStartTime,
+                           IsTopStopTime=a.IsTopStopTime,
+                           IsTop_shor=a.IsTop_shor,
+                           News_Addess=a.News_Addess,
+                           News_Danwei=a.News_Danwei,
+                           News_Item=a.News_Item,
+                           News_KaiFaShang=a.News_KaiFaShang,
+                           News_Money= a.News_Money,
+                           News_Name=a.News_Name,
+                           News_Photo=a.News_Photo,
+                           News_Text=a.News_Text,
+                           News_YouHui=a.News_YouHui,
+                           Str_Image=a.Str_Image,
+                           Str_Name=a.Str_Name,
+                           Str_Photo=a.Str_Photo
                        };
             return ret;
         }

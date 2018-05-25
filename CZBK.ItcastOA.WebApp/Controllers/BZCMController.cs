@@ -21,6 +21,11 @@ namespace CZBK.ItcastOA.WebApp.Controllers
 
         public ActionResult Index()
         {
+            var slider = T_BoolItemService.LoadEntities(x => x.ItemsID == 0).DefaultIfEmpty();
+            ViewBag.slider0 = slider.Where(x=>x.ID==1).FirstOrDefault().@int;
+            ViewBag.slider1 = slider.Where(x => x.ID == 2).FirstOrDefault().@int;
+            ViewBag.slider2 = slider.Where(x => x.ID == 3).FirstOrDefault().@int;
+            ViewBag.slider3 = slider.Where(x => x.ID == 4).FirstOrDefault().@int;
             return View();
         }
         #region 获取上传图片
@@ -141,13 +146,35 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 Items = Request["item"] == null ? "2" : Request["item"],
                 IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"]),
                 IsTop = false
-                
-                              
             };
 
             var temp = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
           
             return Json(new { rows = temp, total = userInfoParam.TotalCount }, JsonRequestBehavior.AllowGet);
+        }
+        //修改微信首页显示行数
+        public ActionResult editslider() {
+
+            var val =Convert.ToInt32( Request["val"]);
+            long id = Convert.ToInt64(Request["id"]);
+
+            var tbl= T_BoolItemService.LoadEntities(x => x.ID == id).FirstOrDefault();
+            if (tbl != null)
+            {
+                tbl.@int = val;
+                if (T_BoolItemService.EditEntity(tbl))
+                {
+                    return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { ret = "修改失败！" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else {
+                return Json(new { ret = "未找到要修改的数据！" }, JsonRequestBehavior.AllowGet);
+            }
+            
         }
         #endregion
 
