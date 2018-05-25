@@ -68,17 +68,17 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IDepartmentDal;
         }
 		
-	    public static IIsFristItemDal CreateIsFristItemDal()
+	    public static IIsFristItemsDal CreateIsFristItemsDal()
         {
 
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".IsFristItemDal";
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".IsFristItemsDal";
 
 
             //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
             var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
 
 
-            return obj as IIsFristItemDal;
+            return obj as IIsFristItemsDal;
         }
 		
 	    public static ILogin_listDal CreateLogin_listDal()
@@ -133,17 +133,17 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as IT_BoolItemDal;
         }
 		
-	    public static IUserbakDal CreateUserbakDal()
+	    public static IUserbaksDal CreateUserbaksDal()
         {
 
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".UserbakDal";
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".UserbaksDal";
 
 
             //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
             var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
 
 
-            return obj as IUserbakDal;
+            return obj as IUserbaksDal;
         }
 		
 	    public static IUserInfoDal CreateUserInfoDal()
@@ -183,32 +183,6 @@ namespace CZBK.ItcastOA.DALFactory
 
 
             return obj as IWXX_FormIDDal;
-        }
-		
-	    public static IWXXLogin_bakDal CreateWXXLogin_bakDal()
-        {
-
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXLogin_bakDal";
-
-
-            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
-            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
-
-
-            return obj as IWXXLogin_bakDal;
-        }
-		
-	    public static IWXXMenuInfoDal CreateWXXMenuInfoDal()
-        {
-
-            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".WXXMenuInfoDal";
-
-
-            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
-            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
-
-
-            return obj as IWXXMenuInfoDal;
         }
 		
 	    public static IWXXUserInfoDal CreateWXXUserInfoDal()

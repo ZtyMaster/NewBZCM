@@ -87,7 +87,7 @@
     <Compile Include="Enum\FastPropertyComparer.cs" />
     <Compile Include="Enum\AddMD5.cs" />
     <Compile Include="EqualityComparer.cs" />
-    <Compile Include="IsFristItem.cs">
+    <Compile Include="IsFristItems.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Login_list.cs">
@@ -124,16 +124,10 @@
     <Compile Include="T_BoolItem.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Userbak.cs">
+    <Compile Include="Userbaks.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="UserInfo.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WXXLogin_bak.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WXXMenuInfo.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="WXXUserInfo.cs">

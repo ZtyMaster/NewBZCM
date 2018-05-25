@@ -23,6 +23,5 @@ namespace CZBK.ItcastOA.Model
         public double AltPhoto { get; set; }
     
         public virtual BzcmText_FanChan BzcmText_FanChan { get; set; }
-        public virtual WXXUserInfo WXXUserInfo { get; set; }
     }
 }

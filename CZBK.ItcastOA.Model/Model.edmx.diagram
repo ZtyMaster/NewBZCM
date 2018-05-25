@@ -4,38 +4,33 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="11e7e10d13ad43c3a93597f4c431aa25" Name="Diagram1" ZoomLevel="71">
-        <EntityTypeShape EntityType="BZCMModel.ActionInfo" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.BumenInfoSet" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.Department" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.Login_list" Width="1.5" PointX="7.5" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.R_UserInfo_ActionInfo" Width="1.5" PointX="7.5" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.RoleInfo" Width="1.5" PointX="3" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.T_BoolItem" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.Userbak" Width="1.5" PointX="7.5" PointY="11.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.UserInfo" Width="1.5" PointX="5.25" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.WXX_FormID" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.WXXMenuInfo" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BZCMModel.WXXUserInfo" Width="1.5" PointX="7.5" PointY="15.75" IsExpanded="true" />
+      <Diagram DiagramId="c0793f101f9b4d3ca22a4a2f6aae2c5b" Name="Diagram1">
+        <EntityTypeShape EntityType="BZCMModel.ActionInfo" Width="1.5" PointX="0.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.BumenInfoSet" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.BzcmText_FanChan" Width="1.5" PointX="10.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.Department" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.IsFristItems" Width="1.5" PointX="8.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.Login_list" Width="1.5" PointX="7.5" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.R_UserInfo_ActionInfo" Width="1.5" PointX="7.5" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.RoleInfo" Width="1.5" PointX="3" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.T_BoolItem" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.Userbaks" Width="1.5" PointX="7.5" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.UserInfo" Width="1.5" PointX="5.25" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.Wx__BzcmText" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.WXX_FormID" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.WXXUserInfo" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="BZCMModel.FK_ActionInfoR_UserInfo_ActionInfo" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.FK_Bumen" ManuallyRouted="false" />
+        <AssociationConnector Association="BZCMModel.FK_BzcmText_FanChan_IsFristItems" ManuallyRouted="false" />
+        <AssociationConnector Association="BZCMModel.FK_BzcmText_FanChan_UserInfo" ManuallyRouted="false" />
+        <AssociationConnector Association="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.FK_Login_list_UserInfo" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.FK_UserInfoR_UserInfo_ActionInfo" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.FK_Userbak_UserInfo" ManuallyRouted="false" />
-        <AssociationConnector Association="BZCMModel.FK_WXXUserInfo_UserInfo" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.DepartmentActionInfo" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.RoleInfoActionInfo" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.UserInfoDepartment" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.UserInfoRoleInfo" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="BZCMModel.BzcmText_FanChan" Width="1.5" PointX="10.5" PointY="7.125" />
-        <EntityTypeShape EntityType="BZCMModel.IsFristItem" Width="1.5" PointX="8.25" PointY="23.25" />
-        <EntityTypeShape EntityType="BZCMModel.Wx__BzcmText" Width="1.5" PointX="12.75" PointY="11.75" />
-        <EntityTypeShape EntityType="BZCMModel.WXXLogin_bak" Width="1.5" PointX="9.75" PointY="19.75" />
-        <AssociationConnector Association="BZCMModel.FK_BzcmText_FanChan_IsFristItems" />
-        <AssociationConnector Association="BZCMModel.FK_BzcmText_FanChan_UserInfo" />
-        <AssociationConnector Association="BZCMModel.FK_Wx__BzcmText_BzcmText_FanChan" />
-        <AssociationConnector Association="BZCMModel.FK_Wx__BzcmText_WXXUserInfo" />
-        <AssociationConnector Association="BZCMModel.FK_WXXLogin_bak_WXXLogin_bak" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

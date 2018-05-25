@@ -25,21 +25,19 @@ namespace CZBK.ItcastOA.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<ActionInfo> ActionInfoes { get; set; }
-        public DbSet<BumenInfoSet> BumenInfoSets { get; set; }
-        public DbSet<Department> Departments { get; set; }
+        public DbSet<ActionInfo> ActionInfo { get; set; }
+        public DbSet<BumenInfoSet> BumenInfoSet { get; set; }
+        public DbSet<BzcmText_FanChan> BzcmText_FanChan { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<IsFristItems> IsFristItems { get; set; }
         public DbSet<Login_list> Login_list { get; set; }
         public DbSet<R_UserInfo_ActionInfo> R_UserInfo_ActionInfo { get; set; }
-        public DbSet<RoleInfo> RoleInfoes { get; set; }
+        public DbSet<RoleInfo> RoleInfo { get; set; }
         public DbSet<T_BoolItem> T_BoolItem { get; set; }
-        public DbSet<Userbak> Userbaks { get; set; }
-        public DbSet<UserInfo> UserInfoes { get; set; }
-        public DbSet<WXX_FormID> WXX_FormID { get; set; }
-        public DbSet<WXXMenuInfo> WXXMenuInfoes { get; set; }
-        public DbSet<WXXUserInfo> WXXUserInfoes { get; set; }
-        public DbSet<BzcmText_FanChan> BzcmText_FanChan { get; set; }
-        public DbSet<IsFristItem> IsFristItems { get; set; }
+        public DbSet<Userbaks> Userbaks { get; set; }
+        public DbSet<UserInfo> UserInfo { get; set; }
         public DbSet<Wx__BzcmText> Wx__BzcmText { get; set; }
-        public DbSet<WXXLogin_bak> WXXLogin_bak { get; set; }
+        public DbSet<WXX_FormID> WXX_FormID { get; set; }
+        public DbSet<WXXUserInfo> WXXUserInfo { get; set; }
     }
 }

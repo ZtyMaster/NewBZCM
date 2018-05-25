@@ -46,7 +46,7 @@ namespace CZBK.ItcastOA.Model
         public string FYXX_TWO { get; set; }
         public string FYXX_SHRER { get; set; }
     
-        public virtual IsFristItem IsFristItem { get; set; }
+        public virtual IsFristItems IsFristItems { get; set; }
         public virtual UserInfo UserInfo { get; set; }
         public virtual ICollection<Wx__BzcmText> Wx__BzcmText { get; set; }
     }

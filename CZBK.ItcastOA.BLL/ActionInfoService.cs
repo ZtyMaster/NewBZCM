@@ -23,13 +23,13 @@ namespace CZBK.ItcastOA.BLL
             if (actionInfo != null)//如果权限信息不为空
             {
                 
-                actionInfo.RoleInfoes.Clear();//现有的权限已有的角色信息删除  actionInfo.RoleInfo导航属性
+                actionInfo.RoleInfo.Clear();//现有的权限已有的角色信息删除  actionInfo.RoleInfo导航属性
                 foreach (int roleid in roleIdList)//遍历
                 {
                     //每遍历一次找到 角色
                     var roleinfo = this.GetCurrentDbSession.RoleInfoDal.LoadEntities(r => r.ID == roleid).FirstOrDefault();
                     //把遍历倒的角色添加倒权限中
-                    actionInfo.RoleInfoes.Add(roleinfo);
+                    actionInfo.RoleInfo.Add(roleinfo);
                 }
                //最后执行保存
                 return this.GetCurrentDbSession.SaveChanges();

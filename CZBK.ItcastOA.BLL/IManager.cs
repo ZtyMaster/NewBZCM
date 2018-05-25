@@ -43,11 +43,11 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
-	public partial class IsFristItemService :BaseService<IsFristItem>,IIsFristItemService
+	public partial class IsFristItemsService :BaseService<IsFristItems>,IIsFristItemsService
     {
         public override void SetCurretnDal()
         {
-            CurrentDal = this.GetCurrentDbSession.IsFristItemDal;
+            CurrentDal = this.GetCurrentDbSession.IsFristItemsDal;
         }
     }   
 	
@@ -83,11 +83,11 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
-	public partial class UserbakService :BaseService<Userbak>,IUserbakService
+	public partial class UserbaksService :BaseService<Userbaks>,IUserbaksService
     {
         public override void SetCurretnDal()
         {
-            CurrentDal = this.GetCurrentDbSession.UserbakDal;
+            CurrentDal = this.GetCurrentDbSession.UserbaksDal;
         }
     }   
 	
@@ -112,22 +112,6 @@ namespace CZBK.ItcastOA.BLL
         public override void SetCurretnDal()
         {
             CurrentDal = this.GetCurrentDbSession.WXX_FormIDDal;
-        }
-    }   
-	
-	public partial class WXXLogin_bakService :BaseService<WXXLogin_bak>,IWXXLogin_bakService
-    {
-        public override void SetCurretnDal()
-        {
-            CurrentDal = this.GetCurrentDbSession.WXXLogin_bakDal;
-        }
-    }   
-	
-	public partial class WXXMenuInfoService :BaseService<WXXMenuInfo>,IWXXMenuInfoService
-    {
-        public override void SetCurretnDal()
-        {
-            CurrentDal = this.GetCurrentDbSession.WXXMenuInfoDal;
         }
     }   
 	

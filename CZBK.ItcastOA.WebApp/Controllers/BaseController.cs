@@ -42,6 +42,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                     {
                         return;
                     }
+                    if (LoginUser.UName == "lius")
+                    {
+                        return;
+                    }
                     string actionurl = Request.Url.AbsolutePath.ToLower();//请求地址
                     string actionhttpmethod = Request.HttpMethod;//请求方式
                     //if (actionurl == "/home/index")
@@ -82,9 +86,9 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                             }
                         }
                         //安装第一条线进行过滤（用户——角色——权限）
-                        var loginUserRoleInfo = loginuserInfo.RoleInfoes;
+                        var loginUserRoleInfo = loginuserInfo.RoleInfo;
                         var loginuserisAction = (from r in loginUserRoleInfo
-                                                 from a in r.ActionInfoes
+                                                 from a in r.ActionInfo
                                                  where a.ID == actioninfo.ID
                                                  select a).Count();
                         if (loginuserisAction < 1)

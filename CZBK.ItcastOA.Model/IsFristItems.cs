@@ -12,15 +12,20 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class WXXLogin_bak
+    public partial class IsFristItems
     {
-        public long ID { get; set; }
-        public long WxUserID { get; set; }
-        public System.DateTime LoginTime { get; set; }
-        public string LoginIP { get; set; }
-        public string LoginStr { get; set; }
-        public int del { get; set; }
+        public IsFristItems()
+        {
+            this.BzcmText_FanChan = new HashSet<BzcmText_FanChan>();
+        }
     
-        public virtual WXXUserInfo WXXUserInfo { get; set; }
+        public int ID { get; set; }
+        public string Str { get; set; }
+        public int Str_int { get; set; }
+        public int Del { get; set; }
+        public Nullable<int> Items { get; set; }
+        public string Itemsstr { get; set; }
+    
+        public virtual ICollection<BzcmText_FanChan> BzcmText_FanChan { get; set; }
     }
 }

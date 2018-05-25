@@ -20,7 +20,7 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IDepartmentDal DepartmentDal{get;set;}
 	
-		IIsFristItemDal IsFristItemDal{get;set;}
+		IIsFristItemsDal IsFristItemsDal{get;set;}
 	
 		ILogin_listDal Login_listDal{get;set;}
 	
@@ -30,17 +30,13 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IT_BoolItemDal T_BoolItemDal{get;set;}
 	
-		IUserbakDal UserbakDal{get;set;}
+		IUserbaksDal UserbaksDal{get;set;}
 	
 		IUserInfoDal UserInfoDal{get;set;}
 	
 		IWx__BzcmTextDal Wx__BzcmTextDal{get;set;}
 	
 		IWXX_FormIDDal WXX_FormIDDal{get;set;}
-	
-		IWXXLogin_bakDal WXXLogin_bakDal{get;set;}
-	
-		IWXXMenuInfoDal WXXMenuInfoDal{get;set;}
 	
 		IWXXUserInfoDal WXXUserInfoDal{get;set;}
 	}	

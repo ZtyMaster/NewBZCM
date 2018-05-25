@@ -14,7 +14,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         //
         // GET: /BZCM/
         IBLL.IBzcmText_FanChanService BzcmText_FanChanService { get; set; }
-        IBLL.IIsFristItemService IsFristItemService { get; set; }
+        IBLL.IIsFristItemsService IsFristItemsService { get; set; }
         IBLL.IWx__BzcmTextService Wx__BzcmTextService { get; set; }
 
         public ActionResult Index()
@@ -75,7 +75,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult Bzkx() {
             var p =Convert.ToInt32(Request["items"]);
             //p==0时 返回广告位信息  ==0时返回历史记录            
-            var temps = IsFristItemService.LoadEntities(x=>x.Items==p).DefaultIfEmpty();
+            var temps = IsFristItemsService.LoadEntities(x=>x.Items==p).DefaultIfEmpty();
             var temp = from a in temps
                        select new {
                            a.ID,
@@ -128,7 +128,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                            a.FYXX_Photo,
                            a.FYXX_SHRER,
                            a.FYXX_TWO,
-                           IsFristItemsID = a.IsFristItem.Str,
+                           IsFristItemsID = a.IsFristItems.Str,
                            a.IsTop,
                            a.IsTopStartTime,
                            a.IsTopStopTime,

@@ -31,7 +31,7 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
-	public partial class IsFristItemDal :BaseDal<IsFristItem>,IIsFristItemDal
+	public partial class IsFristItemsDal :BaseDal<IsFristItems>,IIsFristItemsDal
     {
 
     }
@@ -56,7 +56,7 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
-	public partial class UserbakDal :BaseDal<Userbak>,IUserbakDal
+	public partial class UserbaksDal :BaseDal<Userbaks>,IUserbaksDal
     {
 
     }
@@ -72,16 +72,6 @@ namespace CZBK.ItcastOA.DAL
     }
 		
 	public partial class WXX_FormIDDal :BaseDal<WXX_FormID>,IWXX_FormIDDal
-    {
-
-    }
-		
-	public partial class WXXLogin_bakDal :BaseDal<WXXLogin_bak>,IWXXLogin_bakDal
-    {
-
-    }
-		
-	public partial class WXXMenuInfoDal :BaseDal<WXXMenuInfo>,IWXXMenuInfoDal
     {
 
     }

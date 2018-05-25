@@ -30,7 +30,7 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
-	public partial interface IIsFristItemService : IBaseService<IsFristItem>
+	public partial interface IIsFristItemsService : IBaseService<IsFristItems>
     {
        
     }   
@@ -55,7 +55,7 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
-	public partial interface IUserbakService : IBaseService<Userbak>
+	public partial interface IUserbaksService : IBaseService<Userbaks>
     {
        
     }   
@@ -71,16 +71,6 @@ namespace CZBK.ItcastOA.IBLL
     }   
 	
 	public partial interface IWXX_FormIDService : IBaseService<WXX_FormID>
-    {
-       
-    }   
-	
-	public partial interface IWXXLogin_bakService : IBaseService<WXXLogin_bak>
-    {
-       
-    }   
-	
-	public partial interface IWXXMenuInfoService : IBaseService<WXXMenuInfo>
     {
        
     }   
