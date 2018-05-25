@@ -35,6 +35,7 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public int? QuXian { get; set; }
         public int? BumenID { get; set; }
         public long ID { get; set; }
+        public bool IsTop { get; set; }
 
     }
 }

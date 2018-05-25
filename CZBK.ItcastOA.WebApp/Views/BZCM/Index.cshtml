@@ -104,6 +104,17 @@
                 toggleKZ()
                 $("#Wxdiv").show();
             })
+
+           
+
+            //控制显示张数
+            $(".easyui-slider").slider({
+                onSlideEnd: function (e) {
+                    alert(e);
+                }
+            })
+            
+            
         });
         function loadData(pars) {
             var Jpfy = true;
@@ -111,20 +122,24 @@
             var Fyxx = true;
             var NewKX = true;
             var imagebol = true;
+            var Shere = true;
             
             if (pars != undefined) {
-                switch (pars.item) {
-                    case "2": Jpfy = false, imagebol = false;
-                        break;
-                    case "7": Fyxx = false;
-                        break;
-                    case "5": Jpfy = false, imagebol = false;
-                        break;
-                    case "6": NewKX = false, imagebol = false;
-                        break;
-                    case "4": Jpfy = false, imagebol = false;
-                        break;
-                }
+                if (!IsHSZ) {
+                    switch (pars.item) {
+
+                        case "7": Fyxx = false;
+                            break;
+                        case "6": NewKX = false, imagebol = false;
+                            break;
+                        case "2": Jpfy = false, imagebol = false, Shere = false;
+                            break;
+                        case "5": Jpfy = false, imagebol = false, Shere = false;
+                            break;
+                        case "4": Jpfy = false, imagebol = false, Shere = false;
+                            break;
+                    }
+                }                
                 pars = { "item": pars.item, "IsHSZ": IsHSZ }
             }
            
@@ -153,6 +168,11 @@
                     {
                         field: 'del', title: '删除', align: 'center', hidden: IsHSZ, formatter: function (value, row) {
                             return "<a href='javascript:deldata()' class='l-btn' style='padding:2px 5px;'>删除</a>";
+                        }
+                    },
+                    {
+                        field: 'addshere', title: '追加详细信息', align: 'center', hidden: Shere, formatter: function (value, row) {
+                            return "<a href='javascript:addshere()' class='l-btn' style='padding:2px 5px;'>追加信息</a>";
                         }
                     },
                     {
@@ -537,21 +557,20 @@
                         <li><text>精品房源:</text>
                         </li>
                         <li style="margin:25px 5px">
-                            <input class="easyui-slider" style="width:300px"  data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                            <input class="easyui-slider" id="ipt1" style="width:300px"   data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
                         </li>
                         <li><text>最新快选:</text></li>
                         <li style="margin:25px 5px">
-                            <input class="easyui-slider" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                            <input class="easyui-slider" id="ipt2" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
                         </li>
                         <li><text>房源信息:</text></li>
                         <li style="margin:25px 5px">
-                            <input class="easyui-slider" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                            <input class="easyui-slider" id="ipt3" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
                         </li>
-                        <li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
-                        <li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
-                        <li>complete framework for HTML5 web page.</li>
-                        <li>easyui save your time and scales while developing your products.</li>
-                        <li>easyui is very easy but powerful.</li>
+                        <li><text>导航下信息:</text></li>
+                        <li style="margin:25px 5px">
+                            <input class="easyui-slider" id="ipt4" style="width:300px" data-options="showTip:true,rule:[5,'|',10,'|',15,'|',20],min:5,max:20,value:5" />
+                        </li>
                     </ul>
                 </div>
                 <div title="My Documents" style="padding:10px">

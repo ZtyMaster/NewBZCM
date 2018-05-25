@@ -139,7 +139,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 PageSize = pageSize,
                 TotalCount = totalCount,
                 Items = Request["item"] == null ? "2" : Request["item"],
-                IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"])                
+                IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"]),
+                IsTop = false
+                
+                              
             };
 
             var temp = BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
