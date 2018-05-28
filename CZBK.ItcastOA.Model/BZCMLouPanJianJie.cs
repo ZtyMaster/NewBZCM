@@ -56,6 +56,8 @@ namespace CZBK.ItcastOA.Model
         public string Sty { get; set; }
         public string Game { get; set; }
         public string EAC { get; set; }
+        public string Image_banner { get; set; }
+        public string Image_Name { get; set; }
     
         public virtual BzcmText_FanChan BzcmText_FanChan { get; set; }
         public virtual UserInfo UserInfo { get; set; }

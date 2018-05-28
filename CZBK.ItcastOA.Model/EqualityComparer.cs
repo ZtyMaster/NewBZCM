@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CZBK.ItcastOA.Model.SearchParam;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,7 @@ namespace CZBK.ItcastOA.Model
             return obj.GetHashCode();
         }
     }
-  
+
+ 
+
 }

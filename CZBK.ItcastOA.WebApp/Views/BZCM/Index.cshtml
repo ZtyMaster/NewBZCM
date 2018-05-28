@@ -42,7 +42,11 @@
             toggleKZ();
             $("#TTdiv").show();
             loadData();
+            //隐藏删除图片按钮
             $("#DelImageBtn").hide();
+            $("#ShtereBannerimg").hide();
+            $("#ShtereNameimg").hide();
+            ShtereBannerimg
             //文件上传
             $("#btnFileUp").click(function () {
                 if ($("#fileUp").val() == "") {
@@ -79,8 +83,36 @@
                     }                    
                 })
             })
+            $("#ShtereBannerimg").click(function () {
+                var image = $("#DivShowImage_Image_banner").attr("src");
+                alert(image)
+                $.post("/BZCM/DelImage", { str: image }, function (data) {
+                    if (data.ret = "ok") {
+                        alert(data.ret)
+                        $("#DivShowImage_Image_banner").remove();
+                        $("#Image_banner").val("");
+                        $("#fileUp_Image_banner").val("");
+                        $("#ShtereBannerimg").hide();
+
+                    }
+                })
+            })
+            $("#ShtereNameimg").click(function () {
+                var image = $("#DivShowImage_Image_Name").attr("src");
+                $.post("/BZCM/DelImage", { str: image}, function (data) {
+                    if (data.ret = "ok") {
+                        $("#DivShowImage_Image_Name").remove();
+                        $("#Image_Name").val("");
+                        $("#fileUp_Image_Name").val("");
+                        $("#ShtereNameimg").hide();
+
+                    }
+                })
+            })
+
+
             $("#AddFCKX").css("display", "none");
-           
+            $("#Addejym").css("display", "none");            
             $("#JingPinFangYuan").hide();
             $("#FangYuanXinXi").hide();
             $(".easyui-combobox").combobox("select", "2");
@@ -105,11 +137,35 @@
                 $("#Wxdiv").show();
             })
 
-           
-
-            
             
         });
+        //二级页面上传头部图片与名称图片
+        function btnupimg(thisid) {
+            if ($("#fileUp_"+thisid).val() == "") {
+                $.messager.alert("提示", "请选择上传文件", "errer");
+                return;
+            }
+            //开始进行异步上传图片文件
+            $("#AddejymFrom").ajaxSubmit({
+                success: function (data) {
+                    var serverData = data.split(":");
+                    if (serverData[0] == "yes") {
+                        $("#showImage_" + thisid).append("<img id='DivShowImage_" + thisid + "' src='" + serverData[1] + "' width='200' height='100'/>");
+                        $("#"+thisid).val(serverData[1]);//将上传成功的图片地址放在隐藏input中
+                    }
+                    else {
+                        $.messager.alert("提示", serverData[1], "errer");
+                    }
+                },
+                url: "/BZCM/FileUpload?item="+thisid,
+                type: "post"
+            })
+            if (thisid == "Image_banner") {
+                $("#ShtereBannerimg").show();
+            } else {
+                $("#ShtereNameimg").show();
+            }                        
+        }
         function loadData(pars) {
             var Jpfy = true;
             var Fckx = true;
@@ -165,8 +221,8 @@
                         }
                     },
                     {
-                        field: 'addshere', title: '追加详细信息', align: 'center', hidden: Shere, formatter: function (value, row) {
-                            return "<a href='javascript:addshere()' class='l-btn' style='padding:2px 5px;'>追加信息</a>";
+                        field: 'addshere', title: '详细信息', align: 'center', hidden: Shere, formatter: function (value, row) {
+                            return row.Shtere ? "<a href='javascript:editshere()' class='l-btn' style='padding:2px 5px;'>修改信息</a>" : "<a href='javascript:addshere()' class='l-btn' style='padding:2px 5px;'>追加信息</a>";
                         }
                     },
                     {
@@ -294,6 +350,40 @@
                     }
                 }]
             });
+        }
+        //追加详细信息
+        function addshere() {
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            $("#Addejym").css("display", "block");
+            $("#BzcmTextID").val(rows[0].ID);
+            $('#Addejym').dialog({
+                title: "新增信息",
+                width: 750,
+                height: 400,
+                collapsible: true,
+                resizable: true,
+                modal: true,
+                buttons: [{
+                    text: '确定',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+
+                        $("#AddejymFrom").submit();//提交表单     
+                        $('#Addejym').dialog('close');
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        $('#Addejym').dialog('close');
+                    }
+                }]
+            });
+            clertShtere();
         }
         function changeScenes() {
             TabIsHide();
@@ -442,6 +532,68 @@
                 }
             })
         }
+        //修改追加信息
+        function editshere() {
+            
+            addshere();
+            var rows = $('#tt').datagrid('getSelections');
+            if (rows.length != 1) {
+                //alert("请选择要修改的商品！");
+                $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
+                return;
+            }
+            
+            $.post("/bzcm/GetShtere", { id: rows[0].ID }, function (dat) {
+                if (dat.ret == "ok") {
+                    alert(dat.temp);
+                    var temp = $.parseJSON(dat.temp);                    
+                    //alert(temp.BzcmTextID)
+                    //alert(temp.ShuoSuQuYu)
+                    //alert(temp.Addess)
+                    //alert(temp.ID)
+                    $.each(temp, function (i, items) {
+                        if (i == "KaiPanTime" || i == "RuzuTime") {
+                            $("#" + i).datebox("setValue", items);
+
+                        } else if (i == "XiaoShouZT") {
+                            $("#" + i).combobox("select", items);
+                        }  else {
+                            try {
+
+                                $("#" + i).val(items);
+
+                                if (i == "Image_banner") {
+                                    if (items != null) {
+                                        $("#showImage_Image_banner").append("<img id='DivShowImage_Image_banner' src='" + items + "' width='200' height='100'/>");
+                                        $("#ShtereBannerimg").show();
+                                    }
+                            
+                                } else if (i == "Image_Name") {
+                                    if (items != null) {                                    
+                                        $("#showImage_Image_Name").append("<img id='DivShowImage_Image_Name' src='" + items + "' width='200' height='100'/>");
+                                        $("#ShtereNameimg").show();
+                                    }
+
+                                }
+
+                            }
+                            catch (e) { }
+                        }                        
+                    })
+                    };
+            })
+            clertShtere();
+        }
+        //清空追加信息
+        function clertShtere() {
+            $("#Addejym").find("input,textarea").each(function () {
+                
+                if (this.type != "button") {
+                    this.value = "";//也可以清空数据this.value ="";
+                }                
+            });   
+
+        }
     </script>
     <style>
         html, body {
@@ -449,7 +601,19 @@
             margin: 0px;
             padding: 0px;
         }
-
+        .tdheader {
+            color: cornflowerblue;
+            font-size:16px;
+            font:bold;
+            margin-left:22px;
+        }
+        .addshtere {
+             color:deepskyblue;
+             font-size:12px;
+        }
+        .td_one {
+            text-align:center;
+        }
         .btnlink a {
             width: 90%;
             margin-top: 3px;
@@ -672,6 +836,132 @@
                             <textarea rows="5" cols="50"   name="News_Text" id="News_Text"></textarea>
                     </tbody>                       
                 </table>
+        }
+    </div>
+
+    <div id="Addejym" style="height:100%; width:100%;">
+        @using (Ajax.BeginForm("AddShere", "BZCM", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "AddejymFrom" }))
+            {
+            <input type="hidden" id="editID" name="ID" />
+            <input type="hidden"  name="DEL" value="0" />
+            <input type="hidden" id="BzcmTextID" name="BzcmTextID"  />
+            <table class="JKtable addshtere">
+                <tbody>
+                    <tr><td colspan="2" class="tdheader">基本信息</td></tr>
+                    <tr><td class="td_one">所属区域</td><td><input class="text" name="ShuoSuQuYu" id="ShuoSuQuYu" /></td></tr>
+                    <tr><td class="td_one">联系电话</td><td><input type="text" name="Photo" id="Photo" onkeyup="ReadPhoto(this)" /></td></tr>
+                    @*<tr><td class="td_one">联系点火</td><td><input class="easyui-datetimebox" name="IsTopStopTime" id="IsTopStopTime" /></td></tr>*@
+                    <tr><td class="td_one">楼盘地址</td><td><input type="text" name="Addess" id="Addess" /></td></tr>
+                    <tr>
+                        <td class="td_one">销售状态</td>
+                        <td>
+                            <select class="easyui-combobox" name="XiaoShouZT" id="XiaoShouZT">
+                                <option value="0" selected="selected">在售</option>
+                                <option value="1">其他</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td class="td_one">项目特色</td><td><input type="text" name="XiangMuTeShe" id="XiangMuTeShe" /></td></tr>
+                    <tr><td class="td_one">开发商</td><td><input type="text" name="KaiFaShang" id="KaiFaShang" /></td></tr>
+                    <tr>
+                        <td class="td_one">楼盘简介</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="Texts" id="Texts"></textarea>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" class="tdheader">基本信息</td></tr>
+                    <tr><td class="td_one">开盘时间</td><td><input class="easyui-datebox" name="KaiPanTime" id="KaiPanTime" /></td></tr>
+                    <tr><td class="td_one">入住时间</td><td><input class="easyui-datebox" name="RuzuTime" id="RuzuTime" /></td></tr>
+                    <tr><td class="td_one">价格详情</td><td><input type="text" name="Money" id="Money" onkeyup="num(this)" /></td></tr>
+                    <tr><td class="td_one">售楼地址</td><td><input type="text" name="ShouLouAddess" id="ShouLouAddess" /></td></tr>
+                    <tr><td colspan="2" class="tdheader">建筑信息</td></tr>
+
+                    <tr><td class="td_one">产权年限</td><td><input type="text" name="ChanQuanYear" id="ChanQuanYear" value="70" /></td></tr>
+                    <tr><td class="td_one">户型</td><td><input type="text" name="HuXing" id="HuXing" /></td></tr>
+                    <tr><td class="td_one">建筑面积</td><td><input type="text" name="JianZhuMianJi" id="JianZhuMianJi" onkeyup="num(this)" /></td></tr>
+                    <tr><td class="td_one">占地面积</td><td><input type="text" name="ZhanDiMianJi" id="ZhanDiMianJi" onkeyup="num(this)" /></td></tr>
+                    <tr><td class="td_one">建筑类别</td><td><input type="text" name="JianZhuLeiBie" id="JianZhuLeiBie" /></td></tr>
+                    <tr><td class="td_one">装修情况</td><td><input type="text" name="ZhuangXiuQingKuang" id="ZhuangXiuQingKuang" /></td></tr>
+                    <tr><td class="td_one">楼层状况</td><td><input type="text" name="LouCheZhuanKuang" id="LouCheZhuanKuang" /></td></tr>
+                    <tr><td class="td_one">承建商</td><td><input type="text" name="ChengJianShang" id="ChengJianShang" /></td></tr>
+                    <tr><td class="td_one">代理商</td><td><input type="text" name="DaiLiShang" id="DaiLiShang" /></td></tr>
+                    <tr><td colspan="2" class="tdheader">物业信息</td></tr>
+                    <tr><td class="td_one">物业类别</td><td><input type="text" name="WuYeLeiBie" id="WuYeLeiBie" /></td></tr>
+                    <tr><td class="td_one">容积率</td><td><input type="text" name="RongJiLv" id="RongJiLv" /></td></tr>
+                    <tr><td class="td_one">绿化率</td><td><input type="text" name="LvHuaLv" id="LvHuaLv" /></td></tr>
+                    <tr><td class="td_one">供水</td><td><input type="text" name="GongShui" id="GongShui" /></td></tr>
+                    <tr><td class="td_one">供气</td><td><input type="text" name="GongQi" id="GongQi" /></td></tr>
+                    <tr><td class="td_one">供暖</td><td><input type="text" name="GongNuan" id="GongNuan" /></td></tr>
+                    <tr><td class="td_one">宽带</td><td><input type="text" name="KuanDai" id="KuanDai" /></td></tr>
+                    <tr><td class="td_one">物业公司</td><td><input type="text" name="WuYeGongShi" id="WuYeGongShi" /></td></tr>
+                    <tr><td class="td_one">物业费</td><td><input type="text" name="WuYeFei" id="WuYeFei" /></td></tr>
+                    <tr><td class="td_one">地下停车场</td><td><input type="text" name="StopCar" id="StopCar" /></td></tr>
+                    <tr><td colspan="2" class="tdheader">交通配套</td></tr>
+                    <tr>
+                        <td class="td_one">公交线路</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="GongJiaoXianLu" id="GongJiaoXianLu"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_one">学校</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="Shool" id="Shool"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_one">购物</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="Shop" id="Shop"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_one">餐饮</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="EAC" id="EAC"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_one">医院</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="YiYuan" id="YiYuan"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_one">生活</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="Sty" id="Sty"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td_one">娱乐</td>
+                        <td>
+                            <textarea rows="5" cols="50" name="Game" id="Game"></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+                 <tr>
+                        <td>顶部图片</td>
+                        <td>
+
+                            <input type="file" name="img_banner" id="fileUp_Image_banner" />
+                            <input type="hidden" name="Image_banner" id="Image_banner" />
+                            <div id="showImage_Image_banner"></div>
+                        </td>
+                        <td><input type="button" value="上传图片"  onclick="btnupimg('Image_banner')" /><input type="button" value="删除图片" id="ShtereBannerimg" /></td>
+                    </tr>
+                <tr>
+                    <td>名称图片</td>
+                    <td>
+
+                        <input type="file" name="img_name" id="fileUp_Image_Name" />
+                        <input type="hidden" name="Image_Name" id="Image_Name" />
+                        <div id="showImage_Image_Name"></div>
+                    </td>
+                    <td><input type="button" value="上传图片"  onclick="btnupimg('Image_Name')"/><input type="button" value="删除图片" id="ShtereNameimg" /></td>
+                </tr>
+              
+            </table>
         }
     </div>
     

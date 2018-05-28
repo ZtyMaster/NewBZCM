@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cf1c972f32634358953917f88d07660c" Name="Diagram1" ZoomLevel="94">
+      <Diagram DiagramId="cf1c972f32634358953917f88d07660c" Name="Diagram1" ZoomLevel="71">
         <EntityTypeShape EntityType="BZCMModel.ActionInfo" Width="1.5" PointX="0.75" PointY="17.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BZCMModel.BumenInfoSet" Width="1.5" PointX="3" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="BZCMModel.BZCMLouPanJianJie" Width="1.5" PointX="10.5" PointY="16" IsExpanded="true" />

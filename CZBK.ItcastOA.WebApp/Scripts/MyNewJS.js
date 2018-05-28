@@ -232,4 +232,8 @@ function Arabia_to_Chinese(Num) {
     newchar = newchar.replace("零角整", "整");
     return newchar;
 
+
+
+
+
 }
