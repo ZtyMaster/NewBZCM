@@ -34,39 +34,44 @@ namespace CZBK.ItcastOA.BLL
             }
             astr.TotalCount = temp.Count();
             var temps= temp.OrderBy<BzcmText_FanChan, long>(u => u.ID).Skip<BzcmText_FanChan>((astr.PageIndex - 1) * astr.PageSize).Take<BzcmText_FanChan>(astr.PageSize);
+            var temp_bzcm = this.GetCurrentDbSession.BZCMLouPanJianJieDal.LoadEntities(x => x.DEL == 0).DefaultIfEmpty();
+            var ret = from a in temps 
+                      from b in temp_bzcm 
+                      select  new BzcmClass 
+                      {
+                          ID = a.ID,
+                          Addtime = a.Addtime,
+                          PerSonName = a.UserInfo.PerSonName,
+                          DEL = a.DEL,
+                          FYXX_Name = a.FYXX_Name,
+                          FYXX_ONE = a.FYXX_ONE,
+                          FYXX_Photo = a.FYXX_Photo,
+                          FYXX_SHRER = a.FYXX_SHRER,
+                          FYXX_TWO = a.FYXX_TWO,
+                          Str = a.IsFristItem.Str,
+                          itemsid = a.IsFristItemsID,
+                          IsTop = a.IsTop,
+                          IsTopStartTime = a.IsTopStartTime,
+                          IsTopStopTime = a.IsTopStopTime,
+                          IsTop_shor = a.IsTop_shor,
+                          News_Addess = a.News_Addess,
+                          News_Danwei = a.News_Danwei,
+                          News_Item = a.News_Item,
+                          News_KaiFaShang = a.News_KaiFaShang,
+                          News_Money = a.News_Money,
+                          News_Name = a.News_Name,
+                          News_Photo = a.News_Photo,
+                          News_Text = a.News_Text,
+                          News_YouHui = a.News_YouHui,
+                          Str_Image = a.Str_Image,
+                          Str_Name = a.Str_Name,
+                          Str_Photo = a.Str_Photo,
+                          Shtere = b.BzcmTextID == a.ID ? true : false
+                       } ;
+            
 
-            var ret = from a in temps
-                       select new BzcmClass
-                       {
-                          ID= a.ID,
-                           Addtime=   a.Addtime,
-                           PerSonName = a.UserInfo.PerSonName,
-                           DEL= a.DEL,
-                           FYXX_Name=a.FYXX_Name,
-                           FYXX_ONE=  a.FYXX_ONE,
-                           FYXX_Photo= a.FYXX_Photo,
-                           FYXX_SHRER=a.FYXX_SHRER,
-                           FYXX_TWO=a.FYXX_TWO,
-                           Str = a.IsFristItem.Str,
-                           itemsid = a.IsFristItemsID,
-                           IsTop= a.IsTop,
-                           IsTopStartTime=a.IsTopStartTime,
-                           IsTopStopTime=a.IsTopStopTime,
-                           IsTop_shor=a.IsTop_shor,
-                           News_Addess=a.News_Addess,
-                           News_Danwei=a.News_Danwei,
-                           News_Item=a.News_Item,
-                           News_KaiFaShang=a.News_KaiFaShang,
-                           News_Money= a.News_Money,
-                           News_Name=a.News_Name,
-                           News_Photo=a.News_Photo,
-                           News_Text=a.News_Text,
-                           News_YouHui=a.News_YouHui,
-                           Str_Image=a.Str_Image,
-                           Str_Name=a.Str_Name,
-                           Str_Photo=a.Str_Photo
-                       };
             return ret;
+
         }
     }
        

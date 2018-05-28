@@ -1,5 +1,6 @@
 ﻿using CZBK.ItcastOA.Model;
 using CZBK.ItcastOA.Model.SearchParam;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +33,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         public ActionResult FileUpload()
         {
             HttpPostedFileBase file = Request.Files["fileIconUp"];
+            if (Request["item"] != null) {
+                file= Request["item"]== "Image_banner"? Request.Files["img_banner"] : Request.Files["img_name"];
+            }
+            
             if (file != null)
             {
                 string filename = Path.GetFileName(file.FileName);//获取上传的文件名
@@ -107,7 +112,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 try { BzcmText_FanChanService.AddEntity(btfc); }
                 catch (Exception e)
                 {
-                    NewDeletFile(btfc.Str_Image);
+                    if (btfc.Str_Image.Length > 0) {
+                        NewDeletFile(btfc.Str_Image);
+                    }
+                    
                     str = e.ToString();
                 }
             }
@@ -175,6 +183,60 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(new { ret = "未找到要修改的数据！" }, JsonRequestBehavior.AllowGet);
             }
             
+        }
+
+        //新增二级页面
+        public ActionResult AddShere(BZCMLouPanJianJie bzcm) {
+            bzcm.AddTime = DateTime.Now;
+            bzcm.AddUserID = LoginUser.ID;
+            string str = "ok";
+            if (bzcm.ID > 0)
+            {
+                BZCMLouPanJianJieService.EditEntity(bzcm);
+            }
+            else
+            {
+                try { BZCMLouPanJianJieService.AddEntity(bzcm); }
+                catch (Exception e)
+                {
+                    if (bzcm.Image_banner != null) {
+                        NewDeletFile(bzcm.Image_banner);
+                    }
+                    if (bzcm.Image_Name != null)
+                    {
+                        NewDeletFile(bzcm.Image_Name);
+                    }
+                    str = e.ToString();
+                }
+            }
+
+
+            return Json(new { ret = str }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+        //获取新增二级页面数据
+        
+       
+        public ActionResult GetShtere() {
+            long id = Convert.ToInt64(Request["id"]);
+            var temp= BZCMLouPanJianJieService.LoadEntities(x => x.BzcmTextID == id).FirstOrDefault();
+            
+            if (temp != null)
+            {
+                JsonSerializerSettings setting = new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    Formatting = Formatting.None
+                };
+                var ret = JsonConvert.SerializeObject(temp, setting);
+                return Json(new { ret ="ok",temp= ret }, JsonRequestBehavior.AllowGet);
+            }
+            else {
+                return Json(new { ret = "未找到数据信息" }, JsonRequestBehavior.AllowGet);
+            }
+
+           
         }
         #endregion
 

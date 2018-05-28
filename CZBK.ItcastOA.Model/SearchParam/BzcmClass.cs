@@ -11,5 +11,6 @@ namespace CZBK.ItcastOA.Model.SearchParam
         public  int itemsid { get; set; }
         public string PerSonName { get; set; }
         public string Str { get; set; }
+        public bool Shtere { get; set; }
     }
 }
