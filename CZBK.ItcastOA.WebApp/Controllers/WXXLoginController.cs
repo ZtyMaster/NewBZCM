@@ -80,15 +80,15 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 TotalCount = totalCount,
                 Items = Request["item"] == null ? "2" : Request["item"],
                 IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"]),
-                IsTop=true
+                IsTop= Request["IsTop"] ==null?true:Convert.ToBoolean(Request["IsTop"])
             };
-            var temp =BzcmText_FanChanService.LoadSearchEntities(userInfoParam);
+            var temp =BzcmText_FanChanService.LoadSearchEntities(userInfoParam).OrderBy(x=>x.IsTop_shor);
             return Json(new { rows = temp, total = userInfoParam.TotalCount }, JsonRequestBehavior.AllowGet);
         }
         //获取首页没栏显示数
         public ActionResult GetIndexPageSize()
         {
-            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 1 || x.ThisItem == 2 || x.ThisItem == 3).DefaultIfEmpty().ToList();
+            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 1 || x.ThisItem == 2 || x.ThisItem == 3 || x.ThisItem == 4).DefaultIfEmpty().ToList();
             List<getInfo> lgf = new List<getInfo>();
             foreach(var a in temp)
             {
