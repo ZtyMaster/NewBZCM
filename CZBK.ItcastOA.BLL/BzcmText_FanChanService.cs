@@ -11,15 +11,14 @@ namespace CZBK.ItcastOA.BLL
 {
     public partial class BzcmText_FanChanService : BaseService<BzcmText_FanChan>, IBzcmText_FanChanService
     {
-        public IQueryable<BzcmClass> LoadSearchEntities(UserInfoParam astr)
+        public List<BzcmClass> LoadSearchEntities(UserInfoParam astr)
         {
             /// <summary>
             /// 多条件搜索用户信息
             /// </summary>
             /// <param name="userInfoSearchParam"></param>
             /// <returns></returns>
-
-            short delFlag = (short)DelFlagEnum.Normarl;
+            
             
             var temp = this.GetCurrentDbSession.BzcmText_FanChanDal.LoadEntities(c => c.DEL == (astr.IsMaster?1: 0));
             
@@ -68,9 +67,9 @@ namespace CZBK.ItcastOA.BLL
                           Str_Photo = a.Str_Photo,
                           Shtere = b.BzcmTextID == a.ID ? true : false
                        } ;
+            var tmp = ret.GroupBy(x => x.ID).Where(x => x.Count() > 1).ToList(); 
             
-
-            return ret;
+            return ret.ToList();
 
         }
     }
