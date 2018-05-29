@@ -85,7 +85,7 @@
             })
             $("#ShtereBannerimg").click(function () {
                 var image = $("#DivShowImage_Image_banner").attr("src");
-                alert(image)
+              
                 $.post("/BZCM/DelImage", { str: image }, function (data) {
                     if (data.ret = "ok") {
                         clerimg()
