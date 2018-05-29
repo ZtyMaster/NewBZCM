@@ -68,8 +68,6 @@ namespace CZBK.ItcastOA.BLL
                           Str_Photo = a.Str_Photo,
                           Shtere = b.BzcmTextID == a.ID ? true : false
                        } ;
-            
-
             return ret;
 
         }
