@@ -216,8 +216,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
         }
         //获取新增二级页面数据
-        
-       
         public ActionResult GetShtere() {
             long id = Convert.ToInt64(Request["id"]);
             var temp= BZCMLouPanJianJieService.LoadEntities(x => x.BzcmTextID == id).FirstOrDefault();
@@ -235,8 +233,6 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             else {
                 return Json(new { ret = "未找到数据信息" }, JsonRequestBehavior.AllowGet);
             }
-
-           
         }
         #endregion
 

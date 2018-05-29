@@ -1,5 +1,6 @@
 ﻿using CZBK.ItcastOA.Model;
 using CZBK.ItcastOA.Model.SearchParam;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +19,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
         IBLL.IWXXUserInfoService WXXUserInfoService { get; set; }
         IBLL.IBzcmText_FanChanService BzcmText_FanChanService { get; set; }
         IBLL.IT_BoolItemService T_BoolItemService { get; set; }
+        IBLL.IBZCMLouPanJianJieService BZCMLouPanJianJieService { get; set; }
 
 
         public ActionResult Index()
@@ -98,6 +100,27 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 lgf.Add(gi);
             }
             return Json(lgf, JsonRequestBehavior.AllowGet);
+        }
+        //获取新增二级页面数据
+        public ActionResult GetShtere()
+        {
+            long id = Convert.ToInt64(Request["id"]);
+            var temp = BZCMLouPanJianJieService.LoadEntities(x => x.BzcmTextID == id).FirstOrDefault();
+
+            if (temp != null)
+            {
+                JsonSerializerSettings setting = new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    Formatting = Formatting.None
+                };
+                var ret = JsonConvert.SerializeObject(temp, setting);
+                return Json(new { ret = "ok", temp = ret }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { ret = "未找到数据信息" }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
     public class getInfo
