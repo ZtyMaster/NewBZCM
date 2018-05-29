@@ -21,6 +21,18 @@ namespace CZBK.ItcastOA.Model
         }
     }
 
- 
+    public class BzcmCompare : IEqualityComparer<BzcmClass>
+    {
+        public bool Equals(BzcmClass x, BzcmClass y)
+        {
+            return x.ID == y.ID;
+        }
+
+
+        public int GetHashCode(BzcmClass obj)
+        {
+            return obj.GetHashCode();
+        }        
+    }
 
 }
