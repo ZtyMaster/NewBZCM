@@ -10,6 +10,6 @@ namespace CZBK.ItcastOA.IBLL
     
     public partial interface IBzcmText_FanChanService : IBaseService<BzcmText_FanChan>
     {
-        IQueryable<BzcmClass> LoadSearchEntities(UserInfoParam upm);
+        List<BzcmClass> LoadSearchEntities(UserInfoParam upm);
     }
 }

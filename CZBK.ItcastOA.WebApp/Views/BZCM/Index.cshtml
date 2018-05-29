@@ -88,11 +88,7 @@
                 alert(image)
                 $.post("/BZCM/DelImage", { str: image }, function (data) {
                     if (data.ret = "ok") {
-                        alert(data.ret)
-                        $("#DivShowImage_Image_banner").remove();
-                        $("#Image_banner").val("");
-                        $("#fileUp_Image_banner").val("");
-                        $("#ShtereBannerimg").hide();
+                        clerimg()
 
                     }
                 })
@@ -101,10 +97,7 @@
                 var image = $("#DivShowImage_Image_Name").attr("src");
                 $.post("/BZCM/DelImage", { str: image}, function (data) {
                     if (data.ret = "ok") {
-                        $("#DivShowImage_Image_Name").remove();
-                        $("#Image_Name").val("");
-                        $("#fileUp_Image_Name").val("");
-                        $("#ShtereNameimg").hide();
+                        clerimg()
 
                     }
                 })
@@ -139,6 +132,25 @@
 
             
         });
+        //清空图片数据
+        function clerimg() {
+            try {
+                $("#DivShowImage_Image_banner").remove();
+                $("#Image_banner").val("");
+                $("#fileUp_Image_banner").val("");
+                $("#ShtereBannerimg").hide();
+            }
+            catch (e) {
+            }
+            try {
+                $("#DivShowImage_Image_Name").remove();
+                $("#Image_Name").val("");
+                $("#fileUp_Image_Name").val("");
+                $("#ShtereNameimg").hide();
+            }
+            catch (e) {
+            }
+        }
         //二级页面上传头部图片与名称图片
         function btnupimg(thisid) {
             if ($("#fileUp_"+thisid).val() == "") {
@@ -183,6 +195,8 @@
                         case "6": NewKX = false, imagebol = false;
                             break;
                         case "2": Jpfy = false, imagebol = false, Shere = false;
+                            break;
+                        case "11": Jpfy = false, imagebol = false, Shere = false;
                             break;
                         case "5": Jpfy = false, imagebol = false, Shere = false;
                             break;
@@ -360,7 +374,7 @@
                 return;
             }
             $("#Addejym").css("display", "block");
-            $("#BzcmTextID").val(rows[0].ID);
+           
             $('#Addejym').dialog({
                 title: "新增信息",
                 width: 750,
@@ -384,11 +398,12 @@
                 }]
             });
             clertShtere();
+            $("#BzcmTextID").val(rows[0].ID);
         }
         function changeScenes() {
             TabIsHide();
             var val = $("#FristItems").combobox("getValue");
-            if (val == "2") {
+            if (val == "2"||val=="11") {
                 $("#JingPinFangYuan").show();
                 $("#Imagebody").show();
             }
@@ -591,7 +606,8 @@
                 if (this.type != "button") {
                     this.value = "";//也可以清空数据this.value ="";
                 }                
-            });   
+            });
+            clerimg()
 
         }
     </script>
@@ -771,7 +787,7 @@
     <div id="AddFCKX" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddBzcmImage", "BZCM", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "AddFCKXFrom" }))
             {
-               <input type="hidden" id="AddID" name="ID" />
+            <input type="hidden" id="AddID" name="ID" />
                 <table class="JKtable">
                     
                     <thead>
@@ -842,7 +858,7 @@
     <div id="Addejym" style="height:100%; width:100%;">
         @using (Ajax.BeginForm("AddShere", "BZCM", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterAdd" }, new { id = "AddejymFrom" }))
             {
-            <input type="hidden" id="editID" name="ID" />
+            <input type="hidden" id="ID" name="ID" />
             <input type="hidden"  name="DEL" value="0" />
             <input type="hidden" id="BzcmTextID" name="BzcmTextID"  />
             <table class="JKtable addshtere">
