@@ -45,6 +45,7 @@
     <property name="WXXUserInfoService" ref="WXXUserInfoService" />
     <property name="BzcmText_FanChanService" ref="BzcmText_FanChanService" />
     <property name="T_BoolItemService" ref="T_BoolItemService" />
+    <property name="BZCMLouPanJianJieService" ref="BZCMLouPanJianJieService" />
   </object>
 
 
