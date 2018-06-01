@@ -286,6 +286,8 @@
           <Property Name="Gender" Type="int" />
           <Property Name="Age" Type="int" />
           <Property Name="Photo" Type="nvarchar(max)" />
+          <Property Name="ScoreNum" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EditScoreTime" Type="datetime" />
           <Property Name="bak" Type="nvarchar(max)" />
           <Property Name="DEL" Type="int" Nullable="false" />
         </EntityType>
@@ -899,6 +901,8 @@
           <Property Name="DEL" Type="Int32" Nullable="false" />
           <NavigationProperty Name="UserInfo" Relationship="Self.FK_WXXUserInfo_UserInfo" FromRole="WXXUserInfo" ToRole="UserInfo" />
           <NavigationProperty Name="Wx__BzcmText" Relationship="Self.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="WXXUserInfo" ToRole="Wx__BzcmText" />
+          <Property Name="ScoreNum" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EditScoreTime" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_ActionInfoR_UserInfo_ActionInfo">
           <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
@@ -1386,6 +1390,8 @@
           <EntitySetMapping Name="WXXUserInfoes">
             <EntityTypeMapping TypeName="BZCMModel.WXXUserInfo">
               <MappingFragment StoreEntitySet="WXXUserInfo">
+                <ScalarProperty Name="EditScoreTime" ColumnName="EditScoreTime" />
+                <ScalarProperty Name="ScoreNum" ColumnName="ScoreNum" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="WXID" ColumnName="WXID" />

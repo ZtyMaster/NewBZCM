@@ -82,17 +82,17 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 TotalCount = totalCount,
                 Items = Request["item"] == null ? "2" : Request["item"],
                 IsMaster = Request["IsHSZ"] == null ? false : Convert.ToBoolean(Request["IsHSZ"]),
-                IsTop= Request["IsTop"] ==null?true:Convert.ToBoolean(Request["IsTop"])
+                IsTop = Request["IsTop"] == null ? true : Convert.ToBoolean(Request["IsTop"])
             };
-            var temp =BzcmText_FanChanService.LoadSearchEntities(userInfoParam).OrderBy(x=>x.IsTop_shor);
+            var temp = BzcmText_FanChanService.LoadSearchEntities(userInfoParam).OrderBy(x => x.IsTop_shor);
             return Json(new { rows = temp, total = userInfoParam.TotalCount }, JsonRequestBehavior.AllowGet);
         }
         //获取首页没栏显示数
         public ActionResult GetIndexPageSize()
         {
-            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 1 || x.ThisItem == 2 || x.ThisItem == 3 || x.ThisItem == 4).DefaultIfEmpty().ToList();
+            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 1 || x.ThisItem == 2 || x.ThisItem == 3 || x.ThisItem == 4 || x.ThisItem == 5 || x.ThisItem == 0).DefaultIfEmpty().ToList();
             List<getInfo> lgf = new List<getInfo>();
-            foreach(var a in temp)
+            foreach (var a in temp)
             {
                 getInfo gi = new getInfo();
                 gi.ID = a.ThisItem;
@@ -122,10 +122,33 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 return Json(new { ret = "未找到数据信息" }, JsonRequestBehavior.AllowGet);
             }
         }
+        //获取功能页菜单显示列表
+        public ActionResult GetMenuList()
+        {
+            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 9 && x.BOLL_ == true).DefaultIfEmpty().ToList();
+            List<getInfo> lgf = new List<getInfo>();
+            foreach (var a in temp)
+            {
+                getInfo gi = new getInfo();
+                gi.ID = a.@int;
+                gi.Name = a.str;
+                lgf.Add(gi);
+            }
+            return Json(lgf, JsonRequestBehavior.AllowGet);
+        }
+        /*//获取小程序版本号
+        public ActionResult GetVersionNumber()
+        {
+            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 10).FirstOrDefault();
+            getInfo gi = new getInfo();
+            gi.Name = temp.str;
+            return Json(gi, JsonRequestBehavior.AllowGet);
+        }*/
     }
     public class getInfo
     {
         public int? ID { get; set; }
-        public int? Num { get; set; }
+        public int? Num { get; set; } 
+        public string Name { get; set; }
     }
 }

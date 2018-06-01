@@ -28,6 +28,8 @@ namespace CZBK.ItcastOA.Model
         public string Photo { get; set; }
         public string bak { get; set; }
         public int DEL { get; set; }
+        public Nullable<decimal> ScoreNum { get; set; }
+        public Nullable<System.DateTime> EditScoreTime { get; set; }
     
         public virtual UserInfo UserInfo { get; set; }
         public virtual ICollection<Wx__BzcmText> Wx__BzcmText { get; set; }
