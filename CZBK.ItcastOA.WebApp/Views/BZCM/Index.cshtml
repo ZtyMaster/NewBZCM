@@ -560,7 +560,7 @@
             
             $.post("/bzcm/GetShtere", { id: rows[0].ID }, function (dat) {
                 if (dat.ret == "ok") {
-                    alert(dat.temp);
+                    
                     var temp = $.parseJSON(dat.temp);                    
                     //alert(temp.BzcmTextID)
                     //alert(temp.ShuoSuQuYu)
@@ -609,6 +609,21 @@
             });
             clerimg()
 
+        }
+        //修改积分
+        function editjifen() {
+            var jifen = $("#LoginJiFen").val();
+            if (jifen.length <= 0) {
+                $.messager.alert("提醒", "积分不可为空！", "error");
+                return;
+            }
+            $.post("/bzcm/EditJiFen", { jifen: jifen }, function (ret) {
+                if (ret.ret == "ok") {
+                    $.messager.alert("提醒", "修改成功！", "");
+                } else {
+                    $.messager.alert("提醒", ret.ret, "error");
+                }
+            })
         }
     </script>
     <style>
@@ -732,7 +747,7 @@
         </div>
         <div id="Wxdiv" style="height:100%;">
             <div class="easyui-tabs" style="height:initial">
-                <div title="微信设置" style="padding:10px">
+                <div title="微信小程序" style="padding:10px">
                     <p style="font-size:14px">首页显示数量设置</p>
                     <ul style="list-style:none">
                         <li><text>精品房源:</text>
@@ -752,10 +767,23 @@
                         <li style="margin:25px 5px">
                             <input class="easyui-slider" id="slider4" style="width:300px" data-options="showTip:true,rule:[1,'|','|',10],min:1,max:10,value:@ViewBag.slider3,onComplete: function(value){ jssliderclik(value,4) }" />
                         </li>
+                        <li><text>功能主页滚动图:</text></li>
+                        <li style="margin:25px 5px">
+                            <input class="easyui-slider" id="slider5" style="width:300px" data-options="showTip:true,rule:[1,'|','|',10],min:1,max:10,value:@ViewBag.slider4,onComplete: function(value){ jssliderclik(value,5) }" />
+                        </li>
                     </ul>
                 </div>
-                <div title="My Documents" style="padding:10px">
-                    <ul class="easyui-tree" data-options="url:'tree_data1.json',method:'get',animate:true"></ul>
+                <div title="登陆积分" style="padding:10px">
+                    <p style="font-size:14px">微信每次签到给予积分</p>
+                    <ul style="list-style:none">
+                        <li>
+                            <text>积分数量:</text><input id="LoginJiFen"   style="margin:0px 10px" name="" value="@ViewBag.Jifen" onkeyup="num(this)" />
+                            <input class="easyui-linkbutton" style="width:140px;" onclick="editjifen()" value="确定" />
+                        </li>
+                        <li style="margin:25px 5px">
+                           
+                        </li>                       
+                    </ul>
                 </div>
                 <div title="Help" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
                     This is the help content.
