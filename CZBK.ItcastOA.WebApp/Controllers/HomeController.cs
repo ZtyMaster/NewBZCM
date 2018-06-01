@@ -12,6 +12,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
     {
         IBLL.IUserInfoService UserInfoService { get; set; }
         IBLL.IBumenInfoSetService BumenInfoSetService { get; set; }
+        IBLL.IT_BoolItemService T_BoolItemService { get; set; }
 
         // GET: /Home/
         public ActionResult Index()
@@ -20,6 +21,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             {
                 ViewData["userName"] = LoginUser.PerSonName;
             }
+            ViewBag.Name = T_BoolItemService.LoadEntities(x => x.ItemsID == 99).FirstOrDefault().str;
             return View();
         }
         public ActionResult master()
@@ -29,6 +31,7 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 ViewData["userName"] = LoginUser.PerSonName;
                 ViewBag.id = LoginUser.ID;
                 ViewBag.qx = LoginUser.QuXian;
+                ViewBag.Name = T_BoolItemService.LoadEntities(x => x.ItemsID == 99).FirstOrDefault().str;
             }
             return View();
         }

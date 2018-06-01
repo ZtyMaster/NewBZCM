@@ -27,6 +27,8 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             ViewBag.slider1 = slider.Where(x => x.ID == 2).FirstOrDefault().@int;
             ViewBag.slider2 = slider.Where(x => x.ID == 3).FirstOrDefault().@int;
             ViewBag.slider3 = slider.Where(x => x.ID == 4).FirstOrDefault().@int;
+            ViewBag.slider4 = slider.Where(x => x.ID == 5).FirstOrDefault().@int;
+            ViewBag.Jifen = T_BoolItemService.LoadEntities(x => x.ItemsID ==98).FirstOrDefault().@int;
             return View();
         }
         #region 获取上传图片
@@ -237,6 +239,21 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
 
            
+        }
+
+        //修改登陆积分
+
+        public ActionResult EditJiFen() {
+            int jifen = Convert.ToInt32(Request["jifen"]);
+            var temp_jifen = T_BoolItemService.LoadEntities(x => x.ItemsID == 98).FirstOrDefault();
+            temp_jifen.@int = jifen;
+            if (T_BoolItemService.EditEntity(temp_jifen))
+            {
+                return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+            }
+            else {
+                return Json(new { ret = "修改积分出现错误！" }, JsonRequestBehavior.AllowGet);
+            }
         }
         #endregion
 
