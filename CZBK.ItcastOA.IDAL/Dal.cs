@@ -80,6 +80,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IWXXTsMessageDal :IBaseDal<WXXTsMessage>
+    {
+      
+    }
+	
 	public partial interface IWXXUserInfoDal :IBaseDal<WXXUserInfo>
     {
       

@@ -123,6 +123,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class WXXTsMessageService :BaseService<WXXTsMessage>,IWXXTsMessageService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.WXXTsMessageDal;
+        }
+    }   
+	
 	public partial class WXXUserInfoService :BaseService<WXXUserInfo>,IWXXUserInfoService
     {
         public override void SetCurretnDal()

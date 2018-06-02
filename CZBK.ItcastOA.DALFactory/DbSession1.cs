@@ -225,6 +225,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _WXX_FormIDDal = value; }
         }
 	
+		private IWXXTsMessageDal _WXXTsMessageDal;
+        public IWXXTsMessageDal WXXTsMessageDal
+        {
+            get
+            {
+                if(_WXXTsMessageDal == null)
+                {
+                   // _WXXTsMessageDal = new WXXTsMessageDal();
+				    _WXXTsMessageDal =AbstractFactory.CreateWXXTsMessageDal();
+                }
+                return _WXXTsMessageDal;
+            }
+            set { _WXXTsMessageDal = value; }
+        }
+	
 		private IWXXUserInfoDal _WXXUserInfoDal;
         public IWXXUserInfoDal WXXUserInfoDal
         {

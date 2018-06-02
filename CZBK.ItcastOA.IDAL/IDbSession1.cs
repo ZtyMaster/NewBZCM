@@ -40,6 +40,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		IWXX_FormIDDal WXX_FormIDDal{get;set;}
 	
+		IWXXTsMessageDal WXXTsMessageDal{get;set;}
+	
 		IWXXUserInfoDal WXXUserInfoDal{get;set;}
 	}	
 }

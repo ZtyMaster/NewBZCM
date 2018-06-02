@@ -81,6 +81,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class WXXTsMessageDal :BaseDal<WXXTsMessage>,IWXXTsMessageDal
+    {
+
+    }
+		
 	public partial class WXXUserInfoDal :BaseDal<WXXUserInfo>,IWXXUserInfoDal
     {
 

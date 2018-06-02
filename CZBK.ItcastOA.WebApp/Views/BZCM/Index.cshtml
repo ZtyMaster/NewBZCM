@@ -33,11 +33,33 @@
         });
         var IsHSZ = false;
 
-        $(function () {           
+        $(function () {
+            $("input[name='boutiqueHousing'][value=" + @ViewBag.radio1 + "]").attr("checked", true);
+            $("input[name='newsFlash'][value=" + @ViewBag.radio2 + "]").attr("checked", true);
+            $("input[name='jppropertyInformationFY'][value=" + @ViewBag.radio3 + "]").attr("checked", true);
+            $("input[name='elevator'][value=" + @ViewBag.radio4 + "]").attr("checked", true);
+            $("input[name='camper'][value=" + @ViewBag.radio5 + "]").attr("checked", true);
+            $("input[name='secondHandCar'][value=" + @ViewBag.radio6 + "]").attr("checked", true);
+            $("input[name='recruit'][value=" + @ViewBag.radio7 + "]").attr("checked", true);
+            $("input[name='aboutUs'][value=" + @ViewBag.radio8 + "]").attr("checked", true);
+
+            $('input[type=radio][name=TsType]').change(function () {
+                if (this.value == '0') {
+                    $("#BeiTsPersonTr").css("display", "none");
+                    $("#BeiTsPerson").combobox("setValue", "");
+                }
+                else if (this.value == '1') {
+                    $("#BeiTsPersonTr").css("display", "block");
+                    $("#BeiTsPerson").combobox("setValue", "");
+                }
+            });
+
             // 当窗口大小发生变化时，调整DataGrid的大小
             $(window).resize(function () {
                 $('#tt').resizeDataGrid(0, 0, 200, 500);
             });
+            //隐藏推送消息div
+            $("#AddTsMessageDIV").css("display", "none");
             //隐藏所有模块
             toggleKZ();
             $("#TTdiv").show();
@@ -79,13 +101,13 @@
                         $("#hiddenMenuIcon").val("");
                         $("#fileUp").val("");
                         $("#DelImageBtn").hide();
-                        
-                    }                    
+
+                    }
                 })
             })
             $("#ShtereBannerimg").click(function () {
                 var image = $("#DivShowImage_Image_banner").attr("src");
-              
+
                 $.post("/BZCM/DelImage", { str: image }, function (data) {
                     if (data.ret = "ok") {
                         clerimg()
@@ -98,24 +120,74 @@
                 $.post("/BZCM/DelImage", { str: image}, function (data) {
                     if (data.ret = "ok") {
                         clerimg()
-
                     }
                 })
             })
 
 
             $("#AddFCKX").css("display", "none");
-            $("#Addejym").css("display", "none");            
+            $("#Addejym").css("display", "none");
             $("#JingPinFangYuan").hide();
             $("#FangYuanXinXi").hide();
             $(".easyui-combobox").combobox("select", "2");
             //房产信息
             $("#Btnfcdata").click(function () {
+                $("#TsToolsDiv").hide();
                 toggleKZ()
                 $("#TTdiv").show();
                 var pars = {"item":"2"}
                 loadData(pars);
             })
+            //家具信息
+            $("#BtnBaoXiao").click(function () {
+                toggleKZ()
+            })
+            //推送消息
+            $("#BtnTsMessage").click(function () {
+                $("#Topbtn").hide();
+                toggleKZ();
+                cleanDatagrid();
+                $("#TTdiv").show();
+                loadTsMessage();
+            })
+            $("#toAddTsMessage").click(function () {
+                $("#AddTsMessageDIV").css("display", "block");
+                $('#AddTsMessageDIV').dialog({
+                    title: "推送消息",
+                    width: 600,
+                    height: 250,
+                    collapsible: true,
+                    resizable: true,
+                    modal: true,
+                    buttons: [{
+                        text: '确定',
+                        handler: function () {
+                            //$('#AddTsMessageDIV').dialog('close');
+                            var a = $('input[type=radio][name=TsType]:checked').val();
+                            alert(a);
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function () {
+                            $('#AddTsMessageDIV').dialog('close');
+                            $("#BeiTsPerson").combobox("setValue", "");
+                        }
+                    }],
+                    onClose: function () {
+                        $('#AddTsMessageDIV').dialog('close');
+                        $("#BeiTsPerson").combobox("setValue", "");
+                    }
+                });
+            })
+            //检测字数限制
+            function LimitTextArea(field) {
+                alert(1)
+                 maxlimit = 30;
+                 if (field.value.length > maxlimit) {
+                      field.value = field.value.substring(0, maxlimit);
+                      alert("字数不得多于30！");
+                 }
+             }
             //回收站
             $("#BtnHsz").click(function () {
                 IsHSZ = IsHSZ?false:true;
@@ -129,9 +201,59 @@
                 toggleKZ()
                 $("#Wxdiv").show();
             })
-
-            
         });
+        //推送消息之后
+        function afterToTsMessage(res) {
+            if (res.ret == "ok") {
+                $.messager.alert(res.msg);
+            } else {
+                $.messager.alert("推送失败，请联系管理员！");
+            }
+        }
+        //清空datagrid数据
+        function cleanDatagrid() {
+            var item = $('#tt').datagrid('getRows');
+            if (item) {
+                for (var i = item.length - 1; i >= 0; i--) {
+                    var index = $('#tt').datagrid('getRowIndex', item[i]);
+                    $('#tt').datagrid('deleteRow', index);
+                }
+            }
+        }
+        //加载微信推送消息列表
+        function loadTsMessage(pars) {
+            $('#tt').datagrid({
+                url: '/BZCM/GetTsMessageList',
+                title: '百战传媒',
+                width: $("#dgdiv").width() - 2,
+                height: $("#dgdiv").height() - 2,
+                fitColumns: true, //列自适应
+                nowrap: true,
+                rownumbers: true,
+                idField: 'ID',//主键列的列明
+                loadMsg: '正在加载权限的信息...',
+                pagination: true,//是否有分页
+                singleSelect: true,//是否单行选择
+                pageSize: 25,//页大小，一页多少条数据
+                pageNumber: 1,//当前页，默认的
+                pageList: [15, 25, 35],
+                queryParams: pars,//往后台传递参数
+                columns: [[//c.UserName, c.UserPass, c.Email, c.RegTime
+                    { field: 'Message', title: '推送消息内容', align: 'center' },
+                    {  
+                        field: 'AddTime', title: '推送时间', align: 'center',  formatter: function (value, row) {
+                            var str = ChangeDateFormatHours_Minute(value);
+                            return str;
+                        }
+                    },
+                    { field: 'ToAllUser', title: '发送所有人', align: 'center' },
+                    { field: 'ToOneUser', title: '发送所有人', align: 'center' }
+                ]],
+                toolbar: "#TsToolsDiv",
+                onLoadSuccess: function () {
+                }
+            });
+        }
         //清空图片数据
         function clerimg() {
             try {
@@ -176,7 +298,7 @@
                 $("#ShtereBannerimg").show();
             } else {
                 $("#ShtereNameimg").show();
-            }                        
+            }
         }
         function loadData(pars) {
             var Jpfy = true;
@@ -185,7 +307,7 @@
             var NewKX = true;
             var imagebol = true;
             var Shere = true;
-            
+
             if (pars != undefined) {
                 if (!IsHSZ) {
                     switch (pars.item) {
@@ -203,10 +325,10 @@
                         case "4": Jpfy = false, imagebol = false, Shere = false;
                             break;
                     }
-                }                
+                }
                 pars = { "item": pars.item, "IsHSZ": IsHSZ }
             }
-           
+
             $('#tt').datagrid({
                 url: '/BZCM/GetFanChan',
                 title: '百战传媒',
@@ -246,21 +368,21 @@
                     },
                     {
                         field: 'Addtime', title: '创建时间', formatter: function (value, row, index) {
-                          
+
                             var str = ChangeDateFormatHours_Minute(value);
                             return str;
                         },
                     },
                     {
                         field: 'IsTopStartTime', title: '置顶开始时间', formatter: function (value, row, index) {
-                           
+
                             var str = ChangeDateFormatHours_Minute(value);
                             return str;
                         }
                     },
                     {
                         field: 'IsTopStopTime', title: '置顶结束时间', formatter: function (value, row, index) {
-                           
+
                             var str = ChangeDateFormatHours_Minute(value);
                             return str;
                         }
@@ -286,7 +408,7 @@
                         }
                     },
                     { field: 'News_YouHui', title: '优惠政策', align: 'center', hidden: NewKX },
-                    { field: 'Wx__BzcmText', title: '状态', align: 'center', hidden: NewKX },                    
+                    { field: 'Wx__BzcmText', title: '状态', align: 'center', hidden: NewKX },
                     { field: 'News_Danwei', title: '开户行', align: 'center', hidden: NewKX },
                     {
                         field: 'IsTop', title: '是否置顶', align: 'center', formatter: function (value, row) {
@@ -353,8 +475,8 @@
                     text: '确定',
                     iconCls: 'icon-ok',
                     handler: function () {
-                        
-                        $("#AddFCKXFrom").submit();//提交表单     
+
+                        $("#AddFCKXFrom").submit();//提交表单
                         $('#AddFCKX').dialog('close');
                     }
                 }, {
@@ -374,7 +496,7 @@
                 return;
             }
             $("#Addejym").css("display", "block");
-           
+
             $('#Addejym').dialog({
                 title: "新增信息",
                 width: 750,
@@ -387,7 +509,7 @@
                     iconCls: 'icon-ok',
                     handler: function () {
 
-                        $("#AddejymFrom").submit();//提交表单     
+                        $("#AddejymFrom").submit();//提交表单
                         $('#Addejym').dialog('close');
                     }
                 }, {
@@ -427,15 +549,15 @@
             var val = $("#BtnInput").combobox("getValue");
             var pars = { "item": val }
             loadData(pars)
-            
+
         }
         function TabIsHide() {
             $("#JingPinFangYuan").hide();
             $("#FangYuanXinXi").hide();
             $("#NewKuaiXun").hide();
             $("#Imagebody").hide();
-            
-            
+
+
         }
         //修改房源信息
         function eidtdata() {
@@ -485,7 +607,7 @@
                 return;
             }
 
-            messcon(rows[0].ID,"是否确认删除？");            
+            messcon(rows[0].ID,"是否确认删除？");
         }
         //撤销回收站
         function ReDel() {
@@ -520,7 +642,7 @@
             $("#IsTop_shor").val("");
             $("#Str_Name").val("");
             $("#hiddenMenuIcon").val("");
-            $("#DivShowImage").remove();           
+            $("#DivShowImage").remove();
             $("#FYXX_Name").val("");
             $("#FYXX_Photo").val("");
             $("#FYXX_ONE").val("");
@@ -538,7 +660,7 @@
         function toggleKZ() {
             $("#TTdiv").hide();
             $("#Wxdiv").hide();
-            
+
         }
         function jssliderclik(v,id) {
             $.post("/bzcm/editslider", { "id": id, "val": v }, function (dat) {
@@ -549,7 +671,7 @@
         }
         //修改追加信息
         function editshere() {
-            
+
             addshere();
             var rows = $('#tt').datagrid('getSelections');
             if (rows.length != 1) {
@@ -557,11 +679,11 @@
                 $.messager.alert("提醒", "请选择要编辑的1条记录!", "error");
                 return;
             }
-            
+
             $.post("/bzcm/GetShtere", { id: rows[0].ID }, function (dat) {
                 if (dat.ret == "ok") {
-                    
-                    var temp = $.parseJSON(dat.temp);                    
+
+                    var temp = $.parseJSON(dat.temp);
                     //alert(temp.BzcmTextID)
                     //alert(temp.ShuoSuQuYu)
                     //alert(temp.Addess)
@@ -582,9 +704,9 @@
                                         $("#showImage_Image_banner").append("<img id='DivShowImage_Image_banner' src='" + items + "' width='200' height='100'/>");
                                         $("#ShtereBannerimg").show();
                                     }
-                            
+
                                 } else if (i == "Image_Name") {
-                                    if (items != null) {                                    
+                                    if (items != null) {
                                         $("#showImage_Image_Name").append("<img id='DivShowImage_Image_Name' src='" + items + "' width='200' height='100'/>");
                                         $("#ShtereNameimg").show();
                                     }
@@ -593,7 +715,7 @@
 
                             }
                             catch (e) { }
-                        }                        
+                        }
                     })
                     };
             })
@@ -602,10 +724,10 @@
         //清空追加信息
         function clertShtere() {
             $("#Addejym").find("input,textarea").each(function () {
-                
+
                 if (this.type != "button") {
                     this.value = "";//也可以清空数据this.value ="";
-                }                
+                }
             });
             clerimg()
 
@@ -618,6 +740,17 @@
                 return;
             }
             $.post("/bzcm/EditJiFen", { jifen: jifen }, function (ret) {
+                if (ret.ret == "ok") {
+                    $.messager.alert("提醒", "修改成功！", "");
+                } else {
+                    $.messager.alert("提醒", ret.ret, "error");
+                }
+            })
+        }
+        //修改显示信息
+        function changeLevel(value, type, name) {
+            $("input[name='"+name+"'][value=" + value + "]").attr("checked", true);
+            $.post("/bzcm/EditMenuYorN", { value:value,type:type }, function (ret) {
                 if (ret.ret == "ok") {
                     $.messager.alert("提醒", "修改成功！", "");
                 } else {
@@ -725,6 +858,7 @@
             <div title="控制菜单" data-options="iconCls:'icon-search'" style="overflow:auto;padding:10px;">
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="Btnfcdata">房产信息</a>
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BtnBaoXiao">家具信息</a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1'" id="BtnTsMessage">消息推送</a>
             </div>
             <div title="其他选项" data-options="iconCls:'icon-ok'" style="padding:10px;">
                 <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',selected:true" id="Tooledit">微信系统设置</a>
@@ -741,8 +875,6 @@
                         <th data-options="field:'ID', width: 40">编号</th>                      
                     </tr>
                 </thead>
-
-
             </table>
         </div>
         <div id="Wxdiv" style="height:100%;">
@@ -771,6 +903,51 @@
                         <li style="margin:25px 5px">
                             <input class="easyui-slider" id="slider5" style="width:300px" data-options="showTip:true,rule:[1,'|','|',10],min:1,max:10,value:@ViewBag.slider4,onComplete: function(value){ jssliderclik(value,5) }" />
                         </li>
+                        <li><text>功能页按钮显示状态:</text></li>
+                        <li style="margin:25px 5px">
+                            <table>
+                                <tr>
+                                    <td><label>精品房源:</label></td>
+                                    <td><input type="radio" name="boutiqueHousing" value="0" onclick="javascript:changeLevel(this.value,1,this.name)" />显示</td>
+                                    <td><input type="radio" name="boutiqueHousing" value="1" onclick="javascript: changeLevel(this.value, 1, this.name)" />隐藏</td>
+                                </tr>
+                                <tr>
+                                    <td><label>最新快讯:</label></td>
+                                    <td><input type="radio" name="newsFlash" value="0" onclick="javascript: changeLevel(this.value, 2, this.name)" />显示 </td>
+                                    <td><input type="radio" name="newsFlash" value="1" onclick="javascript: changeLevel(this.value, 2, this.name)" />隐藏</td>
+                                </tr>
+                                <tr>
+                                    <td><label>房源信息:</label></td>
+                                    <td><input type="radio" name="jppropertyInformationFY" value="0" onclick="javascript: changeLevel(this.value, 3, this.name)" />显示</td>
+                                    <td><input type="radio" name="jppropertyInformationFY" value="1" onclick="javascript: changeLevel(this.value, 3, this.name)" />隐藏</td>
+                                </tr>
+                                <tr>
+                                    <td><label>电梯之音:</label></td>
+                                    <td><input type="radio" name="elevator" value="0" onclick="javascript: changeLevel(this.value, 4, this.name)" />显示</td>
+                                    <td><input type="radio" name="elevator" value="1" onclick="javascript: changeLevel(this.value, 4, this.name)" />隐藏</td>
+                                </tr>
+                                <tr>
+                                    <td><label>房车:</label></td>
+                                    <td><input type="radio" name="camper" value="0" onclick="javascript: changeLevel(this.value, 5, this.name)" />显示</td>
+                                    <td><input type="radio" name="camper" value="1" onclick="javascript: changeLevel(this.value, 5, this.name)" />隐藏</td>
+                                </tr>
+                                <tr>
+                                    <td><label>二手车:</label></td>
+                                    <td><input type="radio" name="secondHandCar" value="0" onclick="javascript: changeLevel(this.value, 6, this.name)" />显示</td>
+                                    <td><input type="radio" name="secondHandCar" value="1" onclick="javascript: changeLevel(this.value, 6, this.name)" />隐藏</td>
+                                </tr>
+                                <tr>
+                                    <td><label>招聘:</label></td>
+                                    <td><input type="radio" name="recruit" value="0" onclick="javascript: changeLevel(this.value, 7, this.name)" />显示</td>
+                                    <td><input type="radio" name="recruit" value="1" onclick="javascript: changeLevel(this.value, 7, this.name)" />隐藏</td>
+                                </tr>
+                                <tr>
+                                    <td><label>关于我们:</label></td>
+                                    <td><input type="radio" name="aboutUs" value="0" onclick="javascript: changeLevel(this.value, 8, this.name)" />显示</td>
+                                    <td><input type="radio" name="aboutUs" value="1" onclick="javascript: changeLevel(this.value, 8, this.name)" />隐藏</td>
+                                </tr>
+                            </table>
+                        </li>
                     </ul>
                 </div>
                 <div title="登陆积分" style="padding:10px">
@@ -792,6 +969,46 @@
         </div>
     </div>
  
+    <div id="TsToolsDiv" style="padding:5px;height:auto">
+        <div style="margin-bottom:5px">
+            <a href="#" class="easyui-linkbutton" id="toAddTsMessage" iconCls="icon-add" plain="true">新建推送消息</a>
+        </div>
+    </div>
+
+    <div  id="AddTsMessageDIV" style="height:100%; width:100%;">
+        @using (Ajax.BeginForm("ToTsMessage", "BZCM", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "afterToTsMessage" }, new { id = "totsmessagefrom" }))
+        {<table id="ToTsMessageTab">
+            <tr>
+                <td style="width:100px;font-weight:bolder">推送给：</td>
+                <td></td>
+            </tr>
+        <tr>
+            <td><input type="radio" name="TsType" id="toAllUser" checked value="0"/>推送所有人
+            <input type="radio" name="TsType" id="toOnePerson" value="1" />推送各人</td>
+        </tr>
+        <tr id="BeiTsPersonTr" style="display:none">
+            <td>请选择被推送人：</td>
+            <td><input class="easyui-combobox" id="BeiTsPerson"
+                            name="BeiTsPerson"
+                            url= '/BZCM/GetWxUserList'
+				            valueField='ID'
+				            textField='Name'
+			 	            panelWidth='200'/></td>
+        </tr>
+            <tr>
+                <td style="font-weight:bolder">推送内容：
+                <textarea name="TsText" style="width:300px;height:50px;resize:none;"  onchange="this.value=this.value.substring(0, 30)" onkeydown="this.value=this.value.substring(0, 30)" onkeyup="this.value=this.value.substring(0, 30)"></textarea></td>
+            </tr>
+        <tr>
+            <td style="text-align:right;"><label style="font-weight:bold;color:red;">※限制字数：</label><label style="color:silver">最多不超过30字</label></td>
+        </tr>
+        </table>
+            <table>
+                <tbody id="Selebody"></tbody>
+            </table>
+        }
+    </div>
+
     <div id="Topbtn" class="Topbtn" style="padding:5px;height:auto;">                    
         <div style="font-size:16px;">
             选项列表：<input class="easyui-combobox" id="BtnInput"

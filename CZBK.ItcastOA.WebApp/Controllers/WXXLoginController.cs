@@ -32,7 +32,27 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             var temp = WXXUserInfoService.LoadEntities(x => x.WXID == wxid).FirstOrDefault();
             if (temp != null)
             {
-                return Json(new { ret = "ok", msg = "登陆成功!!" }, JsonRequestBehavior.AllowGet);
+                int state = 0;
+                if (temp.PersonName != Request["nickName"])
+                {
+                    temp.PersonName = Request["nickName"];
+                    state = 1;
+                }
+                if (temp.Gender != Convert.ToInt32(Request["gender"]))
+                {
+                    temp.Gender = Convert.ToInt32(Request["gender"]);
+                    state = 1;
+                }
+                if (temp.Photo != Request["avatarUrl"])
+                {
+                    temp.Photo = Request["avatarUrl"];
+                    state = 1;
+                }
+                if (state == 1)
+                {
+                    WXXUserInfoService.EditEntity(temp);
+                }
+                return Json(new { ret = "ok", msg = "登陆成功!!", userInfo = temp }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -41,9 +61,10 @@ namespace CZBK.ItcastOA.WebApp.Controllers
                 wui.PersonName = Request["nickName"];
                 wui.Gender = Convert.ToInt32(Request["gender"]);
                 wui.Photo = Request["avatarUrl"];
+                wui.ScoreNum = 0;
                 wui.DEL = 0;
-                WXXUserInfoService.AddEntity(wui);
-                return Json(new { ret = "ok", msg = "登陆成功!" }, JsonRequestBehavior.AllowGet);
+                WXXUserInfo wxxui = WXXUserInfoService.AddEntity(wui);
+                return Json(new { ret = "ok", msg = "登陆成功!",userInfo= wxxui }, JsonRequestBehavior.AllowGet);
             }
         }
         #region 微信获取openid
@@ -136,15 +157,51 @@ namespace CZBK.ItcastOA.WebApp.Controllers
             }
             return Json(lgf, JsonRequestBehavior.AllowGet);
         }
-        /*//获取小程序版本号
-        public ActionResult GetVersionNumber()
+        //微信小程序登录积分
+        public ActionResult AddScoreNum()
         {
-            var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 10).FirstOrDefault();
-            getInfo gi = new getInfo();
-            gi.Name = temp.str;
-            return Json(gi, JsonRequestBehavior.AllowGet);
-        }*/
-    }
+            string wxid = Request["WXID"];
+            var temp = WXXUserInfoService.LoadEntities(x => x.WXID == wxid).FirstOrDefault();
+            if (temp != null)
+            {
+                var dateDay = temp.EditScoreTime.GetValueOrDefault().ToLongDateString();
+                if (dateDay == DateTime.Now.ToLongDateString())
+                {
+                    return Json(new { ret = "no", msg = "您今日已签过到了~" }, JsonRequestBehavior.AllowGet);
+                }
+                var score = T_BoolItemService.LoadEntities(x => x.ThisItem == 0).First().@int;
+                temp.ScoreNum = temp.ScoreNum + score;
+                temp.EditScoreTime = DateTime.Now;
+                if (WXXUserInfoService.EditEntity(temp))
+                {
+                    return Json(new { ret = "ok" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { ret = "no", msg = "签到失败！请联系客服" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { ret = "no", msg = "我此微信用户登录信息" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        //获取微信人员信息
+        public ActionResult GetWxUserInfo()
+        {
+            string wxid = Request["WXID"];
+            var temp = WXXUserInfoService.LoadEntities(x => x.WXID == wxid).FirstOrDefault();
+            return Json(temp, JsonRequestBehavior.AllowGet);
+        }
+            /*//获取小程序版本号
+            public ActionResult GetVersionNumber()
+            {
+                var temp = T_BoolItemService.LoadEntities(x => x.ThisItem == 10).FirstOrDefault();
+                getInfo gi = new getInfo();
+                gi.Name = temp.str;
+                return Json(gi, JsonRequestBehavior.AllowGet);
+            }*/
+        }
     public class getInfo
     {
         public int? ID { get; set; }

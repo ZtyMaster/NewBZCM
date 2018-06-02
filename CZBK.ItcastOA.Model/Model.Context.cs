@@ -40,5 +40,6 @@ namespace CZBK.ItcastOA.Model
         public DbSet<Wx__BzcmText> Wx__BzcmText { get; set; }
         public DbSet<WXX_FormID> WXX_FormID { get; set; }
         public DbSet<WXXUserInfo> WXXUserInfoes { get; set; }
+        public DbSet<WXXTsMessage> WXXTsMessages { get; set; }
     }
 }

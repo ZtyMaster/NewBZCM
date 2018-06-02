@@ -80,6 +80,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IWXXTsMessageService : IBaseService<WXXTsMessage>
+    {
+       
+    }   
+	
 	public partial interface IWXXUserInfoService : IBaseService<WXXUserInfo>
     {
        

@@ -275,6 +275,17 @@
           <Property Name="StopTime" Type="datetime" Nullable="false" />
           <Property Name="CanUse" Type="smallint" Nullable="false" />
         </EntityType>
+        <EntityType Name="WXXTsMessage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="AddTime" Type="datetime" />
+          <Property Name="ToAllUser" Type="bit" />
+          <Property Name="ToOneUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="Del" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="WXXUserInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -538,6 +549,7 @@
           <EntitySet Name="UserInfoRoleInfo" EntityType="Self.UserInfoRoleInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Wx_ BzcmText" EntityType="Self.Wx_ BzcmText" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WXX_FormID" EntityType="Self.WXX_FormID" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WXXTsMessage" EntityType="Self.WXXTsMessage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WXXUserInfo" EntityType="Self.WXXUserInfo" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ActionInfoR_UserInfo_ActionInfo" Association="Self.FK_ActionInfoR_UserInfo_ActionInfo">
             <End Role="ActionInfo" EntitySet="ActionInfo" />
@@ -1128,7 +1140,19 @@
             <End Role="RoleInfo" EntitySet="RoleInfoes" />
             <End Role="UserInfo" EntitySet="UserInfoes" />
           </AssociationSet>
+          <EntitySet Name="WXXTsMessages" EntityType="BZCMModel.WXXTsMessage" />
         </EntityContainer>
+        <EntityType Name="WXXTsMessage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddTime" Type="DateTime" Precision="3" />
+          <Property Name="ToAllUser" Type="Boolean" />
+          <Property Name="ToOneUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Del" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1436,6 +1460,18 @@
               <ScalarProperty Name="ID" ColumnName="UserInfoes_ID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="WXXTsMessages">
+            <EntityTypeMapping TypeName="BZCMModel.WXXTsMessage">
+              <MappingFragment StoreEntitySet="WXXTsMessage">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="ToOneUser" ColumnName="ToOneUser" />
+                <ScalarProperty Name="ToAllUser" ColumnName="ToAllUser" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
