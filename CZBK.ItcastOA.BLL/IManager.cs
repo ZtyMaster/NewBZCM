@@ -67,6 +67,14 @@ namespace CZBK.ItcastOA.BLL
         }
     }   
 	
+	public partial class OrderHistoryService :BaseService<OrderHistory>,IOrderHistoryService
+    {
+        public override void SetCurretnDal()
+        {
+            CurrentDal = this.GetCurrentDbSession.OrderHistoryDal;
+        }
+    }   
+	
 	public partial class R_UserInfo_ActionInfoService :BaseService<R_UserInfo_ActionInfo>,IR_UserInfo_ActionInfoService
     {
         public override void SetCurretnDal()

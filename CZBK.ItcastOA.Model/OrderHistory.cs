@@ -12,13 +12,16 @@ namespace CZBK.ItcastOA.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class WXX_FormID
+    public partial class OrderHistory
     {
         public long ID { get; set; }
-        public string FormID { get; set; }
-        public long AddUserID { get; set; }
-        public System.DateTime AddTime { get; set; }
-        public System.DateTime StopTime { get; set; }
-        public Nullable<short> CanUse { get; set; }
+        public long Uid { get; set; }
+        public string GoodName { get; set; }
+        public short Status { get; set; }
+        public decimal GoodPrice { get; set; }
+        public string AddTime { get; set; }
+        public bool Del { get; set; }
+    
+        public virtual WXXUserInfo WXXUserInfo { get; set; }
     }
 }

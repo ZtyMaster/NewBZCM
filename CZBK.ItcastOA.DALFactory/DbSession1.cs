@@ -120,6 +120,21 @@ namespace CZBK.ItcastOA.DALFactory
             set { _Login_listDal = value; }
         }
 	
+		private IOrderHistoryDal _OrderHistoryDal;
+        public IOrderHistoryDal OrderHistoryDal
+        {
+            get
+            {
+                if(_OrderHistoryDal == null)
+                {
+                   // _OrderHistoryDal = new OrderHistoryDal();
+				    _OrderHistoryDal =AbstractFactory.CreateOrderHistoryDal();
+                }
+                return _OrderHistoryDal;
+            }
+            set { _OrderHistoryDal = value; }
+        }
+	
 		private IR_UserInfo_ActionInfoDal _R_UserInfo_ActionInfoDal;
         public IR_UserInfo_ActionInfoDal R_UserInfo_ActionInfoDal
         {

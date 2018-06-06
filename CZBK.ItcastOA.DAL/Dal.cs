@@ -46,6 +46,11 @@ namespace CZBK.ItcastOA.DAL
 
     }
 		
+	public partial class OrderHistoryDal :BaseDal<OrderHistory>,IOrderHistoryDal
+    {
+
+    }
+		
 	public partial class R_UserInfo_ActionInfoDal :BaseDal<R_UserInfo_ActionInfo>,IR_UserInfo_ActionInfoDal
     {
 

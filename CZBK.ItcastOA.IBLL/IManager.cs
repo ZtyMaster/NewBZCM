@@ -45,6 +45,11 @@ namespace CZBK.ItcastOA.IBLL
        
     }   
 	
+	public partial interface IOrderHistoryService : IBaseService<OrderHistory>
+    {
+       
+    }   
+	
 	public partial interface IR_UserInfo_ActionInfoService : IBaseService<R_UserInfo_ActionInfo>
     {
        

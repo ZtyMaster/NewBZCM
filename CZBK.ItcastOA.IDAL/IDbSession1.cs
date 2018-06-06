@@ -26,6 +26,8 @@ namespace CZBK.ItcastOA.IDAL
 	
 		ILogin_listDal Login_listDal{get;set;}
 	
+		IOrderHistoryDal OrderHistoryDal{get;set;}
+	
 		IR_UserInfo_ActionInfoDal R_UserInfo_ActionInfoDal{get;set;}
 	
 		IRoleInfoDal RoleInfoDal{get;set;}

@@ -17,6 +17,7 @@ namespace CZBK.ItcastOA.Model
         public WXXUserInfo()
         {
             this.Wx__BzcmText = new HashSet<Wx__BzcmText>();
+            this.OrderHistories = new HashSet<OrderHistory>();
         }
     
         public long ID { get; set; }
@@ -33,5 +34,6 @@ namespace CZBK.ItcastOA.Model
     
         public virtual UserInfo UserInfo { get; set; }
         public virtual ICollection<Wx__BzcmText> Wx__BzcmText { get; set; }
+        public virtual ICollection<OrderHistory> OrderHistories { get; set; }
     }
 }

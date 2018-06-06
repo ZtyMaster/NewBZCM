@@ -107,6 +107,19 @@ namespace CZBK.ItcastOA.DALFactory
             return obj as ILogin_listDal;
         }
 		
+	    public static IOrderHistoryDal CreateOrderHistoryDal()
+        {
+
+            string classFulleName = ConfigurationManager.AppSettings["NameSpace"] + ".OrderHistoryDal";
+
+
+            //object obj = Assembly.Load(ConfigurationManager.AppSettings["DalAssembly"]).CreateInstance(classFulleName, true);
+            var obj  = CreateInstance(ConfigurationManager.AppSettings["DalAssemblyPath"], classFulleName);
+
+
+            return obj as IOrderHistoryDal;
+        }
+		
 	    public static IR_UserInfo_ActionInfoDal CreateR_UserInfo_ActionInfoDal()
         {
 

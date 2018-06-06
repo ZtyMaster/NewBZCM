@@ -111,6 +111,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="OrderHistory.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="OutExcel\OutExcel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleInfo.cs">

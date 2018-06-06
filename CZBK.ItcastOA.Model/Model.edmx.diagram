@@ -36,6 +36,8 @@
         <AssociationConnector Association="BZCMModel.UserInfoDepartment" ManuallyRouted="false" />
         <AssociationConnector Association="BZCMModel.UserInfoRoleInfo" ManuallyRouted="false" />
         <EntityTypeShape EntityType="BZCMModel.WXXTsMessage" Width="1.5" PointX="4.5" PointY="39.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BZCMModel.OrderHistory" Width="1.5" PointX="9.75" PointY="43.5" />
+        <AssociationConnector Association="BZCMModel.FK_OrderHistory_WXXUserInfo" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

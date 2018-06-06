@@ -156,6 +156,18 @@
           <Property Name="LoginIP" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LoginTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="OrderHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Uid" Type="bigint" Nullable="false" />
+          <Property Name="GoodName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="GoodPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AddTime" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Del" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="R_UserInfo_ActionInfo">
           <Key>
             <PropertyRef Name="ID" />
@@ -270,16 +282,16 @@
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FormID" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="AddUserID" Type="int" Nullable="false" />
+          <Property Name="AddUserID" Type="bigint" Nullable="false" />
           <Property Name="AddTime" Type="datetime" Nullable="false" />
           <Property Name="StopTime" Type="datetime" Nullable="false" />
-          <Property Name="CanUse" Type="smallint" Nullable="false" />
+          <Property Name="CanUse" Type="smallint" />
         </EntityType>
         <EntityType Name="WXXTsMessage">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Message" Type="nvarchar(max)" />
           <Property Name="AddTime" Type="datetime" />
           <Property Name="ToAllUser" Type="bit" />
@@ -407,6 +419,18 @@
             </Principal>
             <Dependent Role="Login_list">
               <PropertyRef Name="Userinfoid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHistory_WXXUserInfo">
+          <End Role="WXXUserInfo" Type="Self.WXXUserInfo" Multiplicity="1" />
+          <End Role="OrderHistory" Type="Self.OrderHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WXXUserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHistory">
+              <PropertyRef Name="Uid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -539,6 +563,7 @@
           <EntitySet Name="DepartmentActionInfo" EntityType="Self.DepartmentActionInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IsFristItems" EntityType="Self.IsFristItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login_list" EntityType="Self.Login_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderHistory" EntityType="Self.OrderHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="R_UserInfo_ActionInfo" EntityType="Self.R_UserInfo_ActionInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleInfo" EntityType="Self.RoleInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleInfoActionInfo" EntityType="Self.RoleInfoActionInfo" Schema="dbo" store:Type="Tables" />
@@ -586,6 +611,10 @@
           <AssociationSet Name="FK_Login_list_UserInfo" Association="Self.FK_Login_list_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="Login_list" EntitySet="Login_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHistory_WXXUserInfo" Association="Self.FK_OrderHistory_WXXUserInfo">
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfo" />
+            <End Role="OrderHistory" EntitySet="OrderHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleInfoActionInfo_ActionInfo" Association="Self.FK_RoleInfoActionInfo_ActionInfo">
             <End Role="ActionInfo" EntitySet="ActionInfo" />
@@ -893,10 +922,10 @@
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FormID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="AddUserID" Type="Int32" Nullable="false" />
+          <Property Name="AddUserID" Type="Int64" Nullable="false" />
           <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="StopTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CanUse" Type="Int16" Nullable="false" />
+          <Property Name="CanUse" Type="Int16" />
         </EntityType>
         <EntityType Name="WXXUserInfo">
           <Key>
@@ -915,6 +944,7 @@
           <NavigationProperty Name="Wx__BzcmText" Relationship="Self.FK_Wx__BzcmText_BzcmText_FanChan" FromRole="WXXUserInfo" ToRole="Wx__BzcmText" />
           <Property Name="ScoreNum" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="EditScoreTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OrderHistories" Relationship="BZCMModel.FK_OrderHistory_WXXUserInfo" FromRole="WXXUserInfo" ToRole="OrderHistory" />
         </EntityType>
         <Association Name="FK_ActionInfoR_UserInfo_ActionInfo">
           <End Role="ActionInfo" Type="Self.ActionInfo" Multiplicity="1" />
@@ -1141,6 +1171,11 @@
             <End Role="UserInfo" EntitySet="UserInfoes" />
           </AssociationSet>
           <EntitySet Name="WXXTsMessages" EntityType="BZCMModel.WXXTsMessage" />
+          <EntitySet Name="OrderHistories" EntityType="BZCMModel.OrderHistory" />
+          <AssociationSet Name="FK_OrderHistory_WXXUserInfo" Association="BZCMModel.FK_OrderHistory_WXXUserInfo">
+            <End Role="WXXUserInfo" EntitySet="WXXUserInfoes" />
+            <End Role="OrderHistory" EntitySet="OrderHistories" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="WXXTsMessage">
           <Key>
@@ -1153,6 +1188,31 @@
           <Property Name="ToOneUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Del" Type="Boolean" Nullable="false" />
         </EntityType>
+        <EntityType Name="OrderHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Uid" Type="Int64" Nullable="false" />
+          <Property Name="GoodName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="GoodPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="AddTime" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Del" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="WXXUserInfo" Relationship="BZCMModel.FK_OrderHistory_WXXUserInfo" FromRole="OrderHistory" ToRole="WXXUserInfo" />
+        </EntityType>
+        <Association Name="FK_OrderHistory_WXXUserInfo">
+          <End Type="BZCMModel.WXXUserInfo" Role="WXXUserInfo" Multiplicity="1" />
+          <End Type="BZCMModel.OrderHistory" Role="OrderHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WXXUserInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHistory">
+              <PropertyRef Name="Uid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1468,6 +1528,19 @@
                 <ScalarProperty Name="ToAllUser" ColumnName="ToAllUser" />
                 <ScalarProperty Name="AddTime" ColumnName="AddTime" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderHistories">
+            <EntityTypeMapping TypeName="BZCMModel.OrderHistory">
+              <MappingFragment StoreEntitySet="OrderHistory">
+                <ScalarProperty Name="Del" ColumnName="Del" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+                <ScalarProperty Name="GoodPrice" ColumnName="GoodPrice" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="GoodName" ColumnName="GoodName" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

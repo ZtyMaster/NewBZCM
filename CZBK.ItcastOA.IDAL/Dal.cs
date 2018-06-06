@@ -45,6 +45,11 @@ namespace CZBK.ItcastOA.IDAL
       
     }
 	
+	public partial interface IOrderHistoryDal :IBaseDal<OrderHistory>
+    {
+      
+    }
+	
 	public partial interface IR_UserInfo_ActionInfoDal :IBaseDal<R_UserInfo_ActionInfo>
     {
       
